@@ -7,7 +7,7 @@
 
 import Foundation
 
-class NetworkModule: Networkable {
+final class NetworkModule: Networkable {
     private let rangeOfSuccessState = 200...299
     private var dataTask: [URLSessionDataTask] = []
     

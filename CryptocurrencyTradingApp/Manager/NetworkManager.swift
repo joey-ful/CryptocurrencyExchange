@@ -7,7 +7,7 @@
 
 import Foundation
 
-class NetworkManager {
+final class NetworkManager {
     private var networkable: Networkable
     
     init(networkable: Networkable = NetworkModule()) {

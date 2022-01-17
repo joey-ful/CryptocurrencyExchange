@@ -8,5 +8,5 @@
 import Foundation
 
 protocol Networkable {
-    mutating func runDataTask(request: URLRequest, completionHandler: @escaping (Result<Data,Error>) -> Void)
+    func runDataTask(request: URLRequest, completionHandler: @escaping (Result<Data,Error>) -> Void)
 }
