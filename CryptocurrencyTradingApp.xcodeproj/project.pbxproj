@@ -24,6 +24,7 @@
 		D4CC021827954E3C00F15957 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC021727954E3C00F15957 /* Route.swift */; };
 		D4CC021A27954E8900F15957 /* URLRequestTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC021927954E8900F15957 /* URLRequestTask.swift */; };
 		D4CC022027954F4600F15957 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC021F27954F4600F15957 /* HTTPMethod.swift */; };
+		D4CC02222795504900F15957 /* BithumbRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC02212795504900F15957 /* BithumbRoute.swift */; };
 		E6899C70279544CC0006C980 /* ParsingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6899C6F279544CC0006C980 /* ParsingManager.swift */; };
 		E6899C73279546320006C980 /* ParsingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6899C72279546320006C980 /* ParsingError.swift */; };
 /* End PBXBuildFile section */
@@ -48,6 +49,7 @@
 		D4CC021727954E3C00F15957 /* Route.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
 		D4CC021927954E8900F15957 /* URLRequestTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRequestTask.swift; sourceTree = "<group>"; };
 		D4CC021F27954F4600F15957 /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
+		D4CC02212795504900F15957 /* BithumbRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BithumbRoute.swift; sourceTree = "<group>"; };
 		E6899C6F279544CC0006C980 /* ParsingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsingManager.swift; sourceTree = "<group>"; };
 		E6899C72279546320006C980 /* ParsingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsingError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -122,6 +124,7 @@
 			isa = PBXGroup;
 			children = (
 				D4CC021F27954F4600F15957 /* HTTPMethod.swift */,
+				D4CC02212795504900F15957 /* BithumbRoute.swift */,
 			);
 			path = Enum;
 			sourceTree = "<group>";
@@ -232,6 +235,7 @@
 				D4CC022027954F4600F15957 /* HTTPMethod.swift in Sources */,
 				D4CC021427954B7000F15957 /* NetworkError.swift in Sources */,
 				D4CC021027954AF400F15957 /* Networkable.swift in Sources */,
+				D4CC02222795504900F15957 /* BithumbRoute.swift in Sources */,
 				D4CC01FB27953FAF00F15957 /* CryptocurrencyTradingApp.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
