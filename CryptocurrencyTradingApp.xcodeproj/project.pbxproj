@@ -25,6 +25,10 @@
 		D4CC021A27954E8900F15957 /* URLRequestTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC021927954E8900F15957 /* URLRequestTask.swift */; };
 		D4CC022027954F4600F15957 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC021F27954F4600F15957 /* HTTPMethod.swift */; };
 		D4CC02222795504900F15957 /* BithumbRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC02212795504900F15957 /* BithumbRoute.swift */; };
+		E64BFA2C27956FAC00BC17A1 /* WebsocketParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFA2B27956FAC00BC17A1 /* WebsocketParameter.swift */; };
+		E64BFA2E27956FCF00BC17A1 /* RequestTik.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFA2D27956FCF00BC17A1 /* RequestTik.swift */; };
+		E64BFA3027956FF400BC17A1 /* RequestType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFA2F27956FF400BC17A1 /* RequestType.swift */; };
+		E64BFA3227958BD900BC17A1 /* CoinType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFA3127958BD900BC17A1 /* CoinType.swift */; };
 		E6899C70279544CC0006C980 /* ParsingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6899C6F279544CC0006C980 /* ParsingManager.swift */; };
 		E6899C73279546320006C980 /* ParsingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6899C72279546320006C980 /* ParsingError.swift */; };
 /* End PBXBuildFile section */
@@ -50,6 +54,10 @@
 		D4CC021927954E8900F15957 /* URLRequestTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRequestTask.swift; sourceTree = "<group>"; };
 		D4CC021F27954F4600F15957 /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
 		D4CC02212795504900F15957 /* BithumbRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BithumbRoute.swift; sourceTree = "<group>"; };
+		E64BFA2B27956FAC00BC17A1 /* WebsocketParameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebsocketParameter.swift; sourceTree = "<group>"; };
+		E64BFA2D27956FCF00BC17A1 /* RequestTik.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestTik.swift; sourceTree = "<group>"; };
+		E64BFA2F27956FF400BC17A1 /* RequestType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestType.swift; sourceTree = "<group>"; };
+		E64BFA3127958BD900BC17A1 /* CoinType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinType.swift; sourceTree = "<group>"; };
 		E6899C6F279544CC0006C980 /* ParsingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsingManager.swift; sourceTree = "<group>"; };
 		E6899C72279546320006C980 /* ParsingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsingError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -107,6 +115,7 @@
 				D4CC020827953FD300F15957 /* TickerAll.swift */,
 				D4CC020A279540CF00F15957 /* WebSockerTicker.swift */,
 				D4CC020C2795411A00F15957 /* WebSocketTransaction.swift */,
+				E64BFA2B27956FAC00BC17A1 /* WebsocketParameter.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -125,6 +134,9 @@
 			children = (
 				D4CC021F27954F4600F15957 /* HTTPMethod.swift */,
 				D4CC02212795504900F15957 /* BithumbRoute.swift */,
+				E64BFA2D27956FCF00BC17A1 /* RequestTik.swift */,
+				E64BFA2F27956FF400BC17A1 /* RequestType.swift */,
+				E64BFA3127958BD900BC17A1 /* CoinType.swift */,
 			);
 			path = Enum;
 			sourceTree = "<group>";
@@ -222,20 +234,24 @@
 			files = (
 				D4CC021227954B5400F15957 /* NetworkModule.swift in Sources */,
 				E6899C70279544CC0006C980 /* ParsingManager.swift in Sources */,
+				E64BFA3027956FF400BC17A1 /* RequestType.swift in Sources */,
 				D4CC01F527953FAF00F15957 /* ViewController.swift in Sources */,
 				D4CC021627954E2500F15957 /* NetworkManager.swift in Sources */,
 				D4CC020B279540CF00F15957 /* WebSockerTicker.swift in Sources */,
 				D4CC021827954E3C00F15957 /* Route.swift in Sources */,
 				D4CC01F127953FAF00F15957 /* AppDelegate.swift in Sources */,
 				D4CC020927953FD300F15957 /* TickerAll.swift in Sources */,
+				E64BFA2E27956FCF00BC17A1 /* RequestTik.swift in Sources */,
 				D4CC021A27954E8900F15957 /* URLRequestTask.swift in Sources */,
 				D4CC01F327953FAF00F15957 /* SceneDelegate.swift in Sources */,
 				D4CC020D2795411A00F15957 /* WebSocketTransaction.swift in Sources */,
 				E6899C73279546320006C980 /* ParsingError.swift in Sources */,
 				D4CC022027954F4600F15957 /* HTTPMethod.swift in Sources */,
 				D4CC021427954B7000F15957 /* NetworkError.swift in Sources */,
+				E64BFA2C27956FAC00BC17A1 /* WebsocketParameter.swift in Sources */,
 				D4CC021027954AF400F15957 /* Networkable.swift in Sources */,
 				D4CC02222795504900F15957 /* BithumbRoute.swift in Sources */,
+				E64BFA3227958BD900BC17A1 /* CoinType.swift in Sources */,
 				D4CC01FB27953FAF00F15957 /* CryptocurrencyTradingApp.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
