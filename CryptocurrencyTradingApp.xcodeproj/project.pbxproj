@@ -18,6 +18,7 @@
 		D4CC020B279540CF00F15957 /* WebSockerTicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC020A279540CF00F15957 /* WebSockerTicker.swift */; };
 		D4CC020D2795411A00F15957 /* WebSocketTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC020C2795411A00F15957 /* WebSocketTransaction.swift */; };
 		D4CC021027954AF400F15957 /* Networkable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC020F27954AF400F15957 /* Networkable.swift */; };
+		D4CC021427954B7000F15957 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC021327954B7000F15957 /* NetworkError.swift */; };
 		E6899C70279544CC0006C980 /* ParsingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6899C6F279544CC0006C980 /* ParsingManager.swift */; };
 		E6899C73279546320006C980 /* ParsingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6899C72279546320006C980 /* ParsingError.swift */; };
 /* End PBXBuildFile section */
@@ -36,6 +37,7 @@
 		D4CC020A279540CF00F15957 /* WebSockerTicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSockerTicker.swift; sourceTree = "<group>"; };
 		D4CC020C2795411A00F15957 /* WebSocketTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketTransaction.swift; sourceTree = "<group>"; };
 		D4CC020F27954AF400F15957 /* Networkable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networkable.swift; sourceTree = "<group>"; };
+		D4CC021327954B7000F15957 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		E6899C6F279544CC0006C980 /* ParsingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsingManager.swift; sourceTree = "<group>"; };
 		E6899C72279546320006C980 /* ParsingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsingError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -116,6 +118,7 @@
 			isa = PBXGroup;
 			children = (
 				E6899C72279546320006C980 /* ParsingError.swift */,
+				D4CC021327954B7000F15957 /* NetworkError.swift */,
 			);
 			path = ErrorCase;
 			sourceTree = "<group>";
@@ -199,6 +202,7 @@
 				D4CC01F327953FAF00F15957 /* SceneDelegate.swift in Sources */,
 				D4CC020D2795411A00F15957 /* WebSocketTransaction.swift in Sources */,
 				E6899C73279546320006C980 /* ParsingError.swift in Sources */,
+				D4CC021427954B7000F15957 /* NetworkError.swift in Sources */,
 				D4CC021027954AF400F15957 /* Networkable.swift in Sources */,
 				D4CC01FB27953FAF00F15957 /* CryptocurrencyTradingApp.xcdatamodeld in Sources */,
 			);
