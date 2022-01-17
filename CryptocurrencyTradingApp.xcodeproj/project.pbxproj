@@ -16,6 +16,7 @@
 		D4CC020027953FB000F15957 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4CC01FE27953FB000F15957 /* LaunchScreen.storyboard */; };
 		D4CC020927953FD300F15957 /* TickerAll.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC020827953FD300F15957 /* TickerAll.swift */; };
 		D4CC020B279540CF00F15957 /* WebSockerTicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC020A279540CF00F15957 /* WebSockerTicker.swift */; };
+		D4CC020D2795411A00F15957 /* WebSocketTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC020C2795411A00F15957 /* WebSocketTransaction.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		D4CC020127953FB000F15957 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D4CC020827953FD300F15957 /* TickerAll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TickerAll.swift; sourceTree = "<group>"; };
 		D4CC020A279540CF00F15957 /* WebSockerTicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSockerTicker.swift; sourceTree = "<group>"; };
+		D4CC020C2795411A00F15957 /* WebSocketTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketTransaction.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +82,7 @@
 			children = (
 				D4CC020827953FD300F15957 /* TickerAll.swift */,
 				D4CC020A279540CF00F15957 /* WebSockerTicker.swift */,
+				D4CC020C2795411A00F15957 /* WebSocketTransaction.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -160,6 +163,7 @@
 				D4CC01F127953FAF00F15957 /* AppDelegate.swift in Sources */,
 				D4CC020927953FD300F15957 /* TickerAll.swift in Sources */,
 				D4CC01F327953FAF00F15957 /* SceneDelegate.swift in Sources */,
+				D4CC020D2795411A00F15957 /* WebSocketTransaction.swift in Sources */,
 				D4CC01FB27953FAF00F15957 /* CryptocurrencyTradingApp.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
