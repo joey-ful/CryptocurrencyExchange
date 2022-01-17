@@ -31,14 +31,14 @@ final class NetworkModule: Networkable {
                 }
                 return
             }
-
+            
             guard let response = response as? HTTPURLResponse,
                   rangeOfSuccessState.contains(response.statusCode) else {
-                DispatchQueue.main.async {
-                    completionHandler(.failure(NetworkError.badResponse))
-                }
-                return
-            }
+                      DispatchQueue.main.async {
+                          completionHandler(.failure(NetworkError.badResponse))
+                      }
+                      return
+                  }
             
             guard let data = data else {
                 DispatchQueue.main.async {

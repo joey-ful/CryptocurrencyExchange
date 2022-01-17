@@ -9,7 +9,7 @@ import Foundation
 
 enum ParsingError: LocalizedError {
     case decodingError
-
+    
     var errorDescription: String? {
         switch self {
         case .decodingError:
