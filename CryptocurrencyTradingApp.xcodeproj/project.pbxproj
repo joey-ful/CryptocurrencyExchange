@@ -14,6 +14,9 @@
 		D4CC01FB27953FAF00F15957 /* CryptocurrencyTradingApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F927953FAF00F15957 /* CryptocurrencyTradingApp.xcdatamodeld */; };
 		D4CC01FD27953FB000F15957 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4CC01FC27953FB000F15957 /* Assets.xcassets */; };
 		D4CC020027953FB000F15957 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4CC01FE27953FB000F15957 /* LaunchScreen.storyboard */; };
+		D4CC020927953FD300F15957 /* TickerAll.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC020827953FD300F15957 /* TickerAll.swift */; };
+		D4CC020B279540CF00F15957 /* WebSockerTicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC020A279540CF00F15957 /* WebSockerTicker.swift */; };
+		D4CC020D2795411A00F15957 /* WebSocketTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC020C2795411A00F15957 /* WebSocketTransaction.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +29,9 @@
 		D4CC01FC27953FB000F15957 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D4CC01FF27953FB000F15957 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D4CC020127953FB000F15957 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D4CC020827953FD300F15957 /* TickerAll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TickerAll.swift; sourceTree = "<group>"; };
+		D4CC020A279540CF00F15957 /* WebSockerTicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSockerTicker.swift; sourceTree = "<group>"; };
+		D4CC020C2795411A00F15957 /* WebSocketTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketTransaction.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +64,7 @@
 		D4CC01EF27953FAF00F15957 /* CryptocurrencyTradingApp */ = {
 			isa = PBXGroup;
 			children = (
+				D4CC020727953FCD00F15957 /* Model */,
 				D4CC01F027953FAF00F15957 /* AppDelegate.swift */,
 				D4CC01F227953FAF00F15957 /* SceneDelegate.swift */,
 				D4CC01F427953FAF00F15957 /* ViewController.swift */,
@@ -68,6 +75,16 @@
 				D4CC01F927953FAF00F15957 /* CryptocurrencyTradingApp.xcdatamodeld */,
 			);
 			path = CryptocurrencyTradingApp;
+			sourceTree = "<group>";
+		};
+		D4CC020727953FCD00F15957 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				D4CC020827953FD300F15957 /* TickerAll.swift */,
+				D4CC020A279540CF00F15957 /* WebSockerTicker.swift */,
+				D4CC020C2795411A00F15957 /* WebSocketTransaction.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -142,8 +159,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				D4CC01F527953FAF00F15957 /* ViewController.swift in Sources */,
+				D4CC020B279540CF00F15957 /* WebSockerTicker.swift in Sources */,
 				D4CC01F127953FAF00F15957 /* AppDelegate.swift in Sources */,
+				D4CC020927953FD300F15957 /* TickerAll.swift in Sources */,
 				D4CC01F327953FAF00F15957 /* SceneDelegate.swift in Sources */,
+				D4CC020D2795411A00F15957 /* WebSocketTransaction.swift in Sources */,
 				D4CC01FB27953FAF00F15957 /* CryptocurrencyTradingApp.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
