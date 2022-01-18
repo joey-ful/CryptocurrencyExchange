@@ -88,7 +88,7 @@ class WebsocketManger: NSObject {
         }
     }
     
-    private func filter<T: WebSocket>(_ parsedResult: Result<T, ParsingError>) {
+    private func filter<T: WebSocketDataModel>(_ parsedResult: Result<T, ParsingError>) {
         switch parsedResult {
         case .success(let data):
             sendNotification(data: data)
@@ -97,7 +97,7 @@ class WebsocketManger: NSObject {
         }
     }
     
-    private func sendNotification(data: WebSocket) {
+    private func sendNotification(data: WebSocketDataModel) {
         if let transactions = (data as? WebSocketTransaction)?.content.list {
             NotificationCenter.default.post(name: .webSocketTransactionNotification,
                                             object: nil,

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct WebSocketTicker: Decodable, WebSocket {
+struct WebSocketTicker: Decodable, WebSocketDataModel {
     let content: Ticker
 }
 
