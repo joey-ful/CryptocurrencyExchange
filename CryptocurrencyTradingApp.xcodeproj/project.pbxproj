@@ -152,6 +152,7 @@
 			children = (
 				E6899C6F279544CC0006C980 /* ParsingManager.swift */,
 				E64BFA262795616600BC17A1 /* WebsocketManager.swift */,
+				D4CC02262795B3C700F15957 /* RestAPIManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -247,6 +248,7 @@
 				D4CC020D2795411A00F15957 /* WebSocketTransaction.swift in Sources */,
 				E64BFA3627959B7100BC17A1 /* WebSocketDataModel.swift in Sources */,
 				E64BFA272795616600BC17A1 /* WebsocketManager.swift in Sources */,
+				D4CC02272795B3C700F15957 /* RestAPIManager.swift in Sources */,
 				E6899C73279546320006C980 /* ParsingError.swift in Sources */,
 				D4CC021427954B7000F15957 /* NetworkError.swift in Sources */,
 				E64BFA2C27956FAC00BC17A1 /* WebsocketParameter.swift in Sources */,
