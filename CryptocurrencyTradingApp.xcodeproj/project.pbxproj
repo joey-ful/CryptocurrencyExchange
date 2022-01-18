@@ -21,6 +21,9 @@
 		D4CC02222795504900F15957 /* RestAPIType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC02212795504900F15957 /* RestAPIType.swift */; };
 		D4CC02272795B3C700F15957 /* RestAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC02262795B3C700F15957 /* RestAPIManager.swift */; };
 		D4CC0265279690B800F15957 /* RestAPIDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC0264279690B800F15957 /* RestAPIDataModel.swift */; };
+		E61B2C032796BC4100E919B0 /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = E61B2C022796BC4100E919B0 /* Charts */; };
+		E61B2C052796BC4100E919B0 /* ChartsDynamic in Frameworks */ = {isa = PBXBuildFile; productRef = E61B2C042796BC4100E919B0 /* ChartsDynamic */; };
+		E61B2C082796BC5700E919B0 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = E61B2C072796BC5700E919B0 /* SnapKit */; };
 		E64BFA272795616600BC17A1 /* WebsocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFA262795616600BC17A1 /* WebsocketManager.swift */; };
 		E64BFA2C27956FAC00BC17A1 /* WebsocketParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFA2B27956FAC00BC17A1 /* WebsocketParameter.swift */; };
 		E64BFA2E27956FCF00BC17A1 /* RequestTik.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFA2D27956FCF00BC17A1 /* RequestTik.swift */; };
@@ -65,6 +68,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E61B2C082796BC5700E919B0 /* SnapKit in Frameworks */,
+				E61B2C032796BC4100E919B0 /* Charts in Frameworks */,
+				E61B2C052796BC4100E919B0 /* ChartsDynamic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -182,6 +188,11 @@
 			dependencies = (
 			);
 			name = CryptocurrencyTradingApp;
+			packageProductDependencies = (
+				E61B2C022796BC4100E919B0 /* Charts */,
+				E61B2C042796BC4100E919B0 /* ChartsDynamic */,
+				E61B2C072796BC5700E919B0 /* SnapKit */,
+			);
 			productName = CryptocurrencyTradingApp;
 			productReference = D4CC01ED27953FAE00F15957 /* CryptocurrencyTradingApp.app */;
 			productType = "com.apple.product-type.application";
@@ -210,6 +221,10 @@
 				Base,
 			);
 			mainGroup = D4CC01E427953FAE00F15957;
+			packageReferences = (
+				E61B2C012796BC4100E919B0 /* XCRemoteSwiftPackageReference "Charts" */,
+				E61B2C062796BC5700E919B0 /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			productRefGroup = D4CC01EE27953FAE00F15957 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -476,6 +491,43 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E61B2C012796BC4100E919B0 /* XCRemoteSwiftPackageReference "Charts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/danielgindi/Charts.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
+		E61B2C062796BC5700E919B0 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E61B2C022796BC4100E919B0 /* Charts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E61B2C012796BC4100E919B0 /* XCRemoteSwiftPackageReference "Charts" */;
+			productName = Charts;
+		};
+		E61B2C042796BC4100E919B0 /* ChartsDynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E61B2C012796BC4100E919B0 /* XCRemoteSwiftPackageReference "Charts" */;
+			productName = ChartsDynamic;
+		};
+		E61B2C072796BC5700E919B0 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E61B2C062796BC5700E919B0 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		D4CC01F927953FAF00F15957 /* CryptocurrencyTradingApp.xcdatamodeld */ = {
