@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TickerAll: Codable {
+struct TickerAll: Codable, RestAPIDataModel {
     let status: String
     let data: Data
     
@@ -249,7 +249,6 @@ struct TickerAll: Codable {
             case date
         }
         
-        
         struct Coin: Codable, Hashable {
             let openingPrice, closingPrice, minPrice, maxPrice: String
             let unitsTraded, accTradeValue, prevClosingPrice, unitsTraded24H: String
@@ -281,6 +280,6 @@ struct TickerAll: Codable {
                 hasher.combine(unitsTraded)
             }
         }
+
     }
 }
-
