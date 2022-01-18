@@ -17,14 +17,10 @@
 		D4CC020927953FD300F15957 /* TickerAll.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC020827953FD300F15957 /* TickerAll.swift */; };
 		D4CC020B279540CF00F15957 /* WebSockerTicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC020A279540CF00F15957 /* WebSockerTicker.swift */; };
 		D4CC020D2795411A00F15957 /* WebSocketTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC020C2795411A00F15957 /* WebSocketTransaction.swift */; };
-		D4CC021027954AF400F15957 /* Networkable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC020F27954AF400F15957 /* Networkable.swift */; };
-		D4CC021227954B5400F15957 /* NetworkModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC021127954B5400F15957 /* NetworkModule.swift */; };
 		D4CC021427954B7000F15957 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC021327954B7000F15957 /* NetworkError.swift */; };
-		D4CC021627954E2500F15957 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC021527954E2500F15957 /* NetworkManager.swift */; };
-		D4CC021827954E3C00F15957 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC021727954E3C00F15957 /* Route.swift */; };
-		D4CC021A27954E8900F15957 /* URLRequestTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC021927954E8900F15957 /* URLRequestTask.swift */; };
-		D4CC022027954F4600F15957 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC021F27954F4600F15957 /* HTTPMethod.swift */; };
-		D4CC02222795504900F15957 /* BithumbRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC02212795504900F15957 /* BithumbRoute.swift */; };
+		D4CC02222795504900F15957 /* RestAPIType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC02212795504900F15957 /* RestAPIType.swift */; };
+		D4CC02272795B3C700F15957 /* RestAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC02262795B3C700F15957 /* RestAPIManager.swift */; };
+		D4CC0265279690B800F15957 /* RestAPIDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC0264279690B800F15957 /* RestAPIDataModel.swift */; };
 		E64BFA272795616600BC17A1 /* WebsocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFA262795616600BC17A1 /* WebsocketManager.swift */; };
 		E64BFA2C27956FAC00BC17A1 /* WebsocketParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFA2B27956FAC00BC17A1 /* WebsocketParameter.swift */; };
 		E64BFA2E27956FCF00BC17A1 /* RequestTik.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFA2D27956FCF00BC17A1 /* RequestTik.swift */; };
@@ -49,14 +45,10 @@
 		D4CC020827953FD300F15957 /* TickerAll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TickerAll.swift; sourceTree = "<group>"; };
 		D4CC020A279540CF00F15957 /* WebSockerTicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSockerTicker.swift; sourceTree = "<group>"; };
 		D4CC020C2795411A00F15957 /* WebSocketTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketTransaction.swift; sourceTree = "<group>"; };
-		D4CC020F27954AF400F15957 /* Networkable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networkable.swift; sourceTree = "<group>"; };
-		D4CC021127954B5400F15957 /* NetworkModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkModule.swift; sourceTree = "<group>"; };
 		D4CC021327954B7000F15957 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
-		D4CC021527954E2500F15957 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
-		D4CC021727954E3C00F15957 /* Route.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
-		D4CC021927954E8900F15957 /* URLRequestTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRequestTask.swift; sourceTree = "<group>"; };
-		D4CC021F27954F4600F15957 /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
-		D4CC02212795504900F15957 /* BithumbRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BithumbRoute.swift; sourceTree = "<group>"; };
+		D4CC02212795504900F15957 /* RestAPIType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestAPIType.swift; sourceTree = "<group>"; };
+		D4CC02262795B3C700F15957 /* RestAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestAPIManager.swift; sourceTree = "<group>"; };
+		D4CC0264279690B800F15957 /* RestAPIDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestAPIDataModel.swift; sourceTree = "<group>"; };
 		E64BFA262795616600BC17A1 /* WebsocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebsocketManager.swift; sourceTree = "<group>"; };
 		E64BFA2B27956FAC00BC17A1 /* WebsocketParameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebsocketParameter.swift; sourceTree = "<group>"; };
 		E64BFA2D27956FCF00BC17A1 /* RequestTik.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestTik.swift; sourceTree = "<group>"; };
@@ -130,8 +122,8 @@
 		D4CC020E27954AEC00F15957 /* Protocol */ = {
 			isa = PBXGroup;
 			children = (
-				D4CC020F27954AF400F15957 /* Networkable.swift */,
-				D4CC021727954E3C00F15957 /* Route.swift */,
+				D4CC0264279690B800F15957 /* RestAPIDataModel.swift */,
+				E64BFA3527959B7100BC17A1 /* WebSocketDataModel.swift */,
 				E64BFA3527959B7100BC17A1 /* WebSocket.swift */,
 			);
 			path = Protocol;
@@ -140,8 +132,7 @@
 		D4CC021E27954F3D00F15957 /* Enum */ = {
 			isa = PBXGroup;
 			children = (
-				D4CC021F27954F4600F15957 /* HTTPMethod.swift */,
-				D4CC02212795504900F15957 /* BithumbRoute.swift */,
+				D4CC02212795504900F15957 /* RestAPIType.swift */,
 				E64BFA2D27956FCF00BC17A1 /* RequestTik.swift */,
 				E64BFA2F27956FF400BC17A1 /* RequestType.swift */,
 				E64BFA3127958BD900BC17A1 /* CoinType.swift */,
@@ -161,9 +152,6 @@
 			isa = PBXGroup;
 			children = (
 				E6899C6F279544CC0006C980 /* ParsingManager.swift */,
-				D4CC021127954B5400F15957 /* NetworkModule.swift */,
-				D4CC021527954E2500F15957 /* NetworkManager.swift */,
-				D4CC021927954E8900F15957 /* URLRequestTask.swift */,
 				E64BFA262795616600BC17A1 /* WebsocketManager.swift */,
 			);
 			path = Manager;
@@ -249,28 +237,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D4CC021227954B5400F15957 /* NetworkModule.swift in Sources */,
 				E6899C70279544CC0006C980 /* ParsingManager.swift in Sources */,
 				E64BFA3027956FF400BC17A1 /* RequestType.swift in Sources */,
 				D4CC01F527953FAF00F15957 /* ViewController.swift in Sources */,
-				D4CC021627954E2500F15957 /* NetworkManager.swift in Sources */,
 				D4CC020B279540CF00F15957 /* WebSockerTicker.swift in Sources */,
-				D4CC021827954E3C00F15957 /* Route.swift in Sources */,
 				D4CC01F127953FAF00F15957 /* AppDelegate.swift in Sources */,
 				D4CC020927953FD300F15957 /* TickerAll.swift in Sources */,
 				E64BFA2E27956FCF00BC17A1 /* RequestTik.swift in Sources */,
-				D4CC021A27954E8900F15957 /* URLRequestTask.swift in Sources */,
 				D4CC01F327953FAF00F15957 /* SceneDelegate.swift in Sources */,
 				D4CC020D2795411A00F15957 /* WebSocketTransaction.swift in Sources */,
 				E64BFA3627959B7100BC17A1 /* WebSocket.swift in Sources */,
 				E64BFA272795616600BC17A1 /* WebsocketManager.swift in Sources */,
 				E6899C73279546320006C980 /* ParsingError.swift in Sources */,
-				D4CC022027954F4600F15957 /* HTTPMethod.swift in Sources */,
 				D4CC021427954B7000F15957 /* NetworkError.swift in Sources */,
 				E64BFA2C27956FAC00BC17A1 /* WebsocketParameter.swift in Sources */,
-				D4CC021027954AF400F15957 /* Networkable.swift in Sources */,
+				D4CC0265279690B800F15957 /* RestAPIDataModel.swift in Sources */,
 				E64BFA3927959D3100BC17A1 /* NotificationName+Extension.swift in Sources */,
-				D4CC02222795504900F15957 /* BithumbRoute.swift in Sources */,
+				D4CC02222795504900F15957 /* RestAPIType.swift in Sources */,
 				E64BFA3227958BD900BC17A1 /* CoinType.swift in Sources */,
 				D4CC01FB27953FAF00F15957 /* CryptocurrencyTradingApp.xcdatamodeld in Sources */,
 			);
