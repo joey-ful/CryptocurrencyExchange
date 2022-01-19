@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		D47D009D2797A0C700E8E305 /* UILable+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47D009C2797A0C700E8E305 /* UILable+Extension.swift */; };
 		D47D009F2797A0EA00E8E305 /* UIStackView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47D009E2797A0EA00E8E305 /* UIStackView+Extension.swift */; };
+		D47D00A32797A1A600E8E305 /* MainListCoin.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47D00A22797A1A600E8E305 /* MainListCoin.swift */; };
 		D4CC01F127953FAF00F15957 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F027953FAF00F15957 /* AppDelegate.swift */; };
 		D4CC01F327953FAF00F15957 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F227953FAF00F15957 /* SceneDelegate.swift */; };
 		D4CC01F527953FAF00F15957 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F427953FAF00F15957 /* ViewController.swift */; };
@@ -40,6 +41,7 @@
 /* Begin PBXFileReference section */
 		D47D009C2797A0C700E8E305 /* UILable+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILable+Extension.swift"; sourceTree = "<group>"; };
 		D47D009E2797A0EA00E8E305 /* UIStackView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Extension.swift"; sourceTree = "<group>"; };
+		D47D00A22797A1A600E8E305 /* MainListCoin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainListCoin.swift; sourceTree = "<group>"; };
 		D4CC01ED27953FAE00F15957 /* CryptocurrencyTradingApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CryptocurrencyTradingApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4CC01F027953FAF00F15957 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D4CC01F227953FAF00F15957 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 				D4CC020A279540CF00F15957 /* WebSockerTicker.swift */,
 				D4CC020C2795411A00F15957 /* WebSocketTransaction.swift */,
 				E64BFA2B27956FAC00BC17A1 /* WebsocketParameter.swift */,
+				D47D00A22797A1A600E8E305 /* MainListCoin.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -272,6 +275,7 @@
 				D4CC02272795B3C700F15957 /* RestAPIManager.swift in Sources */,
 				E6899C73279546320006C980 /* ParsingError.swift in Sources */,
 				D4CC021427954B7000F15957 /* NetworkError.swift in Sources */,
+				D47D00A32797A1A600E8E305 /* MainListCoin.swift in Sources */,
 				E64BFA2C27956FAC00BC17A1 /* WebsocketParameter.swift in Sources */,
 				D4CC0265279690B800F15957 /* RestAPIDataModel.swift in Sources */,
 				E64BFA3927959D3100BC17A1 /* NotificationName+Extension.swift in Sources */,
