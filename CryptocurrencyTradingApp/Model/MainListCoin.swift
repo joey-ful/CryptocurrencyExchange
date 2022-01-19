@@ -13,7 +13,7 @@ struct MainListCoin: Hashable {
     var fluctuationRate: String
     var fluctuationAmount: String
     var tradeValue: String
-    var textcolor: UIColor
+    var textColor: UIColor
     
     static func == (lhs: MainListCoin, rhs: MainListCoin) -> Bool {
         return lhs.symbol == rhs.symbol
@@ -21,7 +21,7 @@ struct MainListCoin: Hashable {
         && lhs.fluctuationRate == rhs.fluctuationRate
         && lhs.fluctuationAmount == rhs.fluctuationAmount
         && lhs.tradeValue == rhs.tradeValue
-        && lhs.textcolor == rhs.textcolor
+        && lhs.textColor == rhs.textColor
     }
     
     func hash(into hasher: inout Hasher) {
@@ -30,6 +30,6 @@ struct MainListCoin: Hashable {
         hasher.combine(fluctuationRate)
         hasher.combine(fluctuationAmount)
         hasher.combine(tradeValue)
-        hasher.combine(textcolor)
+        hasher.combine(textColor)
     }
 }

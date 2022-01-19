@@ -13,7 +13,11 @@ typealias MainListDataSource = UITableViewDiffableDataSource<Int, MainListCoin>
 class MainListViewController: UIViewController {
     private let tableView = UITableView(frame: .zero, style: .plain)
     private var dataSource: MainListDataSource?
-    private var mainListCoins: [MainListCoin] = []
+    private var mainListCoins: [MainListCoin] = [
+        MainListCoin(symbol: "BTC/KRW", currentPrice: "50000000", fluctuationRate: "-1.4", fluctuationAmount: "-718000", tradeValue: "149919203251.1879", textColor: .systemBlue),
+        MainListCoin(symbol: "ETH/KRW", currentPrice: "3733000", fluctuationRate: "-2.76", fluctuationAmount: "-106000", tradeValue: "111405389520.8421", textColor: .systemBlue),
+        MainListCoin(symbol: "ETC/KRW", currentPrice: "40040", fluctuationRate: "6.35", fluctuationAmount: "2390", tradeValue: "361764.02901293", textColor: .systemRed)
+    ]
     private var snapshot: NSDiffableDataSourceSnapshot<Int, MainListCoin>?
 
     override func viewDidLoad() {
@@ -27,6 +31,7 @@ class MainListViewController: UIViewController {
 extension MainListViewController {
     private func setUpTableView() {
         setTableViewAutoLayout()
+        registerCell()
         makeSnapshot()
     }
     
@@ -50,15 +55,15 @@ extension MainListViewController {
     }
     
     private func registerCell() {
-        dataSource = MainListDataSource(tableView: tableView, cellProvider: { tableView, indexPath, itemIdentifier in
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "mainListCell", for: indexPath)
-                    as? MainListTableViewCell
-            else {
+        dataSource = MainListDataSource(tableView: tableView,
+                                        cellProvider: { tableView, indexPath, mainListCoin in
+            
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "mainListCell",
+                                                           for: indexPath) as? MainListTableViewCell else {
                 return UITableViewCell()
             }
             
-            let coin = self.mainListCoins[indexPath.row]
-            cell.configure(coin)
+            cell.configure(mainListCoin)
             
             return cell
         })

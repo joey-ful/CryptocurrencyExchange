@@ -44,5 +44,9 @@ class MainListTableViewCell: UITableViewCell {
         fluctuationRateLabel.text = coin.fluctuationRate
         fluctuationAmountLabel.text = coin.fluctuationAmount
         tradeValueLabel.text = coin.tradeValue
+        
+        currentPriceLabel.textColor = coin.textColor
+        fluctuationRateLabel.textColor = coin.textColor
+        fluctuationAmountLabel.textColor = coin.textColor
     }
 }
