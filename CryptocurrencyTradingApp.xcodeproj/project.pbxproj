@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D47D009D2797A0C700E8E305 /* UILable+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47D009C2797A0C700E8E305 /* UILable+Extension.swift */; };
+		D47D009F2797A0EA00E8E305 /* UIStackView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47D009E2797A0EA00E8E305 /* UIStackView+Extension.swift */; };
 		D4CC01F127953FAF00F15957 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F027953FAF00F15957 /* AppDelegate.swift */; };
 		D4CC01F327953FAF00F15957 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F227953FAF00F15957 /* SceneDelegate.swift */; };
 		D4CC01F527953FAF00F15957 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F427953FAF00F15957 /* ViewController.swift */; };
@@ -36,6 +38,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D47D009C2797A0C700E8E305 /* UILable+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILable+Extension.swift"; sourceTree = "<group>"; };
+		D47D009E2797A0EA00E8E305 /* UIStackView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Extension.swift"; sourceTree = "<group>"; };
 		D4CC01ED27953FAE00F15957 /* CryptocurrencyTradingApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CryptocurrencyTradingApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4CC01F027953FAF00F15957 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D4CC01F227953FAF00F15957 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -149,6 +153,8 @@
 			isa = PBXGroup;
 			children = (
 				E64BFA3827959D3100BC17A1 /* NotificationName+Extension.swift */,
+				D47D009C2797A0C700E8E305 /* UILable+Extension.swift */,
+				D47D009E2797A0EA00E8E305 /* UIStackView+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -269,8 +275,10 @@
 				E64BFA2C27956FAC00BC17A1 /* WebsocketParameter.swift in Sources */,
 				D4CC0265279690B800F15957 /* RestAPIDataModel.swift in Sources */,
 				E64BFA3927959D3100BC17A1 /* NotificationName+Extension.swift in Sources */,
+				D47D009D2797A0C700E8E305 /* UILable+Extension.swift in Sources */,
 				D4CC02222795504900F15957 /* RestAPIType.swift in Sources */,
 				E64BFA3227958BD900BC17A1 /* CoinType.swift in Sources */,
+				D47D009F2797A0EA00E8E305 /* UIStackView+Extension.swift in Sources */,
 				D4CC01FB27953FAF00F15957 /* CryptocurrencyTradingApp.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
