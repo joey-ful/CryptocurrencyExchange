@@ -94,13 +94,21 @@ class RestAPIManager {
                let coin = ($0.value as? TickerAll.Data.Coin),
                let coinName = CoinType.name(symbol: symbol)
             {
-                let textColor: UIColor = coin.fluctateRate24H.contains("-") ? .systemBlue : .systemRed
-                let mainListCoin = MainListCoin(name: coinName,
-                                                symbol: "\(symbol)/KRW",
-                                                currentPrice: coin.closingPrice,
-                                                fluctuationRate: coin.fluctateRate24H,
-                                                fluctuationAmount: coin.fluctate24H,
-                                                tradeValue: coin.accTradeValue24H,
+                let sign = coin.fluctateRate24H.contains("-") ? "" : "+"
+                let name = coinName
+                let symbol = "\(symbol)/KRW"
+                let currentPrice = coin.closingPrice.toDecimal()
+                let fluctuationRate = sign + coin.fluctateRate24H.toDecimal() + .percent
+                let fluctuationAmount = sign + coin.fluctate24H.toDecimal()
+                let tradeValue = coin.accTradeValue24H.dividedByMillion() + .million
+                let textColor: UIColor = sign == "+" ? .systemRed : .systemBlue
+                
+                let mainListCoin = MainListCoin(name: name,
+                                                symbol: symbol,
+                                                currentPrice: currentPrice,
+                                                fluctuationRate: fluctuationRate,
+                                                fluctuationAmount: fluctuationAmount,
+                                                tradeValue: tradeValue,
                                                 textColor: textColor)
                 mainListCoins.append(mainListCoin)
             }

@@ -30,7 +30,7 @@ class MainListViewController: UIViewController {
 extension MainListViewController {
     @objc private func initializeMainList(notification: Notification) {
         if let data = notification.userInfo?["data"] as? [MainListCoin] {
-            mainListCoins = data
+            mainListCoins = data.sorted { $0.tradeValue.toDouble() > $1.tradeValue.toDouble() }
             makeSnapshot()
         }
     }

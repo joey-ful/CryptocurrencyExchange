@@ -13,7 +13,7 @@ extension String {
     static let million = "백만"
     static let zero = "0"
     
-    func convertedToDecimal() -> String {
+    func toDecimal() -> String {
         guard let number = Double(self) as NSNumber? else { return .zero }
         
         let numberFormatter = NumberFormatter()
@@ -24,7 +24,7 @@ extension String {
         return formatted
     }
     
-    func convertedToMillion() -> String {
+    func dividedByMillion() -> String {
         guard let number = Double(self) else { return .zero }
         
         let numberFormatter = NumberFormatter()
@@ -35,5 +35,10 @@ extension String {
         guard let formatted = numberFormatter.string(from: NSNumber(value: millionNumber)) else { return .zero }
         
         return formatted
+    }
+    
+    func toDouble() -> Double {
+        let number = self.filter { $0.isNumber }
+        return Double(number) ?? 0
     }
 }
