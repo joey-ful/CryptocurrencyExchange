@@ -14,10 +14,12 @@ class MainListViewController: UIViewController {
     private let tableView = UITableView(frame: .zero, style: .plain)
     private var dataSource: MainListDataSource?
     private var mainListCoins: [MainListCoin] = []
+    private var snapshot: NSDiffableDataSourceSnapshot<Int, MainListCoin>?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        setUpTableView()
     }
 
 }
@@ -25,6 +27,15 @@ class MainListViewController: UIViewController {
 extension MainListViewController {
     private func setUpTableView() {
         setTableViewAutoLayout()
+        makeSnapshot()
+    }
+    
+    private func makeSnapshot() {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, MainListCoin>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(mainListCoins, toSection: 0)
+        self.snapshot = snapshot
+        dataSource?.apply(snapshot)
     }
     
     private func setTableViewAutoLayout() {
