@@ -14,10 +14,11 @@ class MainListViewController: UIViewController {
     private let tableView = UITableView(frame: .zero, style: .plain)
     private var dataSource: MainListDataSource?
     private var mainListCoins: [MainListCoin] = [
-        MainListCoin(symbol: "BTC/KRW", currentPrice: "50000000", fluctuationRate: "-1.4", fluctuationAmount: "-718000", tradeValue: "149919203251.1879", textColor: .systemBlue),
-        MainListCoin(symbol: "ETH/KRW", currentPrice: "3733000", fluctuationRate: "-2.76", fluctuationAmount: "-106000", tradeValue: "111405389520.8421", textColor: .systemBlue),
-        MainListCoin(symbol: "ETC/KRW", currentPrice: "40040", fluctuationRate: "6.35", fluctuationAmount: "2390", tradeValue: "361764.02901293", textColor: .systemRed)
+        MainListCoin(name: "비트코인", symbol: "BTC/KRW", currentPrice: "50,000,000", fluctuationRate: "-1.40%", fluctuationAmount: "-718,000", tradeValue: "82,587백만", textColor: .systemBlue),
+        MainListCoin(name: "이더리움", symbol: "ETH/KRW", currentPrice: "3,733,000", fluctuationRate: "-2.76%", fluctuationAmount: "-106,000", tradeValue: "111,405백만", textColor: .systemBlue),
+        MainListCoin(name: "이더리움 클래식", symbol: "ETC/KRW", currentPrice: "0.00000338", fluctuationRate: "16.35%", fluctuationAmount: "420,000", tradeValue: "3백만", textColor: .systemRed)
     ]
+    private let mainListHeaders = ["가산자산명", "현재가", "변동률", "거래금액"]
     private var snapshot: NSDiffableDataSourceSnapshot<Int, MainListCoin>?
 
     override func viewDidLoad() {
@@ -48,10 +49,14 @@ extension MainListViewController {
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.top.equalToSuperview()
+            make.trailing.equalToSuperview().offset(-20)
+            make.top.equalToSuperview().offset(200)
             make.bottom.equalToSuperview()
         }
+        
+        tableView.estimatedRowHeight = UIFont.preferredFont(forTextStyle: .subheadline).pointSize
+        + UIFont.preferredFont(forTextStyle: .caption1).pointSize
+        + 30
     }
     
     private func registerCell() {
