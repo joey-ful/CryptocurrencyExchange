@@ -27,12 +27,12 @@ class MainListTableViewCell: UITableViewCell {
         currentPriceLabel,
         fluctuationStackView,
         tradeValueLabel
-])
+    ])
     
     private lazy var cellStackView = UIStackView.makeStackView(spacing: 20, subviews: [
         nameStackView,
         priceStackView
-])
+    ])
 }
 
 extension MainListTableViewCell {
@@ -81,11 +81,13 @@ extension MainListTableViewCell {
         nameLabel.numberOfLines = 0
         
         currentPriceLabel.textAlignment = .right
+        fluctuationRateLabel.textAlignment = .right
+        fluctuationAmountLabel.textAlignment = .right
         tradeValueLabel.textAlignment = .right
         
         nameLabel.widthAnchor.constraint(equalToConstant: 82).isActive = true
         currentPriceLabel.widthAnchor.constraint(equalToConstant: 87).isActive = true
-        fluctuationRateLabel.widthAnchor.constraint(equalToConstant: 52).isActive = true
+        fluctuationRateLabel.widthAnchor.constraint(equalToConstant: 60).isActive = true
         tradeValueLabel.widthAnchor.constraint(equalToConstant: 80).isActive = true
     }
 }
