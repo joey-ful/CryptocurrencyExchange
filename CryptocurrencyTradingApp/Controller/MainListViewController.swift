@@ -8,8 +8,12 @@
 import UIKit
 import SnapKit
 
+typealias MainListDataSource = UITableViewDiffableDataSource<Int, MainListCoin>
+
 class MainListViewController: UIViewController {
     private let tableView = UITableView(frame: .zero, style: .plain)
+    private var dataSource: MainListDataSource?
+    private var mainListCoins: [MainListCoin] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,5 +36,21 @@ extension MainListViewController {
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
         }
+    }
+    
+    private func registerCell() {
+        dataSource = MainListDataSource(tableView: tableView, cellProvider: { tableView, indexPath, itemIdentifier in
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "mainListCell", for: indexPath)
+                    as? MainListTableViewCell
+            else {
+                return UITableViewCell()
+            }
+            
+            let coin = self.mainListCoins[indexPath.row]
+            cell.configure(coin)
+            
+            return cell
+        })
+        tableView.dataSource = dataSource
     }
 }
