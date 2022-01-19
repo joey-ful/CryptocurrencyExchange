@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class CoinListlTableViewCell: UITableViewCell {
+class MainListTableViewCell: UITableViewCell {
     private var nameLabel = UILabel.makeLabel(font: .body)
     private var symbolLabel = UILabel.makeLabel(font: .caption1, color: .systemGray)
     private var currentPriceLabel = UILabel.makeLabel(font: .body)

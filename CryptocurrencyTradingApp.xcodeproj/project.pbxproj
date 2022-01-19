@@ -7,14 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D47D009B2797A09400E8E305 /* CoinListlTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47D009A2797A09400E8E305 /* CoinListlTableViewCell.swift */; };
+		D47D009B2797A09400E8E305 /* MainListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47D009A2797A09400E8E305 /* MainListTableViewCell.swift */; };
 		D47D009D2797A0C700E8E305 /* UILable+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47D009C2797A0C700E8E305 /* UILable+Extension.swift */; };
 		D47D009F2797A0EA00E8E305 /* UIStackView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47D009E2797A0EA00E8E305 /* UIStackView+Extension.swift */; };
 		D47D00A32797A1A600E8E305 /* MainListCoin.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47D00A22797A1A600E8E305 /* MainListCoin.swift */; };
 		D47D00A52797A70400E8E305 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47D00A42797A70400E8E305 /* String+Extension.swift */; };
 		D4CC01F127953FAF00F15957 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F027953FAF00F15957 /* AppDelegate.swift */; };
 		D4CC01F327953FAF00F15957 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F227953FAF00F15957 /* SceneDelegate.swift */; };
-		D4CC01F527953FAF00F15957 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F427953FAF00F15957 /* ViewController.swift */; };
+		D4CC01F527953FAF00F15957 /* MainListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F427953FAF00F15957 /* MainListViewController.swift */; };
 		D4CC01F827953FAF00F15957 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4CC01F627953FAF00F15957 /* Main.storyboard */; };
 		D4CC01FB27953FAF00F15957 /* CryptocurrencyTradingApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F927953FAF00F15957 /* CryptocurrencyTradingApp.xcdatamodeld */; };
 		D4CC01FD27953FB000F15957 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4CC01FC27953FB000F15957 /* Assets.xcassets */; };
@@ -40,7 +40,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		D47D009A2797A09400E8E305 /* CoinListlTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinListlTableViewCell.swift; sourceTree = "<group>"; };
+		D47D009A2797A09400E8E305 /* MainListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainListTableViewCell.swift; sourceTree = "<group>"; };
 		D47D009C2797A0C700E8E305 /* UILable+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILable+Extension.swift"; sourceTree = "<group>"; };
 		D47D009E2797A0EA00E8E305 /* UIStackView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Extension.swift"; sourceTree = "<group>"; };
 		D47D00A22797A1A600E8E305 /* MainListCoin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainListCoin.swift; sourceTree = "<group>"; };
@@ -48,7 +48,7 @@
 		D4CC01ED27953FAE00F15957 /* CryptocurrencyTradingApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CryptocurrencyTradingApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4CC01F027953FAF00F15957 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D4CC01F227953FAF00F15957 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		D4CC01F427953FAF00F15957 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		D4CC01F427953FAF00F15957 /* MainListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainListViewController.swift; sourceTree = "<group>"; };
 		D4CC01F727953FAF00F15957 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D4CC01FA27953FAF00F15957 /* CryptocurrencyTradingApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CryptocurrencyTradingApp.xcdatamodel; sourceTree = "<group>"; };
 		D4CC01FC27953FB000F15957 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -88,7 +88,7 @@
 		D47D00982797983B00E8E305 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				D4CC01F427953FAF00F15957 /* ViewController.swift */,
+				D4CC01F427953FAF00F15957 /* MainListViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -96,7 +96,7 @@
 		D47D00992797A01800E8E305 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				D47D009A2797A09400E8E305 /* CoinListlTableViewCell.swift */,
+				D47D009A2797A09400E8E305 /* MainListTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -282,7 +282,7 @@
 			files = (
 				E6899C70279544CC0006C980 /* ParsingManager.swift in Sources */,
 				E64BFA3027956FF400BC17A1 /* RequestType.swift in Sources */,
-				D4CC01F527953FAF00F15957 /* ViewController.swift in Sources */,
+				D4CC01F527953FAF00F15957 /* MainListViewController.swift in Sources */,
 				D4CC020B279540CF00F15957 /* WebSockerTicker.swift in Sources */,
 				D4CC01F127953FAF00F15957 /* AppDelegate.swift in Sources */,
 				D4CC020927953FD300F15957 /* TickerAll.swift in Sources */,
@@ -293,7 +293,7 @@
 				E64BFA3627959B7100BC17A1 /* WebSocketDataModel.swift in Sources */,
 				E64BFA272795616600BC17A1 /* WebsocketManager.swift in Sources */,
 				D4CC02272795B3C700F15957 /* RestAPIManager.swift in Sources */,
-				D47D009B2797A09400E8E305 /* CoinListlTableViewCell.swift in Sources */,
+				D47D009B2797A09400E8E305 /* MainListTableViewCell.swift in Sources */,
 				E6899C73279546320006C980 /* ParsingError.swift in Sources */,
 				D4CC021427954B7000F15957 /* NetworkError.swift in Sources */,
 				D47D00A32797A1A600E8E305 /* MainListCoin.swift in Sources */,
