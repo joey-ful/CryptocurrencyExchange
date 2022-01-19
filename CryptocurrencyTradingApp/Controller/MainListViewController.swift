@@ -13,20 +13,27 @@ typealias MainListDataSource = UITableViewDiffableDataSource<Int, MainListCoin>
 class MainListViewController: UIViewController {
     private let tableView = UITableView(frame: .zero, style: .plain)
     private var dataSource: MainListDataSource?
-    private var mainListCoins: [MainListCoin] = [
-        MainListCoin(name: "비트코인", symbol: "BTC/KRW", currentPrice: "50,000,000", fluctuationRate: "-1.40%", fluctuationAmount: "-718,000", tradeValue: "82,587백만", textColor: .systemBlue),
-        MainListCoin(name: "이더리움", symbol: "ETH/KRW", currentPrice: "3,733,000", fluctuationRate: "-2.76%", fluctuationAmount: "-106,000", tradeValue: "111,405백만", textColor: .systemBlue),
-        MainListCoin(name: "이더리움 클래식", symbol: "ETC/KRW", currentPrice: "0.00000338", fluctuationRate: "16.35%", fluctuationAmount: "420,000", tradeValue: "3백만", textColor: .systemRed)
-    ]
-    private let mainListHeaders = ["가산자산명", "현재가", "변동률", "거래금액"]
+    private var mainListCoins: [MainListCoin] = []
     private var snapshot: NSDiffableDataSourceSnapshot<Int, MainListCoin>?
+    private let restAPIManager = RestAPIManager()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+
+        NotificationCenter.default.addObserver(self, selector: #selector(initializeMainList), name: .restAPITickerAllNotification, object: nil)
+        restAPIManager.fetch(type: .tickerAll, paymentCurrency: .KRW)
         setUpTableView()
     }
 
+}
+
+extension MainListViewController {
+    @objc private func initializeMainList(notification: Notification) {
+        if let data = notification.userInfo?["data"] as? [MainListCoin] {
+            mainListCoins = data
+            makeSnapshot()
+        }
+    }
 }
 
 extension MainListViewController {

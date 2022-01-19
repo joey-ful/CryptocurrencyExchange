@@ -58,4 +58,17 @@ enum CoinType: String {
     var sysmbol: String {
         return "\(self.rawValue.uppercased())_KRW"
     }
+    
+    static func name(symbol: String) -> String? {
+        switch symbol {
+        case "btc":
+            return "비트코인"
+        case "eth":
+            return "이더리움"
+        case "etc":
+            return "이더리움 클래식"
+        default:
+            return nil
+        }
+    }
 }
