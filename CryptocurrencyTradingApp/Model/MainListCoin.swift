@@ -10,11 +10,11 @@ import UIKit
 struct MainListCoin: Hashable {
     let name: String
     let symbol: String
-    let currentPrice: String
-    let fluctuationRate: String
-    let fluctuationAmount: String
-    let tradeValue: String
-    let textColor: UIColor
+    var currentPrice: String
+    var fluctuationRate: String
+    var fluctuationAmount: String
+    var tradeValue: String
+    var textColor: UIColor
     
     static func == (lhs: MainListCoin, rhs: MainListCoin) -> Bool {
         return lhs.symbol == rhs.symbol

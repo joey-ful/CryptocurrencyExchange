@@ -16,11 +16,14 @@ class MainListViewController: UIViewController {
     private var mainListCoins: [MainListCoin] = []
     private var snapshot: NSDiffableDataSourceSnapshot<Int, MainListCoin>?
     private let restAPIManager = RestAPIManager()
+    private let webSocketManager = WebsocketManger()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         NotificationCenter.default.addObserver(self, selector: #selector(initializeMainList), name: .restAPITickerAllNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateTransaction), name: .webSocketTransactionNotification, object: nil)
+        
         restAPIManager.fetch(type: .tickerAll, paymentCurrency: .KRW)
         setUpTableView()
     }
@@ -32,6 +35,21 @@ extension MainListViewController {
         if let data = notification.userInfo?["data"] as? [MainListCoin] {
             mainListCoins = data.sorted { $0.tradeValue.toDouble() > $1.tradeValue.toDouble() }
             makeSnapshot()
+            self.webSocketManager.connectWebSocket(.transaction, CoinType.allCoins, [.twentyfour])
+        }
+    }
+    
+    @objc private func updateTransaction(notification: Notification) {
+        guard let transactions = notification.userInfo?["data"] as? [Transaction] else { return }
+        transactions.forEach { transaction in
+            mainListCoins.enumerated().forEach { index, oldCoin in
+                if mainListCoins[index].symbol == transaction.symbol.replacingOccurrences(of: "_", with: "/") {
+                    mainListCoins[index].currentPrice = transaction.price
+                    DispatchQueue.main.async { [weak self] in
+                        self?.makeSnapshot()
+                    }
+                }
+            }
         }
     }
 }
@@ -48,7 +66,7 @@ extension MainListViewController {
         snapshot.appendSections([0])
         snapshot.appendItems(mainListCoins, toSection: 0)
         self.snapshot = snapshot
-        dataSource?.apply(snapshot)
+        dataSource?.apply(snapshot, animatingDifferences: false)
     }
     
     private func setTableViewAutoLayout() {
@@ -64,6 +82,8 @@ extension MainListViewController {
         tableView.estimatedRowHeight = UIFont.preferredFont(forTextStyle: .subheadline).pointSize
         + UIFont.preferredFont(forTextStyle: .caption1).pointSize
         + 30
+        
+    
     }
     
     private func registerCell() {

@@ -96,7 +96,7 @@ class RestAPIManager {
             {
                 let sign = coin.fluctateRate24H.contains("-") ? "" : "+"
                 let name = coinName
-                let symbol = "\(symbol)/KRW"
+                let symbol = "\(symbol.uppercased())/KRW"
                 let currentPrice = coin.closingPrice.toDecimal()
                 let fluctuationRate = sign + coin.fluctateRate24H.toDecimal() + .percent
                 let fluctuationAmount = sign + coin.fluctate24H.toDecimal()
