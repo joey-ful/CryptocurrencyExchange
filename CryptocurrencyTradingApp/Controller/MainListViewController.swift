@@ -21,6 +21,7 @@ class MainListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = .white
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(initializeMainList),
                                                name: .restAPITickerAllNotification,
@@ -119,6 +120,7 @@ extension MainListViewController {
     
     private func setTableViewAutoLayout() {
         tableView.register(MainListTableViewCell.self, forCellReuseIdentifier: "mainListCell")
+        tableView.delegate = self
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
@@ -148,5 +150,15 @@ extension MainListViewController {
             return cell
         })
         tableView.dataSource = dataSource
+    }
+}
+
+extension MainListViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let chartViewController = ChartViewController()
+        let coinName = mainListCoins[indexPath.row].symbol.split(separator: "/")[0].lowercased()
+        guard let coin = CoinType.coin(coinName: coinName) else { return }
+        chartViewController.initiate(paymentCurrency: .KRW, coin: coin)
+        navigationController?.pushViewController(chartViewController, animated: true)
     }
 }

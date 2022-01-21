@@ -20,6 +20,7 @@ class ChartViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        view.backgroundColor = .white
         NotificationCenter.default.addObserver(self, selector: #selector(fetchData), name: .candlestickNotification, object: nil)
         restAPIManager.fetch(type: .candlestick, paymentCurrency: .KRW, coin: .ada, chartIntervals: .oneMinute)
     }
@@ -31,6 +32,10 @@ class ChartViewController: UIViewController {
         } else {
             print("error")
         }
+    }
+    
+    func initiate(paymentCurrency: RestAPIType.PaymentCurrency, coin: CoinType) {
+        
     }
     
     private func makeCombineView(candleChartData: CandleChartDataSet, lineChartData: LineChartDataSet) {

@@ -63,6 +63,11 @@ enum CoinType: String, CaseIterable {
         return CoinType.allCases
     }
     
+    static func coin(coinName: String) -> CoinType? {
+        let matchList = CoinType.allCases.filter { $0.rawValue == coinName }
+        return matchList == [] ? nil : matchList[0]
+    }
+    
     static func name(symbol: String) -> String? {
         switch symbol {
         case "btc":
