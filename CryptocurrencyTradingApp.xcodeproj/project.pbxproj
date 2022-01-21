@@ -14,7 +14,7 @@
 		D47D00A52797A70400E8E305 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47D00A42797A70400E8E305 /* String+Extension.swift */; };
 		D4CC01F127953FAF00F15957 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F027953FAF00F15957 /* AppDelegate.swift */; };
 		D4CC01F327953FAF00F15957 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F227953FAF00F15957 /* SceneDelegate.swift */; };
-		D4CC01F527953FAF00F15957 /* MainListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F427953FAF00F15957 /* MainListViewController.swift */; };
+		D4CC01F527953FAF00F15957 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F427953FAF00F15957 /* ViewController.swift */; };
 		D4CC01F827953FAF00F15957 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4CC01F627953FAF00F15957 /* Main.storyboard */; };
 		D4CC01FB27953FAF00F15957 /* CryptocurrencyTradingApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F927953FAF00F15957 /* CryptocurrencyTradingApp.xcdatamodeld */; };
 		D4CC01FD27953FB000F15957 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4CC01FC27953FB000F15957 /* Assets.xcassets */; };
@@ -26,6 +26,7 @@
 		D4CC02222795504900F15957 /* RestAPIType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC02212795504900F15957 /* RestAPIType.swift */; };
 		D4CC02272795B3C700F15957 /* RestAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC02262795B3C700F15957 /* RestAPIManager.swift */; };
 		D4CC0265279690B800F15957 /* RestAPIDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC0264279690B800F15957 /* RestAPIDataModel.swift */; };
+		D4D0D2002799A35100734C42 /* MainListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0D1FF2799A35100734C42 /* MainListViewController.swift */; };
 		E61B2C032796BC4100E919B0 /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = E61B2C022796BC4100E919B0 /* Charts */; };
 		E61B2C082796BC5700E919B0 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = E61B2C072796BC5700E919B0 /* SnapKit */; };
 		E64BFA272795616600BC17A1 /* WebsocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFA262795616600BC17A1 /* WebsocketManager.swift */; };
@@ -48,7 +49,7 @@
 		D4CC01ED27953FAE00F15957 /* CryptocurrencyTradingApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CryptocurrencyTradingApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4CC01F027953FAF00F15957 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D4CC01F227953FAF00F15957 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		D4CC01F427953FAF00F15957 /* MainListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainListViewController.swift; sourceTree = "<group>"; };
+		D4CC01F427953FAF00F15957 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		D4CC01F727953FAF00F15957 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D4CC01FA27953FAF00F15957 /* CryptocurrencyTradingApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CryptocurrencyTradingApp.xcdatamodel; sourceTree = "<group>"; };
 		D4CC01FC27953FB000F15957 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -61,6 +62,7 @@
 		D4CC02212795504900F15957 /* RestAPIType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestAPIType.swift; sourceTree = "<group>"; };
 		D4CC02262795B3C700F15957 /* RestAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestAPIManager.swift; sourceTree = "<group>"; };
 		D4CC0264279690B800F15957 /* RestAPIDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestAPIDataModel.swift; sourceTree = "<group>"; };
+		D4D0D1FF2799A35100734C42 /* MainListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainListViewController.swift; sourceTree = "<group>"; };
 		E64BFA262795616600BC17A1 /* WebsocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebsocketManager.swift; sourceTree = "<group>"; };
 		E64BFA2B27956FAC00BC17A1 /* WebsocketParameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebsocketParameter.swift; sourceTree = "<group>"; };
 		E64BFA2D27956FCF00BC17A1 /* RequestTik.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestTik.swift; sourceTree = "<group>"; };
@@ -88,7 +90,7 @@
 		D47D00982797983B00E8E305 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				D4CC01F427953FAF00F15957 /* MainListViewController.swift */,
+				D4D0D1FF2799A35100734C42 /* MainListViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -128,6 +130,7 @@
 				D4CC020727953FCD00F15957 /* Model */,
 				D47D00992797A01800E8E305 /* View */,
 				D47D00982797983B00E8E305 /* Controller */,
+				D4CC01F427953FAF00F15957 /* ViewController.swift */,
 				D4CC01F027953FAF00F15957 /* AppDelegate.swift */,
 				D4CC01F227953FAF00F15957 /* SceneDelegate.swift */,
 				D4CC01F627953FAF00F15957 /* Main.storyboard */,
@@ -281,8 +284,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				E6899C70279544CC0006C980 /* ParsingManager.swift in Sources */,
+				D4D0D2002799A35100734C42 /* MainListViewController.swift in Sources */,
 				E64BFA3027956FF400BC17A1 /* RequestType.swift in Sources */,
-				D4CC01F527953FAF00F15957 /* MainListViewController.swift in Sources */,
+				D4CC01F527953FAF00F15957 /* ViewController.swift in Sources */,
 				D4CC020B279540CF00F15957 /* WebSockerTicker.swift in Sources */,
 				D4CC01F127953FAF00F15957 /* AppDelegate.swift in Sources */,
 				D4CC020927953FD300F15957 /* TickerAll.swift in Sources */,

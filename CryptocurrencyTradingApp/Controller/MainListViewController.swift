@@ -1,8 +1,8 @@
 //
-//  ViewController.swift
+//  MainListViewController.swift
 //  CryptocurrencyTradingApp
 //
-//  Created by 홍정아 on 2022/01/17.
+//  Created by 홍정아 on 2022/01/20.
 //
 
 import UIKit
