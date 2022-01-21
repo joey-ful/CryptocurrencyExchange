@@ -26,6 +26,9 @@
 		D4CC02272795B3C700F15957 /* RestAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC02262795B3C700F15957 /* RestAPIManager.swift */; };
 		D4CC0265279690B800F15957 /* RestAPIDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC0264279690B800F15957 /* RestAPIDataModel.swift */; };
 		D4D0D2002799A35100734C42 /* MainListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0D1FF2799A35100734C42 /* MainListViewController.swift */; };
+		D4D0D294279AE73000734C42 /* CandleData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0D292279AE73000734C42 /* CandleData+CoreDataClass.swift */; };
+		D4D0D295279AE73000734C42 /* CandleData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0D293279AE73000734C42 /* CandleData+CoreDataProperties.swift */; };
+		D4D0D298279AE7A000734C42 /* CandleCoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0D297279AE7A000734C42 /* CandleCoreDataManager.swift */; };
 		E61B2C032796BC4100E919B0 /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = E61B2C022796BC4100E919B0 /* Charts */; };
 		E61B2C082796BC5700E919B0 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = E61B2C072796BC5700E919B0 /* SnapKit */; };
 		E64BFA272795616600BC17A1 /* WebsocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFA262795616600BC17A1 /* WebsocketManager.swift */; };
@@ -64,6 +67,9 @@
 		D4CC02262795B3C700F15957 /* RestAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestAPIManager.swift; sourceTree = "<group>"; };
 		D4CC0264279690B800F15957 /* RestAPIDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestAPIDataModel.swift; sourceTree = "<group>"; };
 		D4D0D1FF2799A35100734C42 /* MainListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainListViewController.swift; sourceTree = "<group>"; };
+		D4D0D292279AE73000734C42 /* CandleData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CandleData+CoreDataClass.swift"; sourceTree = "<group>"; };
+		D4D0D293279AE73000734C42 /* CandleData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CandleData+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		D4D0D297279AE7A000734C42 /* CandleCoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleCoreDataManager.swift; sourceTree = "<group>"; };
 		E64BFA262795616600BC17A1 /* WebsocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebsocketManager.swift; sourceTree = "<group>"; };
 		E64BFA2B27956FAC00BC17A1 /* WebsocketParameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebsocketParameter.swift; sourceTree = "<group>"; };
 		E64BFA2D27956FCF00BC17A1 /* RequestTik.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestTik.swift; sourceTree = "<group>"; };
@@ -110,6 +116,8 @@
 		D4CC01E427953FAE00F15957 = {
 			isa = PBXGroup;
 			children = (
+				D4D0D292279AE73000734C42 /* CandleData+CoreDataClass.swift */,
+				D4D0D293279AE73000734C42 /* CandleData+CoreDataProperties.swift */,
 				D4CC01EF27953FAF00F15957 /* CryptocurrencyTradingApp */,
 				D4CC01EE27953FAE00F15957 /* Products */,
 			);
@@ -126,6 +134,7 @@
 		D4CC01EF27953FAF00F15957 /* CryptocurrencyTradingApp */ = {
 			isa = PBXGroup;
 			children = (
+				D4D0D296279AE79400734C42 /* CoreData */,
 				E64BFA3727959D1600BC17A1 /* Extension */,
 				D4CC021E27954F3D00F15957 /* Enum */,
 				D4CC020E27954AEC00F15957 /* Protocol */,
@@ -178,6 +187,14 @@
 				E64BFA3127958BD900BC17A1 /* CoinType.swift */,
 			);
 			path = Enum;
+			sourceTree = "<group>";
+		};
+		D4D0D296279AE79400734C42 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				D4D0D297279AE7A000734C42 /* CandleCoreDataManager.swift */,
+			);
+			path = CoreData;
 			sourceTree = "<group>";
 		};
 		E64BFA3727959D1600BC17A1 /* Extension */ = {
@@ -288,12 +305,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4D0D295279AE73000734C42 /* CandleData+CoreDataProperties.swift in Sources */,
 				E6899C70279544CC0006C980 /* ParsingManager.swift in Sources */,
 				E6EC8683279AC36C005A6534 /* ChartViewController.swift in Sources */,
 				D4D0D2002799A35100734C42 /* MainListViewController.swift in Sources */,
 				E64BFA3027956FF400BC17A1 /* RequestType.swift in Sources */,
 				D4CC01F527953FAF00F15957 /* ViewController.swift in Sources */,
 				D4CC020B279540CF00F15957 /* WebSockerTicker.swift in Sources */,
+				D4D0D298279AE7A000734C42 /* CandleCoreDataManager.swift in Sources */,
+				D4D0D294279AE73000734C42 /* CandleData+CoreDataClass.swift in Sources */,
 				D4CC01F127953FAF00F15957 /* AppDelegate.swift in Sources */,
 				D4CC020927953FD300F15957 /* TickerAll.swift in Sources */,
 				E64BFA2E27956FCF00BC17A1 /* RequestTik.swift in Sources */,
