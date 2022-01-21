@@ -25,13 +25,41 @@ class ChartViewController: UIViewController {
         restAPIManager.fetch(type: .candlestick, paymentCurrency: .KRW, coin: .ada, chartIntervals: .oneMinute)
     }
     
-    
     @objc func fetchData(notification: Notification) {
         if let result = notification.userInfo?["data"] as? [[CandleStick.CandleData]] {
             candleStickData = result
         } else {
             print("error")
         }
+    }
+    
+    private func setLayoutForChartView() {
+        chartView = CombinedChartView()
+        self.view.addSubview(chartView)
+        chartView.snp.makeConstraints { make in
+            make.leading.equalTo(view.safeAreaLayoutGuide)
+            make.trailing.equalTo(view.safeAreaLayoutGuide)
+            make.top.equalToSuperview().offset(200)
+            make.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
+    }
+    
+    private func setUIForLineChart(dataSet: LineChartDataSet) {
+        dataSet.circleColors = [.orange]
+        dataSet.colors = [.orange]
+        dataSet.mode = .cubicBezier
+        dataSet.circleRadius = .zero
+        dataSet.drawCircleHoleEnabled = false
+    }
+    
+    private func setUIForCandelChart(dataSet: CandleChartDataSet) {
+        dataSet.increasingColor = .red
+        dataSet.decreasingColor = .blue
+        dataSet.shadowWidth = 1
+        dataSet.shadowColorSameAsCandle = true
+        dataSet.decreasingFilled = true
+        dataSet.increasingFilled = true
+        dataSet.valueTextColor = .clear
     }
     
     private func convert(_ candleData: CandleStick.CandleData) -> Double {
