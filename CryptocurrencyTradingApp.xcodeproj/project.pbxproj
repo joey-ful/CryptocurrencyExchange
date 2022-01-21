@@ -22,7 +22,6 @@
 		D4CC02272795B3C700F15957 /* RestAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC02262795B3C700F15957 /* RestAPIManager.swift */; };
 		D4CC0265279690B800F15957 /* RestAPIDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC0264279690B800F15957 /* RestAPIDataModel.swift */; };
 		E61B2C032796BC4100E919B0 /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = E61B2C022796BC4100E919B0 /* Charts */; };
-		E61B2C052796BC4100E919B0 /* ChartsDynamic in Frameworks */ = {isa = PBXBuildFile; productRef = E61B2C042796BC4100E919B0 /* ChartsDynamic */; };
 		E61B2C082796BC5700E919B0 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = E61B2C072796BC5700E919B0 /* SnapKit */; };
 		E64BFA272795616600BC17A1 /* WebsocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFA262795616600BC17A1 /* WebsocketManager.swift */; };
 		E64BFA2C27956FAC00BC17A1 /* WebsocketParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFA2B27956FAC00BC17A1 /* WebsocketParameter.swift */; };
@@ -31,8 +30,10 @@
 		E64BFA3227958BD900BC17A1 /* CoinType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFA3127958BD900BC17A1 /* CoinType.swift */; };
 		E64BFA3627959B7100BC17A1 /* WebSocketDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFA3527959B7100BC17A1 /* WebSocketDataModel.swift */; };
 		E64BFA3927959D3100BC17A1 /* NotificationName+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFA3827959D3100BC17A1 /* NotificationName+Extension.swift */; };
+		E68713602798422B0036CA0D /* CandleStick.swift in Sources */ = {isa = PBXBuildFile; fileRef = E687135F2798422B0036CA0D /* CandleStick.swift */; };
 		E6899C70279544CC0006C980 /* ParsingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6899C6F279544CC0006C980 /* ParsingManager.swift */; };
 		E6899C73279546320006C980 /* ParsingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6899C72279546320006C980 /* ParsingError.swift */; };
+		E6C96497279A9A7F0007B55E /* RequestChartInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C96496279A9A7F0007B55E /* RequestChartInterval.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,8 +60,10 @@
 		E64BFA3127958BD900BC17A1 /* CoinType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinType.swift; sourceTree = "<group>"; };
 		E64BFA3527959B7100BC17A1 /* WebSocketDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketDataModel.swift; sourceTree = "<group>"; };
 		E64BFA3827959D3100BC17A1 /* NotificationName+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationName+Extension.swift"; sourceTree = "<group>"; };
+		E687135F2798422B0036CA0D /* CandleStick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleStick.swift; sourceTree = "<group>"; };
 		E6899C6F279544CC0006C980 /* ParsingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsingManager.swift; sourceTree = "<group>"; };
 		E6899C72279546320006C980 /* ParsingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsingError.swift; sourceTree = "<group>"; };
+		E6C96496279A9A7F0007B55E /* RequestChartInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestChartInterval.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,7 +73,6 @@
 			files = (
 				E61B2C082796BC5700E919B0 /* SnapKit in Frameworks */,
 				E61B2C032796BC4100E919B0 /* Charts in Frameworks */,
-				E61B2C052796BC4100E919B0 /* ChartsDynamic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,6 +120,7 @@
 			isa = PBXGroup;
 			children = (
 				D4CC020827953FD300F15957 /* TickerAll.swift */,
+				E687135F2798422B0036CA0D /* CandleStick.swift */,
 				D4CC020A279540CF00F15957 /* WebSockerTicker.swift */,
 				D4CC020C2795411A00F15957 /* WebSocketTransaction.swift */,
 				E64BFA2B27956FAC00BC17A1 /* WebsocketParameter.swift */,
@@ -140,6 +143,7 @@
 				D4CC02212795504900F15957 /* RestAPIType.swift */,
 				E64BFA2D27956FCF00BC17A1 /* RequestTik.swift */,
 				E64BFA2F27956FF400BC17A1 /* RequestType.swift */,
+				E6C96496279A9A7F0007B55E /* RequestChartInterval.swift */,
 				E64BFA3127958BD900BC17A1 /* CoinType.swift */,
 			);
 			path = Enum;
@@ -190,7 +194,6 @@
 			name = CryptocurrencyTradingApp;
 			packageProductDependencies = (
 				E61B2C022796BC4100E919B0 /* Charts */,
-				E61B2C042796BC4100E919B0 /* ChartsDynamic */,
 				E61B2C072796BC5700E919B0 /* SnapKit */,
 			);
 			productName = CryptocurrencyTradingApp;
@@ -263,6 +266,7 @@
 				D4CC020D2795411A00F15957 /* WebSocketTransaction.swift in Sources */,
 				E64BFA3627959B7100BC17A1 /* WebSocketDataModel.swift in Sources */,
 				E64BFA272795616600BC17A1 /* WebsocketManager.swift in Sources */,
+				E6C96497279A9A7F0007B55E /* RequestChartInterval.swift in Sources */,
 				D4CC02272795B3C700F15957 /* RestAPIManager.swift in Sources */,
 				E6899C73279546320006C980 /* ParsingError.swift in Sources */,
 				D4CC021427954B7000F15957 /* NetworkError.swift in Sources */,
@@ -271,6 +275,7 @@
 				E64BFA3927959D3100BC17A1 /* NotificationName+Extension.swift in Sources */,
 				D4CC02222795504900F15957 /* RestAPIType.swift in Sources */,
 				E64BFA3227958BD900BC17A1 /* CoinType.swift in Sources */,
+				E68713602798422B0036CA0D /* CandleStick.swift in Sources */,
 				D4CC01FB27953FAF00F15957 /* CryptocurrencyTradingApp.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -498,7 +503,7 @@
 			repositoryURL = "https://github.com/danielgindi/Charts.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 4.0.0;
+				minimumVersion = 3.6.0;
 			};
 		};
 		E61B2C062796BC5700E919B0 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
@@ -516,11 +521,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E61B2C012796BC4100E919B0 /* XCRemoteSwiftPackageReference "Charts" */;
 			productName = Charts;
-		};
-		E61B2C042796BC4100E919B0 /* ChartsDynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E61B2C012796BC4100E919B0 /* XCRemoteSwiftPackageReference "Charts" */;
-			productName = ChartsDynamic;
 		};
 		E61B2C072796BC5700E919B0 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
