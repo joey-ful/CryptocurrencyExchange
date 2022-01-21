@@ -13,7 +13,6 @@ class ChartViewController: UIViewController {
     
     private var chartView: CombinedChartView!
 
-    
     private var restAPIManager = RestAPIManager()
     private var candleStickData: [[CandleStick.CandleData]] = []
     private var data: CombinedChartData = CombinedChartData()
@@ -28,9 +27,24 @@ class ChartViewController: UIViewController {
     @objc func fetchData(notification: Notification) {
         if let result = notification.userInfo?["data"] as? [[CandleStick.CandleData]] {
             candleStickData = result
+            makeCombineView(candleChartData: makeCandleChartData(), lineChartData: makeLineChartData())
         } else {
             print("error")
         }
+    }
+    
+    private func makeCombineView(candleChartData: CandleChartDataSet, lineChartData: LineChartDataSet) {
+        setLayoutForChartView()
+        setUIForLineChart(dataSet: lineChartData)
+        setUIForCandelChart(dataSet: candleChartData)
+        let chartData = CandleChartData(dataSets: [candleChartData])
+        let lineData = LineChartData(dataSets: [lineChartData])
+        
+        data.candleData = chartData
+        data.lineData = lineData
+//        chartView.doubleTapToZoomEnabled = false
+//        chartView.pinchZoomEnabled = false
+        chartView.data = data
     }
     
     private func setLayoutForChartView() {
