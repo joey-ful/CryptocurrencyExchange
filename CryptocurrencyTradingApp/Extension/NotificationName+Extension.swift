@@ -12,4 +12,5 @@ extension Notification.Name {
     static let webSocketTickerNotification = Notification.Name("webSocketTickerNotification")
     static let webSocketTicker24HNotification = Notification.Name("webSocketTicker24HNotification")
     static let restAPITickerAllNotification = Notification.Name("restAPITickerAllNotification")
+    static let candlestickNotification = Notification.Name("candlestickNotification")
 }
