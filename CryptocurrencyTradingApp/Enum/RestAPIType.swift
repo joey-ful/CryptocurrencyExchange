@@ -15,6 +15,7 @@ enum RestAPIType: String {
     case transactionHistory = "transaction_history/"
     case assetStatus = "assetstatus/"
     case assetStatusAll = "assetstatus/ALL"
+    case candlestick = "candlestick/"
 
     var baseURL: String {
       return "https://api.bithumb.com/public/"
@@ -25,11 +26,14 @@ enum RestAPIType: String {
         case BTC
     }
     
-    func urlString(paymentCurrency: PaymentCurrency, coin: CoinType? = nil) -> String? {
+    func urlString(paymentCurrency: PaymentCurrency, coin: CoinType? = nil, chartIntervals: RequestChartInterval? = .twentyFourHour) -> String? {
         let path = self.rawValue
-        
+    
         if path.contains("ALL") {
             return baseURL + path + "_\(paymentCurrency)"
+        } else if path.contains("candlestick") {
+            guard let coin = coin, let chartIntervals = chartIntervals else { return nil }
+            return baseURL + path + "\(coin)_\(paymentCurrency)\(chartIntervals.rawValue)"
         } else {
             guard let coin = coin else { return nil }
             return baseURL + path + "\(coin)_\(paymentCurrency)"
