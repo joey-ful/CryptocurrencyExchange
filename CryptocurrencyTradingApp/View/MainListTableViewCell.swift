@@ -15,23 +15,30 @@ class MainListTableViewCell: UITableViewCell {
     private var fluctuationRateLabel = UILabel.makeLabel(font: .subheadline)
     private var fluctuationAmountLabel = UILabel.makeLabel(font: .caption1)
     private var tradeValueLabel  = UILabel.makeLabel(font: .subheadline)
+    private lazy var underline: UIView = {
+        let view = UIView()
+        view.heightAnchor.constraint(equalToConstant: 2).isActive = true
+        return view
+    }()
     
     private lazy var nameStackView = UIStackView
         .makeStackView(axis: .vertical,
                        subviews: [nameLabel, symbolLabel])
+    private lazy var priceStackView = UIStackView
+        .makeStackView(axis: .vertical, subviews: [currentPriceLabel, underline])
     private lazy var fluctuationStackView = UIStackView
         .makeStackView(alignment: .trailing,
                        axis: .vertical,
                        subviews: [fluctuationRateLabel, fluctuationAmountLabel])
-    private lazy var priceStackView = UIStackView.makeStackView(spacing: 20, subviews: [
-        currentPriceLabel,
+    private lazy var numbersView = UIStackView.makeStackView(spacing: 10, subviews: [
+        priceStackView,
         fluctuationStackView,
         tradeValueLabel
     ])
     
-    private lazy var cellStackView = UIStackView.makeStackView(spacing: 20, subviews: [
+    private lazy var cellStackView = UIStackView.makeStackView(spacing: 10, subviews: [
         nameStackView,
-        priceStackView
+        numbersView
     ])
 }
 
@@ -86,8 +93,18 @@ extension MainListTableViewCell {
         tradeValueLabel.textAlignment = .right
         
         nameLabel.widthAnchor.constraint(equalToConstant: 82).isActive = true
-        currentPriceLabel.widthAnchor.constraint(equalToConstant: 87).isActive = true
-        fluctuationRateLabel.widthAnchor.constraint(equalToConstant: 60).isActive = true
-        tradeValueLabel.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        fluctuationRateLabel.widthAnchor.constraint(equalToConstant: 75).isActive = true
+        tradeValueLabel.widthAnchor.constraint(equalToConstant: 85).isActive = true
+    }
+    
+    func blink(in color: UIColor) {
+        UIView.animate(withDuration: 0.2, delay: 0, options: []) {
+            self.backgroundColor = color.withAlphaComponent(0.1)
+            self.underline.widthAnchor.constraint(equalTo: self.currentPriceLabel.widthAnchor).isActive = true
+            self.underline.backgroundColor = color
+        } completion: { done in
+            self.backgroundColor = .clear
+            self.underline.backgroundColor = .clear
+        }
     }
 }
