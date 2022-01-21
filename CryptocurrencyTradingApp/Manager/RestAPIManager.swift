@@ -5,7 +5,7 @@
 //  Created by 홍정아 on 2022/01/17.
 //
 
-import Foundation
+import UIKit
 
 class RestAPIManager {
     private let rangeOfSuccessState = 200...299
@@ -86,15 +86,33 @@ class RestAPIManager {
         }
     }
     
-    private func mirror(_ data: TickerAll.Data) -> [String: TickerAll.Data.Coin] {
-        var tickerAllDictionary: [String: TickerAll.Data.Coin] = [:]
+    private func mirror(_ data: TickerAll.Data) -> [MainListCoin] {
+        var mainListCoins: [MainListCoin] = []
         let mirror = Mirror(reflecting: data)
         Array(mirror.children).forEach {
-            if let coinName = $0.label,
-               let coin = ($0.value as? TickerAll.Data.Coin) {
-                tickerAllDictionary[coinName] = coin
+            if let symbol = $0.label,
+               let coin = ($0.value as? TickerAll.Data.Coin),
+               let coinName = CoinType.name(symbol: symbol)
+            {
+                let sign = coin.fluctateRate24H.contains("-") ? "" : "+"
+                let name = coinName
+                let symbol = "\(symbol.uppercased())/KRW"
+                let currentPrice = coin.closingPrice.toDecimal()
+                let fluctuationRate = sign + coin.fluctateRate24H.toDecimal() + .percent
+                let fluctuationAmount = sign + coin.fluctate24H.toDecimal()
+                let tradeValue = coin.accTradeValue24H.dividedByMillion() + .million
+                let textColor: UIColor = sign == "+" ? .systemRed : .systemBlue
+                
+                let mainListCoin = MainListCoin(name: name,
+                                                symbol: symbol,
+                                                currentPrice: currentPrice,
+                                                fluctuationRate: fluctuationRate,
+                                                fluctuationAmount: fluctuationAmount,
+                                                tradeValue: tradeValue,
+                                                textColor: textColor)
+                mainListCoins.append(mainListCoin)
             }
         }
-        return tickerAllDictionary
+        return mainListCoins
     }
 }

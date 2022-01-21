@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum CoinType: String {
+enum CoinType: String, CaseIterable {
     case btc, eth, ltc, etc
     case xrp, bch, qtum, btg
     case eos, icx, trx, elf
@@ -57,5 +57,22 @@ enum CoinType: String {
     
     var sysmbol: String {
         return "\(self.rawValue.uppercased())_KRW"
+    }
+    
+    static var allCoins: [CoinType] {
+        return CoinType.allCases
+    }
+    
+    static func name(symbol: String) -> String? {
+        switch symbol {
+        case "btc":
+            return "비트코인"
+        case "eth":
+            return "이더리움"
+        case "etc":
+            return "이더리움 클래식"
+        default:
+            return "나머지"
+        }
     }
 }

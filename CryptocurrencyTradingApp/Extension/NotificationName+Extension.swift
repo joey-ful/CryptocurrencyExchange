@@ -10,5 +10,6 @@ import Foundation
 extension Notification.Name {
     static let webSocketTransactionNotification = Notification.Name("webSocketTransactionNotification")
     static let webSocketTickerNotification = Notification.Name("webSocketTickerNotification")
+    static let webSocketTicker24HNotification = Notification.Name("webSocketTicker24HNotification")
     static let restAPITickerAllNotification = Notification.Name("restAPITickerAllNotification")
 }
