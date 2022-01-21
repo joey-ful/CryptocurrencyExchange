@@ -26,6 +26,10 @@ class MainListViewController: UIViewController {
                                                name: .restAPITickerAllNotification,
                                                object: nil)
         NotificationCenter.default.addObserver(self,
+                                               selector: #selector(updateCoin),
+                                               name: .webSocketTickerNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
                                                selector: #selector(updateTradeValue),
                                                name: .webSocketTicker24HNotification,
                                                object: nil)
@@ -36,7 +40,7 @@ class MainListViewController: UIViewController {
         
         restAPIManager.fetch(type: .tickerAll, paymentCurrency: .KRW)
         webSocketManager.connectWebSocket(.transaction, CoinType.allCoins, nil)
-        webSocketManager.connectWebSocket(.ticker, CoinType.allCoins, [.twentyfour])
+        webSocketManager.connectWebSocket(.ticker, CoinType.allCoins, [.twentyfour, .yesterday])
         setUpTableView()
     }
 
@@ -63,6 +67,20 @@ extension MainListViewController {
         }
     }
     
+    @objc private func updateCoin(notification: Notification) {
+        guard let ticker = notification.userInfo?["data"] as? Ticker else { return }
+        
+        DispatchQueue.main.async { [weak self] in
+            self?.mainListCoins.enumerated().forEach { index, oldCoin in
+                if self?.mainListCoins[index].symbol == ticker.symbol.replacingOccurrences(of: "_", with: "/") {
+                    
+                    let sign = ticker.fluctuationRate.contains("-") ? "" : "+"
+                    self?.mainListCoins[index].fluctuationRate = sign + ticker.fluctuationRate.toDecimal() + .percent
+                    self?.mainListCoins[index].fluctuationAmount = sign + ticker.fluctuationAmount.toDecimal()
+                    self?.mainListCoins[index].textColor = sign == "+" ? .systemRed : .systemBlue
+                    self?.makeSnapshot()
+                }
+            }
         }
     }
     
