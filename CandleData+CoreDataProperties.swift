@@ -16,7 +16,7 @@ extension CandleData {
         return NSFetchRequest<CandleData>(entityName: "CandleData")
     }
 
-    @NSManaged public var date: Int64
+    @NSManaged public var date: Double
     @NSManaged public var openPrice: String?
     @NSManaged public var closePrice: String?
     @NSManaged public var highPrice: String?

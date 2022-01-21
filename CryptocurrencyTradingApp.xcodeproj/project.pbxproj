@@ -28,7 +28,7 @@
 		D4D0D2002799A35100734C42 /* MainListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0D1FF2799A35100734C42 /* MainListViewController.swift */; };
 		D4D0D294279AE73000734C42 /* CandleData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0D292279AE73000734C42 /* CandleData+CoreDataClass.swift */; };
 		D4D0D295279AE73000734C42 /* CandleData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0D293279AE73000734C42 /* CandleData+CoreDataProperties.swift */; };
-		D4D0D298279AE7A000734C42 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0D297279AE7A000734C42 /* CoreDataStack.swift */; };
+		D4D0D298279AE7A000734C42 /* CandleCoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0D297279AE7A000734C42 /* CandleCoreDataManager.swift */; };
 		E61B2C032796BC4100E919B0 /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = E61B2C022796BC4100E919B0 /* Charts */; };
 		E61B2C082796BC5700E919B0 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = E61B2C072796BC5700E919B0 /* SnapKit */; };
 		E64BFA272795616600BC17A1 /* WebsocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFA262795616600BC17A1 /* WebsocketManager.swift */; };
@@ -69,7 +69,7 @@
 		D4D0D1FF2799A35100734C42 /* MainListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainListViewController.swift; sourceTree = "<group>"; };
 		D4D0D292279AE73000734C42 /* CandleData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CandleData+CoreDataClass.swift"; sourceTree = "<group>"; };
 		D4D0D293279AE73000734C42 /* CandleData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CandleData+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		D4D0D297279AE7A000734C42 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		D4D0D297279AE7A000734C42 /* CandleCoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleCoreDataManager.swift; sourceTree = "<group>"; };
 		E64BFA262795616600BC17A1 /* WebsocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebsocketManager.swift; sourceTree = "<group>"; };
 		E64BFA2B27956FAC00BC17A1 /* WebsocketParameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebsocketParameter.swift; sourceTree = "<group>"; };
 		E64BFA2D27956FCF00BC17A1 /* RequestTik.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestTik.swift; sourceTree = "<group>"; };
@@ -192,7 +192,7 @@
 		D4D0D296279AE79400734C42 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
-				D4D0D297279AE7A000734C42 /* CoreDataStack.swift */,
+				D4D0D297279AE7A000734C42 /* CandleCoreDataManager.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -312,7 +312,7 @@
 				E64BFA3027956FF400BC17A1 /* RequestType.swift in Sources */,
 				D4CC01F527953FAF00F15957 /* ViewController.swift in Sources */,
 				D4CC020B279540CF00F15957 /* WebSockerTicker.swift in Sources */,
-				D4D0D298279AE7A000734C42 /* CoreDataStack.swift in Sources */,
+				D4D0D298279AE7A000734C42 /* CandleCoreDataManager.swift in Sources */,
 				D4D0D294279AE73000734C42 /* CandleData+CoreDataClass.swift in Sources */,
 				D4CC01F127953FAF00F15957 /* AppDelegate.swift in Sources */,
 				D4CC020927953FD300F15957 /* TickerAll.swift in Sources */,
