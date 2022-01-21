@@ -267,13 +267,13 @@ struct TickerAll: Codable, RestAPIDataModel {
                 case fluctate24H = "fluctate_24H"
                 case fluctateRate24H = "fluctate_rate_24H"
             }
-            
+
             static func == (lhs: TickerAll.Data.Coin, rhs: TickerAll.Data.Coin) -> Bool {
                 return lhs.openingPrice == rhs.openingPrice
                 && lhs.closingPrice == rhs.closingPrice
                 && lhs.unitsTraded == rhs.unitsTraded
             }
-            
+
             func hash(into hasher: inout Hasher) {
                 hasher.combine(openingPrice)
                 hasher.combine(closingPrice)
