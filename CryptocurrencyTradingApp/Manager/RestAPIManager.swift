@@ -10,13 +10,12 @@ import Foundation
 class RestAPIManager {
     private let rangeOfSuccessState = 200...299
     
-    func fetch(type: RestAPIType, paymentCurrency: RestAPIType.PaymentCurrency, coin: CoinType? = nil) {
-        guard let urlString = type.urlString(paymentCurrency: paymentCurrency, coin: coin),
+    func fetch(type: RestAPIType, paymentCurrency: RestAPIType.PaymentCurrency, coin: CoinType? = nil, chartIntervals: RequestChartInterval? = .twentyFourHour) {
+        guard let urlString = type.urlString(paymentCurrency: paymentCurrency, coin: coin, chartIntervals: chartIntervals),
               let url = URL(string: urlString)
         else {
             return
         }
-        
         runDataTask(url: url) { [weak self] result in
             switch result {
             case .success(let data):
@@ -63,6 +62,9 @@ class RestAPIManager {
     private func parse(_ data: Data, to type: RestAPIType) {
         let parsingManager = ParsingManager()
         switch type {
+        case .candlestick:
+            let result = parsingManager.decode(from: data, to: CandleStick.self)
+            filter(result)
         default:
             let result = parsingManager.decode(from: data, to: TickerAll.self)
             filter(result)
@@ -83,6 +85,10 @@ class RestAPIManager {
             NotificationCenter.default.post(name: .restAPITickerAllNotification,
                                             object: nil,
                                             userInfo: ["data": mirror(data)])
+        } else {
+            if let data = (data as? CandleStick) {
+                NotificationCenter.default.post(name: .candlestickNotification, object: nil, userInfo: ["data": data.data])
+            }
         }
     }
     
