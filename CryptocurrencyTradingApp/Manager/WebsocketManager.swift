@@ -19,7 +19,7 @@ class WebsocketManger: NSObject {
     
     func connectWebSocket(_ type: RequestType, _ symbols: [CoinType], _ tickTypes: [RequestTik]?) {
         sendMessage(type, symbols, tickTypes)
-        receiveMessage(of: type)
+        receiveMessage()
     }
     
     private func ping() {
@@ -55,14 +55,14 @@ class WebsocketManger: NSObject {
         }
     }
     
-    private func receiveMessage(of type: RequestType) {
+    private func receiveMessage() {
         webSocket.receive(completionHandler: { [weak self] result in
             switch result {
             case .success(let message):
                 switch message {
                 case .string(let message):
                     if message.contains("status") == false {
-                        self?.parse(text: message, to: type)
+                        self?.parse(text: message)
                     }
                 default:
                     break
@@ -70,21 +70,20 @@ class WebsocketManger: NSObject {
             case .failure(let error):
                 assertionFailure("\(error)")
             }
-            self?.receiveMessage(of: type)
+            self?.receiveMessage()
         })
     }
     
-    private func parse(text: String, to type: RequestType) {
+    private func parse(text: String) {
         let data = Data(text.utf8)
-        switch type {
-        case .ticker:
+        
+        if text.contains("ticker") {
             let result = parsingManager.decode(from: data, to: WebSocketTicker.self)
             filter(result)
-        case .transaction:
+        } else if text.contains("transaction") {
+            
             let result = parsingManager.decode(from: data, to: WebSocketTransaction.self)
             filter(result)
-        case .orderbookdepth:
-            break
         }
     }
     
@@ -103,9 +102,15 @@ class WebsocketManger: NSObject {
                                             object: nil,
                                             userInfo: ["data": transactions])
         } else if let ticker = (data as? WebSocketTicker)?.content {
-            NotificationCenter.default.post(name: .webSocketTickerNotification,
-                                            object: nil,
-                                            userInfo: ["data": ticker ])
+            if ticker.tickType == "24H" {
+                NotificationCenter.default.post(name: .webSocketTicker24HNotification,
+                                                object: nil,
+                                                userInfo: ["data": ticker ])
+            } else {
+                NotificationCenter.default.post(name: .webSocketTickerNotification,
+                                                object: nil,
+                                                userInfo: ["data": ticker ])
+            }
         }
     }
 }
