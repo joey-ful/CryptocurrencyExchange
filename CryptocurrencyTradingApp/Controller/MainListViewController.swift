@@ -107,7 +107,8 @@ extension MainListViewController {
 }
 
 extension MainListViewController {
-    private func setUpTableView() {
+    private func buildTableView() {
+        setUpTableView()
         setTableViewAutoLayout()
         registerCell()
         makeSnapshot()
@@ -121,9 +122,13 @@ extension MainListViewController {
         dataSource?.apply(snapshot, animatingDifferences: false)
     }
     
-    private func setTableViewAutoLayout() {
+    private func setUpTableView() {
         tableView.register(MainListTableViewCell.self, forCellReuseIdentifier: "mainListCell")
+        tableView.register(MainListHeaderView.self, forHeaderFooterViewReuseIdentifier: "mainListHeader")
         tableView.delegate = self
+    }
+    
+    private func setTableViewAutoLayout() {
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
@@ -162,5 +167,17 @@ extension MainListViewController: UITableViewDelegate {
         webSocketManager.close()
         chartViewController.initiate(paymentCurrency: .KRW, coin: coin)
         navigationController?.pushViewController(chartViewController, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "mainListHeader")
+                as? MainListHeaderView
+        else {
+            return UIView()
+        }
+        
+        header.configure()
+        
+        return header
     }
 }
