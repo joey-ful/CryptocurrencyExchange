@@ -38,11 +38,14 @@ class MainListViewController: UIViewController {
                                                selector: #selector(updateTransaction),
                                                name: .webSocketTransactionNotification,
                                                object: nil)
-        
         restAPIManager.fetch(type: .tickerAll, paymentCurrency: .KRW)
+        buildTableView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        webSocketManager.resume()
         webSocketManager.connectWebSocket(.transaction, CoinType.allCoins, nil)
         webSocketManager.connectWebSocket(.ticker, CoinType.allCoins, [.twentyfour, .yesterday])
-        setUpTableView()
     }
 
 }
@@ -132,8 +135,6 @@ extension MainListViewController {
         tableView.estimatedRowHeight = UIFont.preferredFont(forTextStyle: .subheadline).pointSize
         + UIFont.preferredFont(forTextStyle: .caption1).pointSize
         + 30
-        
-    
     }
     
     private func registerCell() {
@@ -158,6 +159,7 @@ extension MainListViewController: UITableViewDelegate {
         let chartViewController = ChartViewController()
         let coinName = mainListCoins[indexPath.row].symbol.split(separator: "/")[0].lowercased()
         guard let coin = CoinType.coin(coinName: coinName) else { return }
+        webSocketManager.close()
         chartViewController.initiate(paymentCurrency: .KRW, coin: coin)
         navigationController?.pushViewController(chartViewController, animated: true)
     }

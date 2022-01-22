@@ -17,6 +17,13 @@ class WebsocketManger: NSObject {
         return webSocket
     }()
     
+    func resume() {
+        let url = URL(string: "wss://pubwss.bithumb.com/pub/ws")!
+        webSocket = URLSession.shared.webSocketTask(with: url)
+        webSocket.delegate = self
+        webSocket.resume()
+    }
+    
     func connectWebSocket(_ type: RequestType, _ symbols: [CoinType], _ tickTypes: [RequestTik]?) {
         sendMessage(type, symbols, tickTypes)
         receiveMessage()
@@ -33,12 +40,9 @@ class WebsocketManger: NSObject {
         })
     }
     
-    private func close() {
-        webSocket.sendPing { error in
-            if let error = error {
-                assertionFailure("\(error)")
-            }
-        }
+    func close() {
+        let reason = Data("Pause webSocket before moving to ChartViewController".utf8)
+        webSocket.cancel(with: .normalClosure, reason: reason)
     }
     
     private func sendMessage(_ type: RequestType, _ symbols: [CoinType], _ tickTypes: [RequestTik]?) {
@@ -81,7 +85,6 @@ class WebsocketManger: NSObject {
             let result = parsingManager.decode(from: data, to: WebSocketTicker.self)
             filter(result)
         } else if text.contains("transaction") {
-            
             let result = parsingManager.decode(from: data, to: WebSocketTransaction.self)
             filter(result)
         }
@@ -117,12 +120,18 @@ class WebsocketManger: NSObject {
 
 extension WebsocketManger: URLSessionWebSocketDelegate {
     func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol: String?) {
-        print("Did connect to socket")
+        print("WebSocket에 연결되었습니다.")
         ping()
     }
     
     func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didCloseWith closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
-        print("Did close connection with reason:")
+        
+        if let reason = reason,
+           let closeReason = String(data: reason, encoding: .utf8) {
+            print("WebSocket 연결이 끊겼습니다: \(closeReason)")
+        } else {
+            print("WebSocket 연결이 끊겼습니다.")
+        }
     }
 }
 
