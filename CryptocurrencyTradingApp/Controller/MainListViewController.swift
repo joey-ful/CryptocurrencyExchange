@@ -176,8 +176,27 @@ extension MainListViewController: UITableViewDelegate {
             return UIView()
         }
         
-        header.configure()
+        header.configure(sortName: sortName,
+                         sortPrice: sortPrice,
+                         sortFluctuation: sortFluctuation,
+                         sortTradeValue: sortTradeValue)
         
         return header
+    }
+    
+    private func sortName() {
+        print("가상자산명")
+    }
+    
+    private func sortPrice() {
+        print("현재가")
+    }
+    
+    private func sortFluctuation() {
+        print("변동률")
+    }
+    
+    private func sortTradeValue() {
+        print("거래금액")
     }
 }

@@ -26,22 +26,32 @@ class MainListHeaderView: UITableViewHeaderFooterView {
     private var priceSortIcon = UIImageView(image: Sort.none.image)
     private var fluctuationSortIcon = UIImageView(image: Sort.none.image)
     private var tradeValueSortIcon = UIImageView(image: Sort.down.image)
+
     
     private var nameTapGestureRecognizer = UITapGestureRecognizer()
     private var priceTapGestureRecognizer = UITapGestureRecognizer()
     private var fluctuationTapGestureRecognizer = UITapGestureRecognizer()
     private var tradeValueTapGestureRecognizer = UITapGestureRecognizer()
+    private var sorts: [Sort] = [.none, .none, .none, .down]
+    private var sortingMethods: [(() -> Void)?] = []
     
-    private var nameSort = Sort.none
-    private var priceSort = Sort.none
-    private var fluctuationSort = Sort.none
-    private var tradeValueSort = Sort.down
-    
-    private var sortName: (() -> Void)?
-    private var sortPrice: (() -> Void)?
-    private var sortFluctuation: (() -> Void)?
-    private var sortTradeValue: (() -> Void)?
-    
+    func configure(sortName: (() -> Void)?, sortPrice: (() -> Void)?, sortFluctuation: (() -> Void)?, sortTradeValue: (() -> Void)?) {
+        resizeIcons()
+        layoutLabels()
+        layoutStackViews()
+        
+        sortingMethods = [sortName, sortPrice, sortFluctuation, sortTradeValue]
+        
+        nameStackView.addGestureRecognizer(nameTapGestureRecognizer)
+        priceStackView.addGestureRecognizer(priceTapGestureRecognizer)
+        fluctuationStackView.addGestureRecognizer(fluctuationTapGestureRecognizer)
+        tradeValueStackView.addGestureRecognizer(tradeValueTapGestureRecognizer)
+        
+        nameTapGestureRecognizer.addTarget(self, action: #selector(sortNameTapped))
+        priceTapGestureRecognizer.addTarget(self, action: #selector(sortPriceTapped))
+        fluctuationTapGestureRecognizer.addTarget(self, action: #selector(sortFluctuationTapped))
+        tradeValueTapGestureRecognizer.addTarget(self, action: #selector(sortTradeValueTapped))
+    }
 }
 
 extension MainListHeaderView {
@@ -89,9 +99,40 @@ extension MainListHeaderView {
         ])
     }
     
-    func configure() {
-        resizeIcons()
-        layoutLabels()
-        layoutStackViews()
+}
+
+extension MainListHeaderView {
+    
+    @objc private func sortNameTapped() {
+        updateSorts(targetIndex: 0)
+    }
+    
+    @objc private func sortPriceTapped() {
+        updateSorts(targetIndex: 1)
+    }
+    
+    @objc private func sortFluctuationTapped() {
+        updateSorts(targetIndex: 2)
+    }
+    
+    @objc private func sortTradeValueTapped() {
+        updateSorts(targetIndex: 3)
+    }
+    
+    private func updateSorts(targetIndex: Int) {
+        sortingMethods[targetIndex]?()
+        
+        sorts = sorts.enumerated().map { index, value in
+            if index == targetIndex {
+                return sorts[targetIndex] == .down ? .up : .down
+            } else {
+                return .none
+            }
+        }
+        
+        nameSortIcon.image = sorts[0].image
+        priceSortIcon.image = sorts[1].image
+        fluctuationSortIcon.image = sorts[2].image
+        tradeValueSortIcon.image = sorts[3].image
     }
 }
