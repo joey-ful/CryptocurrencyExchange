@@ -21,41 +21,39 @@ class MainListTableViewCell: UITableViewCell {
         return view
     }()
     
-    private lazy var nameStackView = UIStackView
-        .makeStackView(axis: .vertical,
-                       subviews: [nameLabel, symbolLabel])
-    private lazy var priceStackView = UIStackView
-        .makeStackView(axis: .vertical, subviews: [currentPriceLabel, underline])
-    private lazy var fluctuationStackView = UIStackView
-        .makeStackView(alignment: .trailing,
-                       axis: .vertical,
-                       subviews: [fluctuationRateLabel, fluctuationAmountLabel])
-    private lazy var numbersView = UIStackView.makeStackView(spacing: 10, subviews: [
-        priceStackView,
-        fluctuationStackView,
-        tradeValueLabel
-    ])
+    private lazy var nameStackView = UIStackView.makeStackView(axis: .vertical,
+                                                               subviews: [nameLabel, symbolLabel])
+    private lazy var priceStackView = UIStackView.makeStackView(axis: .vertical,
+                                                                subviews: [currentPriceLabel, underline])
+    private lazy var fluctuationStackView = UIStackView.makeStackView(alignment: .trailing,
+                                                                      axis: .vertical,
+                                                                      subviews: [fluctuationRateLabel,
+                                                                                 fluctuationAmountLabel])
+    private lazy var numbersView = UIStackView.makeStackView(subviews: [priceStackView,
+                                                                        fluctuationStackView,
+                                                                        tradeValueLabel])
     
-    private lazy var cellStackView = UIStackView.makeStackView(spacing: 10, subviews: [
-        nameStackView,
-        numbersView
-    ])
+    private lazy var cellStackView = UIStackView.makeStackView(subviews: [nameStackView,
+                                                                          numbersView])
 }
 
 extension MainListTableViewCell {
     
     func configure(_ coin: MainListCoin) {
-        layoutStackViews()
         configureLabel(coin)
         layoutLabel()
+        layoutStackViews()
     }
     
     private func layoutStackViews() {
-        currentPriceLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        fluctuationStackView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        nameLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        fluctuationRateLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        fluctuationAmountLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         tradeValueLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         
-        fluctuationStackView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        nameLabel.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+        priceStackView.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+        tradeValueLabel.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         
         addSubview(cellStackView)
         cellStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -65,13 +63,18 @@ extension MainListTableViewCell {
             make.top.equalToSuperview().offset(10)
             make.bottom.equalToSuperview().offset(-10)
         }
+        
+        NSLayoutConstraint.activate([
+            currentPriceLabel.trailingAnchor.constraint(equalTo: priceStackView.trailingAnchor),
+            underline.trailingAnchor.constraint(equalTo: priceStackView.trailingAnchor)
+        ])
+        
         priceStackView.alignment = .firstBaseline
         cellStackView.alignment = .center
     }
     
     private func configureLabel(_ coin: MainListCoin) {
         nameLabel.text = coin.name
-        
         symbolLabel.text = coin.symbol
         currentPriceLabel.text = coin.currentPrice
         fluctuationRateLabel.text = coin.fluctuationRate
@@ -87,14 +90,16 @@ extension MainListTableViewCell {
         nameLabel.lineBreakMode = .byCharWrapping
         nameLabel.numberOfLines = 0
         
+        nameLabel.textAlignment = .left
         currentPriceLabel.textAlignment = .right
         fluctuationRateLabel.textAlignment = .right
         fluctuationAmountLabel.textAlignment = .right
         tradeValueLabel.textAlignment = .right
         
-        nameLabel.widthAnchor.constraint(equalToConstant: 82).isActive = true
-        fluctuationRateLabel.widthAnchor.constraint(equalToConstant: 75).isActive = true
-        tradeValueLabel.widthAnchor.constraint(equalToConstant: 85).isActive = true
+        NSLayoutConstraint.activate([
+            fluctuationStackView.widthAnchor.constraint(equalToConstant: 75),
+            tradeValueLabel.widthAnchor.constraint(equalToConstant: 85)
+        ])
     }
     
     func blink(in color: UIColor) {
