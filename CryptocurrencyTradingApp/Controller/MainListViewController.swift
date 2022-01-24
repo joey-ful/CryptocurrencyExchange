@@ -63,8 +63,12 @@ extension MainListViewController {
         
         DispatchQueue.main.async { [weak self] in
             self?.mainListCoins.enumerated().forEach { index, oldCoin in
-                if self?.mainListCoins[index].symbol == ticker.symbol.replacingOccurrences(of: "_", with: "/") {
-                    self?.mainListCoins[index].tradeValue = ticker.accumulatedTradeValue.dividedByMillion() + .million
+                let newSymbol = ticker.symbol.replacingOccurrences(of: "_", with: "/")
+                
+                if self?.mainListCoins[index].symbol == newSymbol {
+                    let newTradeValue = ticker.accumulatedTradeValue.dividedByMillion() + .million
+                    
+                    self?.mainListCoins[index].tradeValue = newTradeValue
                     self?.makeSnapshot()
                 }
             }
@@ -76,12 +80,17 @@ extension MainListViewController {
         
         DispatchQueue.main.async { [weak self] in
             self?.mainListCoins.enumerated().forEach { index, oldCoin in
-                if self?.mainListCoins[index].symbol == ticker.symbol.replacingOccurrences(of: "_", with: "/") {
+                let newSymbol = ticker.symbol.replacingOccurrences(of: "_", with: "/")
+                
+                if self?.mainListCoins[index].symbol == newSymbol {
+                    let newSign = ticker.fluctuationRate.contains("-") ? "" : "+"
+                    let newFluctuationRate = newSign + ticker.fluctuationRate.toDecimal() + .percent
+                    let newFluctuationAmount = newSign + ticker.fluctuationAmount.toDecimal()
+                    let newTextColor: UIColor = newSign == "+" ? .systemRed : .systemBlue
                     
-                    let sign = ticker.fluctuationRate.contains("-") ? "" : "+"
-                    self?.mainListCoins[index].fluctuationRate = sign + ticker.fluctuationRate.toDecimal() + .percent
-                    self?.mainListCoins[index].fluctuationAmount = sign + ticker.fluctuationAmount.toDecimal()
-                    self?.mainListCoins[index].textColor = sign == "+" ? .systemRed : .systemBlue
+                    self?.mainListCoins[index].fluctuationRate = newFluctuationRate
+                    self?.mainListCoins[index].fluctuationAmount = newFluctuationAmount
+                    self?.mainListCoins[index].textColor = newTextColor
                     self?.makeSnapshot()
                 }
             }
@@ -94,11 +103,17 @@ extension MainListViewController {
         DispatchQueue.main.async { [weak self] in
             transactions.forEach { transaction in
                 self?.mainListCoins.enumerated().forEach { index, oldCoin in
-                    if self?.mainListCoins[index].symbol == transaction.symbol.replacingOccurrences(of: "_", with: "/") {
-                        let textColor: UIColor = transaction.upDown == "up" ? .systemRed : .systemBlue
-                        self?.mainListCoins[index].currentPrice = transaction.price.toDecimal()
+                    let newSymbol = transaction.symbol.replacingOccurrences(of: "_", with: "/")
+                    
+                    if self?.mainListCoins[index].symbol == newSymbol
+                    {
+                        let newTextColor: UIColor = transaction.upDown == "up" ? .systemRed : .systemBlue
+                        let newPrice = transaction.price.toDecimal()
+                        
+                        self?.mainListCoins[index].currentPrice = newPrice
                         self?.makeSnapshot()
-                        (self?.tableView.cellForRow(at: IndexPath(row: index, section: 0)) as? MainListTableViewCell)?.blink(in: textColor)
+                        (self?.tableView.cellForRow(at: IndexPath(row: index, section: 0))
+                         as? MainListTableViewCell)?.blink(in: newTextColor)
                     }
                 }
             }
