@@ -129,6 +129,7 @@ extension MainListHeaderView {
                 return .none
             }
         }
+        sortingMethods[targetIndex]?(sorts[targetIndex])
         
         nameSortIcon.image = sorts[0].image
         priceSortIcon.image = sorts[1].image

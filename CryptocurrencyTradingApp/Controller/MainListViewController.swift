@@ -184,19 +184,47 @@ extension MainListViewController: UITableViewDelegate {
         return header
     }
     
-    private func sortName() {
-        print("가상자산명")
+    private func sortName(type: Sort) {
+        switch type {
+        case .up:
+            mainListCoins.sort { $0.name < $1.name }
+        case .down:
+            mainListCoins.sort { $0.name > $1.name }
+        case .none:
+            break
+        }
     }
     
-    private func sortPrice() {
-        print("현재가")
+    private func sortPrice(type: Sort) {
+        switch type {
+        case .up:
+            mainListCoins.sort { $0.currentPrice.toDouble() < $1.currentPrice.toDouble() }
+        case .down:
+            mainListCoins.sort { $0.currentPrice.toDouble() > $1.currentPrice.toDouble() }
+        case .none:
+            break
+        }
     }
     
-    private func sortFluctuation() {
-        print("변동률")
+    private func sortFluctuation(type: Sort) {
+        switch type {
+        case .up:
+            mainListCoins.sort { $0.fluctuationRate.toDouble() < $1.fluctuationRate.toDouble() }
+        case .down:
+            mainListCoins.sort { $0.fluctuationRate.toDouble() > $1.fluctuationRate.toDouble() }
+        case .none:
+            break
+        }
     }
     
-    private func sortTradeValue() {
-        print("거래금액")
+    private func sortTradeValue(type: Sort) {
+        switch type {
+        case .up:
+            mainListCoins.sort { $0.tradeValue.toDouble() < $1.tradeValue.toDouble() }
+        case .down:
+            mainListCoins.sort { $0.tradeValue.toDouble() > $1.tradeValue.toDouble() }
+        case .none:
+            break
+        }
     }
 }
