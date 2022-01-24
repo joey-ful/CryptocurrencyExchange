@@ -12,20 +12,32 @@ class MainListHeaderView: UITableViewHeaderFooterView {
     private let priceLabel = UILabel.makeLabel(font: .caption1, text: "현재가", color: .systemGray)
     private let fluctuationLabel = UILabel.makeLabel(font: .caption1, text: "변동률", color: .systemGray)
     private let tradeValueLabel = UILabel.makeLabel(font: .caption1, text: "거래금액", color: .systemGray)
-    private lazy var nameStackView = UIStackView.makeStackView(distribution: .fill, spacing: 5, subviews: [nameLabel, nameSortIcon])
-    private lazy var priceStackView = UIStackView.makeStackView(distribution: .fill, spacing: 5, subviews: [priceLabel, priceSortIcon])
-    private lazy var fluctuationStackView = UIStackView.makeStackView(distribution: .fill, spacing: 5, subviews: [fluctuationLabel, fluctuationSortIcon])
-    private lazy var tradeValueStackView = UIStackView.makeStackView(distribution: .fill, spacing: 5, subviews: [tradeValueLabel, tradeValueSortIcon])
+    
+    private var nameSortIcon = UIImageView(image: Sort.none.image)
+    private var priceSortIcon = UIImageView(image: Sort.none.image)
+    private var fluctuationSortIcon = UIImageView(image: Sort.none.image)
+    private var tradeValueSortIcon = UIImageView(image: Sort.down.image)
+    
+    private lazy var nameStackView = UIStackView.makeStackView(distribution: .fill,
+                                                               spacing: 5,
+                                                               subviews: [nameLabel, nameSortIcon])
+    private lazy var priceStackView = UIStackView.makeStackView(distribution: .fill,
+                                                                spacing: 5,
+                                                                subviews: [priceLabel, priceSortIcon])
+    private lazy var fluctuationStackView = UIStackView.makeStackView(distribution: .fill,
+                                                                      spacing: 5,
+                                                                      subviews: [fluctuationLabel,
+                                                                                 fluctuationSortIcon])
+    private lazy var tradeValueStackView = UIStackView.makeStackView(distribution: .fill,
+                                                                     spacing: 5,
+                                                                     subviews: [tradeValueLabel,
+                                                                                tradeValueSortIcon])
     private lazy var headerStackView = UIStackView.makeStackView(subviews: [
         nameStackView,
         priceStackView,
         fluctuationStackView,
         tradeValueStackView
     ])
-    private var nameSortIcon = UIImageView(image: Sort.none.image)
-    private var priceSortIcon = UIImageView(image: Sort.none.image)
-    private var fluctuationSortIcon = UIImageView(image: Sort.none.image)
-    private var tradeValueSortIcon = UIImageView(image: Sort.down.image)
 
     
     private var nameTapGestureRecognizer = UITapGestureRecognizer()
@@ -33,24 +45,18 @@ class MainListHeaderView: UITableViewHeaderFooterView {
     private var fluctuationTapGestureRecognizer = UITapGestureRecognizer()
     private var tradeValueTapGestureRecognizer = UITapGestureRecognizer()
     private var sorts: [Sort] = [.none, .none, .none, .down]
-    private var sortingMethods: [(() -> Void)?] = []
+    private var sortingMethods: [((Sort) -> Void)?] = []
     
-    func configure(sortName: (() -> Void)?, sortPrice: (() -> Void)?, sortFluctuation: (() -> Void)?, sortTradeValue: (() -> Void)?) {
+    
+    func configure(sortName: ((Sort) -> Void)?,
+                   sortPrice: ((Sort) -> Void)?,
+                   sortFluctuation: ((Sort) -> Void)?,
+                   sortTradeValue: ((Sort) -> Void)?)
+    {
         resizeIcons()
         layoutLabels()
         layoutStackViews()
-        
-        sortingMethods = [sortName, sortPrice, sortFluctuation, sortTradeValue]
-        
-        nameStackView.addGestureRecognizer(nameTapGestureRecognizer)
-        priceStackView.addGestureRecognizer(priceTapGestureRecognizer)
-        fluctuationStackView.addGestureRecognizer(fluctuationTapGestureRecognizer)
-        tradeValueStackView.addGestureRecognizer(tradeValueTapGestureRecognizer)
-        
-        nameTapGestureRecognizer.addTarget(self, action: #selector(sortNameTapped))
-        priceTapGestureRecognizer.addTarget(self, action: #selector(sortPriceTapped))
-        fluctuationTapGestureRecognizer.addTarget(self, action: #selector(sortFluctuationTapped))
-        tradeValueTapGestureRecognizer.addTarget(self, action: #selector(sortTradeValueTapped))
+        addGestureRecognizers(sortingMethods: [sortName, sortPrice, sortFluctuation, sortTradeValue])
     }
 }
 
@@ -98,10 +104,23 @@ extension MainListHeaderView {
             tradeValueSortIcon.widthAnchor.constraint(equalToConstant: 6)
         ])
     }
-    
 }
 
 extension MainListHeaderView {
+    
+    private func addGestureRecognizers(sortingMethods: [((Sort) -> Void)?]) {
+        self.sortingMethods = sortingMethods
+        
+        nameStackView.addGestureRecognizer(nameTapGestureRecognizer)
+        priceStackView.addGestureRecognizer(priceTapGestureRecognizer)
+        fluctuationStackView.addGestureRecognizer(fluctuationTapGestureRecognizer)
+        tradeValueStackView.addGestureRecognizer(tradeValueTapGestureRecognizer)
+        
+        nameTapGestureRecognizer.addTarget(self, action: #selector(sortNameTapped))
+        priceTapGestureRecognizer.addTarget(self, action: #selector(sortPriceTapped))
+        fluctuationTapGestureRecognizer.addTarget(self, action: #selector(sortFluctuationTapped))
+        tradeValueTapGestureRecognizer.addTarget(self, action: #selector(sortTradeValueTapped))
+    }
     
     @objc private func sortNameTapped() {
         updateSorts(targetIndex: 0)
@@ -120,8 +139,6 @@ extension MainListHeaderView {
     }
     
     private func updateSorts(targetIndex: Int) {
-        sortingMethods[targetIndex]?()
-        
         sorts = sorts.enumerated().map { index, value in
             if index == targetIndex {
                 return sorts[targetIndex] == .down ? .up : .down
