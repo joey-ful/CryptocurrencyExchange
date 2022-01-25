@@ -15,6 +15,7 @@ class MainListViewController: UIViewController {
     private var dataSource: MainListDataSource?
     private var mainListCoins: [MainListCoin] = []
     private var snapshot: NSDiffableDataSourceSnapshot<Int, MainListCoin>?
+    
     private let restAPIManager = RestAPIManager()
     private let webSocketManager = WebsocketManger()
 
@@ -39,7 +40,7 @@ class MainListViewController: UIViewController {
                                                name: .webSocketTransactionNotification,
                                                object: nil)
         restAPIManager.fetch(type: .tickerAll, paymentCurrency: .KRW)
-        buildTableView()
+        buildUI()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,6 +51,7 @@ class MainListViewController: UIViewController {
 
 }
 
+// MARK: Handle Notification
 extension MainListViewController {
     @objc private func initializeMainList(notification: Notification) {
         if let data = notification.userInfo?["data"] as? [MainListCoin] {
@@ -115,12 +117,40 @@ extension MainListViewController {
                         (self?.tableView.cellForRow(at: IndexPath(row: index, section: 0))
                          as? MainListTableViewCell)?.blink(in: newTextColor)
                     }
+                    
                 }
             }
         }
     }
 }
 
+// MARK: SearchBar
+extension MainListViewController {
+    
+    private func buildUI() {
+        buildSearchBar()
+        buildTableView()
+    }
+    
+    private func buildSearchBar() {
+        let searchController = UISearchController(searchResultsController: nil)
+        navigationItem.searchController = searchController
+        searchController.searchBar.placeholder = "코인명 또는 심볼 검색"
+        searchController.searchBar.searchTextField.font = .preferredFont(forTextStyle: .subheadline)
+        searchController.searchBar.searchTextField.backgroundColor = .white
+        searchController.searchBar.autocapitalizationType = .none
+        definesPresentationContext = true
+    }
+            }
+        }
+    }
+// MARK: SearchResultsUpdating
+extension MainListViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+    }
+}
+
+// MARK: TableView UI
 extension MainListViewController {
     private func buildTableView() {
         setUpTableView()
@@ -174,6 +204,7 @@ extension MainListViewController {
     }
 }
 
+// MARK: TableViewHeader
 extension MainListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let chartViewController = ChartViewController()
