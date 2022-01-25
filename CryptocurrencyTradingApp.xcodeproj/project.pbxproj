@@ -26,6 +26,8 @@
 		D4CC02272795B3C700F15957 /* RestAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC02262795B3C700F15957 /* RestAPIManager.swift */; };
 		D4CC0265279690B800F15957 /* RestAPIDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC0264279690B800F15957 /* RestAPIDataModel.swift */; };
 		D4D0D2002799A35100734C42 /* MainListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0D1FF2799A35100734C42 /* MainListViewController.swift */; };
+		D4D0D29C279B083200734C42 /* MainListHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0D29B279B083200734C42 /* MainListHeaderView.swift */; };
+		D4D0D29E279C29B500734C42 /* Sort.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0D29D279C29B500734C42 /* Sort.swift */; };
 		D4D0D294279AE73000734C42 /* CandleData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0D292279AE73000734C42 /* CandleData+CoreDataClass.swift */; };
 		D4D0D295279AE73000734C42 /* CandleData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0D293279AE73000734C42 /* CandleData+CoreDataProperties.swift */; };
 		D4D0D298279AE7A000734C42 /* CandleCoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0D297279AE7A000734C42 /* CandleCoreDataManager.swift */; };
@@ -67,6 +69,8 @@
 		D4CC02262795B3C700F15957 /* RestAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestAPIManager.swift; sourceTree = "<group>"; };
 		D4CC0264279690B800F15957 /* RestAPIDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestAPIDataModel.swift; sourceTree = "<group>"; };
 		D4D0D1FF2799A35100734C42 /* MainListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainListViewController.swift; sourceTree = "<group>"; };
+		D4D0D29B279B083200734C42 /* MainListHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainListHeaderView.swift; sourceTree = "<group>"; };
+		D4D0D29D279C29B500734C42 /* Sort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sort.swift; sourceTree = "<group>"; };
 		D4D0D292279AE73000734C42 /* CandleData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CandleData+CoreDataClass.swift"; sourceTree = "<group>"; };
 		D4D0D293279AE73000734C42 /* CandleData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CandleData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		D4D0D297279AE7A000734C42 /* CandleCoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleCoreDataManager.swift; sourceTree = "<group>"; };
@@ -109,6 +113,7 @@
 			isa = PBXGroup;
 			children = (
 				D47D009A2797A09400E8E305 /* MainListTableViewCell.swift */,
+				D4D0D29B279B083200734C42 /* MainListHeaderView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -185,6 +190,7 @@
 				E64BFA2F27956FF400BC17A1 /* RequestType.swift */,
 				E6C96496279A9A7F0007B55E /* RequestChartInterval.swift */,
 				E64BFA3127958BD900BC17A1 /* CoinType.swift */,
+				D4D0D29D279C29B500734C42 /* Sort.swift */,
 			);
 			path = Enum;
 			sourceTree = "<group>";
@@ -308,6 +314,7 @@
 				D4D0D295279AE73000734C42 /* CandleData+CoreDataProperties.swift in Sources */,
 				E6899C70279544CC0006C980 /* ParsingManager.swift in Sources */,
 				E6EC8683279AC36C005A6534 /* ChartViewController.swift in Sources */,
+				D4D0D29E279C29B500734C42 /* Sort.swift in Sources */,
 				D4D0D2002799A35100734C42 /* MainListViewController.swift in Sources */,
 				E64BFA3027956FF400BC17A1 /* RequestType.swift in Sources */,
 				D4CC01F527953FAF00F15957 /* ViewController.swift in Sources */,
@@ -332,6 +339,7 @@
 				D4CC0265279690B800F15957 /* RestAPIDataModel.swift in Sources */,
 				E64BFA3927959D3100BC17A1 /* NotificationName+Extension.swift in Sources */,
 				D47D009D2797A0C700E8E305 /* UILable+Extension.swift in Sources */,
+				D4D0D29C279B083200734C42 /* MainListHeaderView.swift in Sources */,
 				D4CC02222795504900F15957 /* RestAPIType.swift in Sources */,
 				E64BFA3227958BD900BC17A1 /* CoinType.swift in Sources */,
 				E68713602798422B0036CA0D /* CandleStick.swift in Sources */,
