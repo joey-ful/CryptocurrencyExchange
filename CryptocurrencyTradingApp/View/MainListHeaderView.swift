@@ -62,13 +62,15 @@ class MainListHeaderView: UITableViewHeaderFooterView {
 
 extension MainListHeaderView {
     
+    
     private func layoutStackViews() {
+        
         addSubview(headerStackView)
         headerStackView.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(20)
-            make.trailing.equalToSuperview()
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.trailing.equalToSuperview().offset(-20)
+            make.top.equalToSuperview().offset(10)
+            make.bottom.equalToSuperview().offset(-10)
         }
         
         NSLayoutConstraint.activate([

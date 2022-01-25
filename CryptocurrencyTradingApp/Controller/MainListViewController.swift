@@ -11,7 +11,7 @@ import SnapKit
 typealias MainListDataSource = UITableViewDiffableDataSource<Int, MainListCoin>
 
 class MainListViewController: UIViewController {
-    private let tableView = UITableView(frame: .zero, style: .plain)
+    private let tableView = UITableView(frame: .zero, style: .grouped)
     private var dataSource: MainListDataSource?
     private var mainListCoins: [MainListCoin] = []
     private var filtered: [MainListCoin] = []
@@ -202,13 +202,15 @@ extension MainListViewController {
     
     private func setTableViewAutoLayout() {
         view.addSubview(tableView)
+        tableView.backgroundColor = .white
         tableView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-20)
-            make.top.equalToSuperview().offset(200)
+            make.trailing.equalToSuperview()
+            make.top.equalToSuperview()
             make.bottom.equalToSuperview()
         }
-        
+
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
         tableView.estimatedRowHeight = UIFont.preferredFont(forTextStyle: .subheadline).pointSize
         + UIFont.preferredFont(forTextStyle: .caption1).pointSize
         + 30

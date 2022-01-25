@@ -59,7 +59,7 @@ extension MainListTableViewCell {
         cellStackView.translatesAutoresizingMaskIntoConstraints = false
         cellStackView.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(20)
-            make.trailing.equalToSuperview()
+            make.trailing.equalToSuperview().offset(-20)
             make.top.equalToSuperview().offset(10)
             make.bottom.equalToSuperview().offset(-10)
         }
