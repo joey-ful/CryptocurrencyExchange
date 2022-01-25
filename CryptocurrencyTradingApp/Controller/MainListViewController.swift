@@ -14,7 +14,7 @@ class MainListViewController: UIViewController {
     private let tableView = UITableView(frame: .zero, style: .plain)
     private var dataSource: MainListDataSource?
     private var mainListCoins: [MainListCoin] = []
-    private var snapshot: NSDiffableDataSourceSnapshot<Int, MainListCoin>?
+    private var filtered: [MainListCoin] = []
     
     private let restAPIManager = RestAPIManager()
     private let webSocketManager = WebsocketManger()
@@ -56,6 +56,7 @@ extension MainListViewController {
     @objc private func initializeMainList(notification: Notification) {
         if let data = notification.userInfo?["data"] as? [MainListCoin] {
             mainListCoins = data.sorted { $0.tradeValue.toDouble() > $1.tradeValue.toDouble() }
+            filtered = mainListCoins
             makeSnapshot()
         }
     }
@@ -134,6 +135,7 @@ extension MainListViewController {
     
     private func buildSearchBar() {
         let searchController = UISearchController(searchResultsController: nil)
+        searchController.searchResultsUpdater = self
         navigationItem.searchController = searchController
         searchController.searchBar.placeholder = "코인명 또는 심볼 검색"
         searchController.searchBar.searchTextField.font = .preferredFont(forTextStyle: .subheadline)
@@ -141,12 +143,28 @@ extension MainListViewController {
         searchController.searchBar.autocapitalizationType = .none
         definesPresentationContext = true
     }
-            }
+    
+    private func filter(_ target: String?) {
+        let text = target?.uppercased() ?? ""
+        
+        if text == "" {
+            filtered = mainListCoins
+        } else {
+            filtered = mainListCoins.filter { return $0.name.contains(text) || $0.symbol.contains(text) }
         }
+        
+        var snapshot = NSDiffableDataSourceSnapshot<Int, MainListCoin>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(filtered, toSection: 0)
+        dataSource?.apply(snapshot, animatingDifferences: true)
     }
+}
+
 // MARK: SearchResultsUpdating
 extension MainListViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
+        let text = searchController.searchBar.text
+        filter(text)
     }
 }
 
@@ -160,11 +178,20 @@ extension MainListViewController {
     }
     
     private func makeSnapshot() {
+        filtered = mainListCoins.filter { exists(coin: $0) }
         var snapshot = NSDiffableDataSourceSnapshot<Int, MainListCoin>()
         snapshot.appendSections([0])
-        snapshot.appendItems(mainListCoins, toSection: 0)
-        self.snapshot = snapshot
+        snapshot.appendItems(filtered, toSection: 0)
         dataSource?.apply(snapshot, animatingDifferences: false)
+    }
+    
+    private func exists(coin: MainListCoin) -> Bool {
+        for filteredCoin in filtered {
+            if filteredCoin.symbol == coin.symbol {
+                return true
+            }
+        }
+        return false
     }
     
     private func setUpTableView() {
