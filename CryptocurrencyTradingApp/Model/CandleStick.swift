@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CandleStick: Codable, RestAPIDataModel {
+struct CandleStick: Codable {
     let status: String
     let data: [[CandleData]]
     
