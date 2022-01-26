@@ -17,6 +17,7 @@
 		D4AFEB2F27A03FB300011251 /* MainListCoinViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AFEB2E27A03FB300011251 /* MainListCoinViewModel.swift */; };
 		D4AFEB3127A0414200011251 /* MainListCoinsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AFEB3027A0414200011251 /* MainListCoinsViewModel.swift */; };
 		D4AFEB3327A0552500011251 /* MainListHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AFEB3227A0552500011251 /* MainListHeaderViewModel.swift */; };
+		D4AFEB3827A1292600011251 /* TransactionsTableViewTimeHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AFEB3727A1292600011251 /* TransactionsTableViewTimeHeader.swift */; };
 		D4CC01F127953FAF00F15957 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F027953FAF00F15957 /* AppDelegate.swift */; };
 		D4CC01F327953FAF00F15957 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F227953FAF00F15957 /* SceneDelegate.swift */; };
 		D4CC01F527953FAF00F15957 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F427953FAF00F15957 /* ViewController.swift */; };
@@ -65,6 +66,7 @@
 		D4AFEB2E27A03FB300011251 /* MainListCoinViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainListCoinViewModel.swift; sourceTree = "<group>"; };
 		D4AFEB3027A0414200011251 /* MainListCoinsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainListCoinsViewModel.swift; sourceTree = "<group>"; };
 		D4AFEB3227A0552500011251 /* MainListHeaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainListHeaderViewModel.swift; sourceTree = "<group>"; };
+		D4AFEB3727A1292600011251 /* TransactionsTableViewTimeHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TransactionsTableViewTimeHeader.swift; path = CryptocurrencyTradingApp/ViewModel/TransactionsTableViewTimeHeader.swift; sourceTree = SOURCE_ROOT; };
 		D4CC01ED27953FAE00F15957 /* CryptocurrencyTradingApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CryptocurrencyTradingApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4CC01F027953FAF00F15957 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D4CC01F227953FAF00F15957 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 				D47D009A2797A09400E8E305 /* MainListTableViewCell.swift */,
 				D4D0D29B279B083200734C42 /* MainListHeaderView.swift */,
 				D4D0D2AD27A0010200734C42 /* TransactionsTableViewCell.swift */,
+				D4AFEB3727A1292600011251 /* TransactionsTableViewTimeHeader.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -351,6 +354,7 @@
 				D4CC020B279540CF00F15957 /* WebSockerTicker.swift in Sources */,
 				D4AFEB3327A0552500011251 /* MainListHeaderViewModel.swift in Sources */,
 				D4D0D298279AE7A000734C42 /* CandleCoreDataManager.swift in Sources */,
+				D4AFEB3827A1292600011251 /* TransactionsTableViewTimeHeader.swift in Sources */,
 				D4D0D294279AE73000734C42 /* CandleData+CoreDataClass.swift in Sources */,
 				D4CC01F127953FAF00F15957 /* AppDelegate.swift in Sources */,
 				D4CC020927953FD300F15957 /* TickerAll.swift in Sources */,

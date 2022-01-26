@@ -52,11 +52,13 @@ extension TransactionsViewController {
     
     private func setUpTableView() {
         tableView.register(TransactionsTableViewCell.self, forCellReuseIdentifier: "transactionsCell")
+        tableView.register(TransactionsTableViewTimeHeader.self, forHeaderFooterViewReuseIdentifier: "transactionsTimeHeader")
     }
     
     private func setTableViewAutoLayout() {
         view.addSubview(tableView)
         tableView.backgroundColor = .white
+        tableView.delegate = self
         tableView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
@@ -82,5 +84,15 @@ extension TransactionsViewController {
         })
 
         tableView.dataSource = dataSource
+    }
+}
+
+extension TransactionsViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "transactionsTimeHeader") as? TransactionsTableViewTimeHeader else { return UITableViewHeaderFooterView() }
+        
+        header.configure()
+        
+        return header
     }
 }
