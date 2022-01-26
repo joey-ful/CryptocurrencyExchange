@@ -38,6 +38,7 @@
 		D4D0D298279AE7A000734C42 /* CandleCoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0D297279AE7A000734C42 /* CandleCoreDataManager.swift */; };
 		D4D0D29C279B083200734C42 /* MainListHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0D29B279B083200734C42 /* MainListHeaderView.swift */; };
 		D4D0D29E279C29B500734C42 /* Sort.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0D29D279C29B500734C42 /* Sort.swift */; };
+		D4D0D2B227A0024B00734C42 /* TransactionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0D2B127A0024B00734C42 /* TransactionViewModel.swift */; };
 		E61B2C032796BC4100E919B0 /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = E61B2C022796BC4100E919B0 /* Charts */; };
 		E61B2C082796BC5700E919B0 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = E61B2C072796BC5700E919B0 /* SnapKit */; };
 		E64BFA272795616600BC17A1 /* WebsocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFA262795616600BC17A1 /* WebsocketManager.swift */; };
@@ -88,6 +89,7 @@
 		D4D0D297279AE7A000734C42 /* CandleCoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleCoreDataManager.swift; sourceTree = "<group>"; };
 		D4D0D29B279B083200734C42 /* MainListHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainListHeaderView.swift; sourceTree = "<group>"; };
 		D4D0D29D279C29B500734C42 /* Sort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sort.swift; sourceTree = "<group>"; };
+		D4D0D2B127A0024B00734C42 /* TransactionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionViewModel.swift; sourceTree = "<group>"; };
 		E64BFA262795616600BC17A1 /* WebsocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebsocketManager.swift; sourceTree = "<group>"; };
 		E64BFA2B27956FAC00BC17A1 /* WebsocketParameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebsocketParameter.swift; sourceTree = "<group>"; };
 		E64BFA2D27956FCF00BC17A1 /* RequestTik.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestTik.swift; sourceTree = "<group>"; };
@@ -224,6 +226,7 @@
 		D4D0D2AA27A000CD00734C42 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				D4D0D2B127A0024B00734C42 /* TransactionViewModel.swift */,
 				D4AFEB2E27A03FB300011251 /* MainListCoinViewModel.swift */,
 				D4AFEB3027A0414200011251 /* MainListCoinsViewModel.swift */,
 				D4AFEB3227A0552500011251 /* MainListHeaderViewModel.swift */,
@@ -355,6 +358,7 @@
 				D4CC020927953FD300F15957 /* TickerAll.swift in Sources */,
 				E64BFA2E27956FCF00BC17A1 /* RequestTik.swift in Sources */,
 				D4CC01F327953FAF00F15957 /* SceneDelegate.swift in Sources */,
+				D4D0D2B227A0024B00734C42 /* TransactionViewModel.swift in Sources */,
 				D47D00A52797A70400E8E305 /* String+Extension.swift in Sources */,
 				D4CC020D2795411A00F15957 /* WebSocketTransaction.swift in Sources */,
 				E64BFA3627959B7100BC17A1 /* WebSocketDataModel.swift in Sources */,
