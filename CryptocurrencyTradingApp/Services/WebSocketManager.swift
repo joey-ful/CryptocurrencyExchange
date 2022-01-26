@@ -34,7 +34,7 @@ class WebSocketManager: NSObject {
     
     private func sendMessage(_ type: RequestType, _ symbols: [CoinType], _ tickTypes: [RequestTik]?) {
         let encoder = JSONEncoder()
-        let parameters = WebsocketParameter(type, symbols, tickTypes)
+        let parameters = WebSocketParameter(type, symbols, tickTypes)
         guard let data = try? encoder.encode(parameters) else {
             return
         }

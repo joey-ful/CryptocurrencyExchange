@@ -43,7 +43,7 @@
 		E61B2C032796BC4100E919B0 /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = E61B2C022796BC4100E919B0 /* Charts */; };
 		E61B2C082796BC5700E919B0 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = E61B2C072796BC5700E919B0 /* SnapKit */; };
 		E64BFA272795616600BC17A1 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFA262795616600BC17A1 /* WebSocketManager.swift */; };
-		E64BFA2C27956FAC00BC17A1 /* WebsocketParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFA2B27956FAC00BC17A1 /* WebsocketParameter.swift */; };
+		E64BFA2C27956FAC00BC17A1 /* WebSocketParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFA2B27956FAC00BC17A1 /* WebSocketParameter.swift */; };
 		E64BFA2E27956FCF00BC17A1 /* RequestTik.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFA2D27956FCF00BC17A1 /* RequestTik.swift */; };
 		E64BFA3027956FF400BC17A1 /* RequestType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFA2F27956FF400BC17A1 /* RequestType.swift */; };
 		E64BFA3227958BD900BC17A1 /* CoinType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFA3127958BD900BC17A1 /* CoinType.swift */; };
@@ -92,7 +92,7 @@
 		D4D0D2AF27A0011600734C42 /* TransactionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsViewController.swift; sourceTree = "<group>"; };
 		D4D0D2B127A0024B00734C42 /* TransactionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionViewModel.swift; sourceTree = "<group>"; };
 		E64BFA262795616600BC17A1 /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
-		E64BFA2B27956FAC00BC17A1 /* WebsocketParameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebsocketParameter.swift; sourceTree = "<group>"; };
+		E64BFA2B27956FAC00BC17A1 /* WebSocketParameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketParameter.swift; sourceTree = "<group>"; };
 		E64BFA2D27956FCF00BC17A1 /* RequestTik.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestTik.swift; sourceTree = "<group>"; };
 		E64BFA2F27956FF400BC17A1 /* RequestType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestType.swift; sourceTree = "<group>"; };
 		E64BFA3127958BD900BC17A1 /* CoinType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinType.swift; sourceTree = "<group>"; };
@@ -187,7 +187,7 @@
 				E687135F2798422B0036CA0D /* CandleStick.swift */,
 				D4CC020A279540CF00F15957 /* WebSockerTicker.swift */,
 				D4CC020C2795411A00F15957 /* WebSocketTransaction.swift */,
-				E64BFA2B27956FAC00BC17A1 /* WebsocketParameter.swift */,
+				E64BFA2B27956FAC00BC17A1 /* WebSocketParameter.swift */,
 				D47D00A22797A1A600E8E305 /* MainListCoin.swift */,
 				D4AFEB2A27A01FC300011251 /* RestAPITransaction.swift */,
 				D4AFEB2C27A0350800011251 /* Transaction.swift */,
@@ -372,7 +372,7 @@
 				E6899C73279546320006C980 /* ParsingError.swift in Sources */,
 				D4CC021427954B7000F15957 /* NetworkError.swift in Sources */,
 				D47D00A32797A1A600E8E305 /* MainListCoin.swift in Sources */,
-				E64BFA2C27956FAC00BC17A1 /* WebsocketParameter.swift in Sources */,
+				E64BFA2C27956FAC00BC17A1 /* WebSocketParameter.swift in Sources */,
 				D4D0D2AC27A000E200734C42 /* TransactionsViewModel.swift in Sources */,
 				E64BFA3927959D3100BC17A1 /* NotificationName+Extension.swift in Sources */,
 				D47D009D2797A0C700E8E305 /* UILable+Extension.swift in Sources */,
