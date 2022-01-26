@@ -31,14 +31,14 @@ final class CandleCoreDataManager {
         }
     }
     
-    func read(date: Double) -> CandleData? {
+    func read(date: String) -> CandleData? {
         guard let candleDataList = try? context.fetch(CandleData.fetchRequest()) else { return nil }
         
         let matchingCandleData = candleDataList.filter { $0.date == date }
         return matchingCandleData == [] ? nil : matchingCandleData[0]
     }
     
-    func create(date: Double, openPrice: String, closePrice: String, highPrice: String, lowPrice: String, tradeVolume: String) {
+    func create(date: String, openPrice: Double, closePrice: Double, highPrice: Double, lowPrice: Double, tradeVolume: Double) {
         let candleData = CandleData(context: context)
         candleData.date = date
         candleData.openPrice = openPrice
