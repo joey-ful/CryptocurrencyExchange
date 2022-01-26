@@ -9,10 +9,9 @@ import Foundation
 
 struct CandleStick: Codable {
     let status: String
-    let data: [[CandleData]]
+    let data: [[CandleStickData]]
     
-    
-    enum CandleData: Codable {
+    enum CandleStickData: Codable {
         case integer(Int)
         case string(String)
         
@@ -27,7 +26,7 @@ struct CandleStick: Codable {
                  self = .string(x)
                  return
              }
-             throw DecodingError.typeMismatch(CandleData.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type"))
+             throw DecodingError.typeMismatch(CandleStickData.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type"))
          }
     
     }
