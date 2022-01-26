@@ -35,8 +35,6 @@ class TransactionsTableViewTimeHeader: UITableViewHeaderFooterView {
             make.bottom.equalToSuperview()
         }
         
-        
-        
         NSLayoutConstraint.activate([
             timeLabel.heightAnchor.constraint(equalToConstant: UIFont.preferredFont(forTextStyle: font).pointSize + 20),
             timeLabel.widthAnchor.constraint(equalTo: safeAreaLayoutGuide.widthAnchor, multiplier: 0.25),
@@ -45,14 +43,10 @@ class TransactionsTableViewTimeHeader: UITableViewHeaderFooterView {
             quantityLabel.widthAnchor.constraint(equalTo: safeAreaLayoutGuide.widthAnchor, multiplier: 0.35)
         ])
         
-        timeLabel.textAlignment = .center
-        timeLabel.layer.borderColor = UIColor.systemGray5.cgColor
-        timeLabel.layer.borderWidth = borderWidth
-        priceLabel.textAlignment = .center
-        priceLabel.layer.borderColor = UIColor.systemGray5.cgColor
-        priceLabel.layer.borderWidth = borderWidth
-        quantityLabel.textAlignment = .center
-        quantityLabel.layer.borderColor = UIColor.systemGray5.cgColor
-        quantityLabel.layer.borderWidth = borderWidth
+        [timeLabel, priceLabel, quantityLabel].forEach {
+            $0.textAlignment = .center
+            $0.layer.borderColor = UIColor.systemGray5.cgColor
+            $0.layer.borderWidth = borderWidth
+        }
     }
 }

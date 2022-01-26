@@ -13,6 +13,7 @@ class TransactionsViewModel {
             NotificationCenter.default.post(name: .restAPITransactionsNotification, object: nil)
         }
     }
+    private let coinType: CoinType
     private let restAPIManager = RestAPIManager()
     private let webSocketManager = WebsocketManager()
     
@@ -21,6 +22,7 @@ class TransactionsViewModel {
     }
     
     init(coinType: CoinType) {
+        self.coinType = coinType
         initiateWithRestAPI()
         updateWithWebSocket(coinType)
     }
@@ -32,7 +34,7 @@ class TransactionsViewModel {
     private func initiateWithRestAPI() {
         restAPIManager.fetch(type: .transactionHistory,
                              paymentCurrency: .KRW,
-                             coin: .btc) { (parsedResult: Result<RestAPITransaction, Error>) in
+                             coin: coinType) { (parsedResult: Result<RestAPITransaction, Error>) in
             
             guard case .success(let parsedData) = parsedResult else { return }
             self.transactions = parsedData.data.map {

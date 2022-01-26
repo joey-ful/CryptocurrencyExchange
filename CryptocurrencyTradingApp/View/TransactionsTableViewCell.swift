@@ -9,10 +9,11 @@ import UIKit
 import SnapKit
 
 class TransactionsTableViewCell: UITableViewCell {
-
-    private var timeLabel = UILabel.makeLabel(font: .subheadline)
-    private var priceLabel = UILabel.makeLabel(font: .subheadline)
-    private var quantityLabel = UILabel.makeLabel(font: .subheadline)
+    private let font: UIFont.TextStyle = .footnote
+    private let borderWidth: CGFloat = 0.5
+    private lazy var timeLabel = UILabel.makeLabel(font: font)
+    private lazy var priceLabel = UILabel.makeLabel(font: font)
+    private lazy var quantityLabel = UILabel.makeLabel(font: font)
     private lazy var cellStackView = UIStackView.makeStackView(alignment: .center,
                                                                spacing: 0,
                                                                subviews: [timeLabel,
@@ -29,8 +30,22 @@ class TransactionsTableViewCell: UITableViewCell {
         cellStackView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.top.equalToSuperview().offset(10)
-            make.bottom.equalToSuperview().offset(-10)
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
+        
+        NSLayoutConstraint.activate([
+            timeLabel.heightAnchor.constraint(equalToConstant: UIFont.preferredFont(forTextStyle: font).pointSize + 20),
+            timeLabel.widthAnchor.constraint(equalTo: safeAreaLayoutGuide.widthAnchor, multiplier: 0.25),
+            priceLabel.heightAnchor.constraint(equalToConstant: UIFont.preferredFont(forTextStyle: font).pointSize + 20),
+            quantityLabel.heightAnchor.constraint(equalToConstant: UIFont.preferredFont(forTextStyle: font).pointSize + 20),
+            quantityLabel.widthAnchor.constraint(equalTo: safeAreaLayoutGuide.widthAnchor, multiplier: 0.35)
+        ])
+        
+        [timeLabel, priceLabel, quantityLabel].forEach {
+            $0.textAlignment = .center
+            $0.layer.borderColor = UIColor.systemGray5.cgColor
+            $0.layer.borderWidth = borderWidth
         }
     }
     
@@ -38,5 +53,7 @@ class TransactionsTableViewCell: UITableViewCell {
         timeLabel.text = viewModel.time
         priceLabel.text = viewModel.price
         quantityLabel.text = viewModel.quantity
+        priceLabel.textColor = viewModel.type == "bid" ? .systemBlue : .systemRed
+        quantityLabel.textColor = viewModel.type == "bid" ? .systemBlue : .systemRed
     }
 }

@@ -45,4 +45,16 @@ extension String {
     func lose(from separator: String.Element) -> String {
         return String(self.split(separator: separator)[0])
     }
+    
+    func leaveFractionDigits(count: Int) -> String {
+        guard let number = Double(self) as NSNumber? else { return .zero }
+        
+        let numberFormatter = NumberFormatter()
+        numberFormatter.maximumFractionDigits = count
+        numberFormatter.minimumFractionDigits = count
+        
+        guard let formatted = numberFormatter.string(from: number) else { return .zero }
+        
+        return formatted
+    }
 }

@@ -43,6 +43,6 @@ class TransactionViewModel {
     }
     
     var quantity: String {
-        return transaction.quantity
+        return transaction.quantity.leaveFractionDigits(count: 4)
     }
 }
