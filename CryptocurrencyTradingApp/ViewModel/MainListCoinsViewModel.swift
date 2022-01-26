@@ -11,7 +11,6 @@ class MainListCoinsViewModel {
     private(set) var mainListCoins: [MainListCoin] = [] {
         didSet {
             filtered = mainListCoins.filter { existsInFiltered($0) }
-            NotificationCenter.default.post(name: .restAPITickerAllNotification, object: nil)
         }
     }
     
@@ -46,6 +45,7 @@ extension MainListCoinsViewModel {
                     .sorted { $0.tradeValue.toDouble() > $1.tradeValue.toDouble() }
                 self.filtered = data
                 self.mainListCoins = data
+                NotificationCenter.default.post(name: .restAPITickerAllNotification, object: nil)
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
             }
@@ -111,7 +111,11 @@ extension MainListCoinsViewModel {
             switch parsedResult {
             case .success(let parsedData):
                 guard let ticker = parsedData?.content else { return }
-                self.updateTradeValue(ticker)
+                if ticker.tickType == "24H" {
+                    self.updateTradeValue(ticker)
+                } else if ticker.tickType == "MID" {
+                    self.updateFluctuation(ticker)
+                }
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
             }
@@ -125,6 +129,7 @@ extension MainListCoinsViewModel {
             if mainListCoins[index].symbol == newSymbol
             {
                 mainListCoins[index].currentPrice = transaction.price
+                
                 NotificationCenter.default.post(name: .currentPriceNotification,
                                                 object: nil,
                                                 userInfo: ["index": index])
@@ -134,11 +139,24 @@ extension MainListCoinsViewModel {
     
     private func updateTradeValue(_ ticker: WebSocketTicker.Ticker) {
         mainListCoins.enumerated().forEach { index, oldCoin in
-            let newSymbol = ticker.symbol.lose(from: "_")
-
+            let newSymbol = ticker.symbol.lose(from: "_").lowercased()
+            
             if mainListCoins[index].symbol == newSymbol {
                 mainListCoins[index].tradeValue = ticker.accumulatedTradeValue
                 NotificationCenter.default.post(name: .tradeValueNotification, object: nil)
+            }
+        }
+    }
+    
+    private func updateFluctuation(_ ticker: WebSocketTicker.Ticker) {
+        mainListCoins.enumerated().forEach { index, oldCoin in
+            let newSymbol = ticker.symbol.lose(from: "_").lowercased()
+            
+            if mainListCoins[index].symbol == newSymbol {
+                mainListCoins[index].fluctuationRate = ticker.fluctuationRate
+                mainListCoins[index].fluctuationAmount = ticker.fluctuationAmount
+                
+                NotificationCenter.default.post(name: .fluctuationNotification, object: nil)
             }
         }
     }
