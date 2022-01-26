@@ -44,6 +44,7 @@
 		E69FEBD0279F985900E9B1FA /* DetailChartServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69FEBCF279F985900E9B1FA /* DetailChartServices.swift */; };
 		E6C96497279A9A7F0007B55E /* RequestChartInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C96496279A9A7F0007B55E /* RequestChartInterval.swift */; };
 		E6EC8683279AC36C005A6534 /* ChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6EC8682279AC36C005A6534 /* ChartViewController.swift */; };
+		E6FA20B8279F04F700CCB1CC /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FA20B7279F04F700CCB1CC /* DetailViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -84,6 +85,7 @@
 		E69FEBCF279F985900E9B1FA /* DetailChartServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailChartServices.swift; sourceTree = "<group>"; };
 		E6C96496279A9A7F0007B55E /* RequestChartInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestChartInterval.swift; sourceTree = "<group>"; };
 		E6EC8682279AC36C005A6534 /* ChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewController.swift; sourceTree = "<group>"; };
+		E6FA20B7279F04F700CCB1CC /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +114,7 @@
 			children = (
 				D47D009A2797A09400E8E305 /* MainListTableViewCell.swift */,
 				E69FEBCF279F985900E9B1FA /* DetailChartServices.swift */,
+				E6FA20B7279F04F700CCB1CC /* DetailViewModel.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -323,6 +326,7 @@
 				D4CC01F327953FAF00F15957 /* SceneDelegate.swift in Sources */,
 				D47D00A52797A70400E8E305 /* String+Extension.swift in Sources */,
 				D4CC020D2795411A00F15957 /* WebSocketTransaction.swift in Sources */,
+				E6FA20B8279F04F700CCB1CC /* DetailViewModel.swift in Sources */,
 				E64BFA3627959B7100BC17A1 /* WebSocketDataModel.swift in Sources */,
 				E64BFA272795616600BC17A1 /* WebsocketManager.swift in Sources */,
 				E6C96497279A9A7F0007B55E /* RequestChartInterval.swift in Sources */,
