@@ -17,7 +17,7 @@ class MainListCoinsViewModel {
     
     private(set) var filtered: [MainListCoin] = []
     private let restAPIManager = RestAPIManager()
-    private let webSocketManager = WebsocketManager()
+    private let webSocketManager = WebSocketManager()
     
     var headerViewModel: MainListHeaderViewModel {
         return MainListHeaderViewModel(mainListCoinsViewModel: self)

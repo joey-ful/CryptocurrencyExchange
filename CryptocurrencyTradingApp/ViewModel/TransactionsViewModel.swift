@@ -15,7 +15,7 @@ class TransactionsViewModel {
     }
     private let coinType: CoinType
     private let restAPIManager = RestAPIManager()
-    private let webSocketManager = WebsocketManager()
+    private let webSocketManager = WebSocketManager()
     
     var count: Int {
         transactions.count

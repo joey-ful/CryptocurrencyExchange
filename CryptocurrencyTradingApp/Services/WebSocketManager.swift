@@ -7,7 +7,7 @@
 
 import Foundation
 
-class WebsocketManager: NSObject {
+class WebSocketManager: NSObject {
     private lazy var webSocket: URLSessionWebSocketTask = {
         let url = URL(string: "wss://pubwss.bithumb.com/pub/ws")!
         let webSocket = URLSession.shared.webSocketTask(with: url)
@@ -98,12 +98,12 @@ class WebsocketManager: NSObject {
     }
     
     func close() {
-        let reason = Data("Pause webSocket before moving to ChartViewController".utf8)
+        let reason = Data("Close webSocket before view transition".utf8)
         webSocket.cancel(with: .normalClosure, reason: reason)
     }
 }
 
-extension WebsocketManager: URLSessionWebSocketDelegate {
+extension WebSocketManager: URLSessionWebSocketDelegate {
     func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol: String?) {
         print("WebSocket에 연결되었습니다.")
         ping()
