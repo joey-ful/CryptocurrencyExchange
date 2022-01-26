@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19461" systemVersion="21A559" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="20F71" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="CandleData" representedClassName="CandleData" syncable="YES">
-        <attribute name="closePrice" attributeType="String"/>
-        <attribute name="date" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="highPrice" attributeType="String"/>
-        <attribute name="lowPrice" attributeType="String"/>
-        <attribute name="openPrice" attributeType="String"/>
-        <attribute name="tradeVolume" attributeType="String"/>
+        <attribute name="closePrice" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="date" attributeType="String"/>
+        <attribute name="highPrice" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="lowPrice" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="openPrice" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="tradeVolume" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
     </entity>
     <elements>
         <element name="CandleData" positionX="-63" positionY="-18" width="128" height="119"/>
