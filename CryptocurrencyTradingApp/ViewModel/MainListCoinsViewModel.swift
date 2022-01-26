@@ -24,7 +24,7 @@ class MainListCoinsViewModel {
     }
     
     func coinViewModel(at index: Int) -> MainListCoinViewModel {
-        return MainListCoinViewModel(coin: mainListCoins[index])
+        return MainListCoinViewModel(coin: filtered[index])
     }
     
     init() {
