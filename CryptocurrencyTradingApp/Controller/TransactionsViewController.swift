@@ -30,8 +30,19 @@ class TransactionsViewController: UIViewController {
                                                selector: #selector(makeSnapshot),
                                                name: .restAPITransactionsNotification,
                                                object: nil)
-        
         configureTableView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(makeSnapshot),
+                                               name: .webSocketTransactionsNotification,
+                                               object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self, name: .webSocketTransactionsNotification, object: nil)
+        viewModel.closeWebSocket()
     }
 }
 

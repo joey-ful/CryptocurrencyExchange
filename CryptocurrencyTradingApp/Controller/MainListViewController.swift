@@ -31,6 +31,11 @@ class MainListViewController: UIViewController {
                                                selector: #selector(makeSnapshot),
                                                name: .restAPITickerAllNotification,
                                                object: nil)
+        viewModel.initiateWebSocket()
+        buildUI()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(makeSnapshot),
                                                name: .tradeValueNotification,
@@ -39,15 +44,11 @@ class MainListViewController: UIViewController {
                                                selector: #selector(updateDataSource),
                                                name: .currentPriceNotification,
                                                object: nil)
-        
-        buildUI()
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        viewModel.initiateWebSocket()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self, name: .tradeValueNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .currentPriceNotification, object: nil)
         viewModel.closeWebSocket()
     }
 }
@@ -154,7 +155,8 @@ extension MainListViewController: UITableViewDelegate {
         
         let mainListCoinViewModel = self.viewModel.coinViewModel(at: indexPath.row)
         guard let coin = mainListCoinViewModel.coinType else { return }
-        viewModel.closeWebSocket()
+        let transactionsViewController = TransactionsViewController(coin: coin)
+        navigationController?.pushViewController(transactionsViewController, animated: true)
 //        chartViewController.initiate(paymentCurrency: .KRW, coin: coin)
 //        navigationController?.pushViewController(chartViewController, animated: true)
     }

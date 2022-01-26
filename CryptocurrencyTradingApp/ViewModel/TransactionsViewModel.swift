@@ -74,4 +74,8 @@ class TransactionsViewModel {
             }
         }
     }
+    
+    func closeWebSocket() {
+        webSocketManager.close()
+    }
 }
