@@ -10,23 +10,36 @@ import SwiftUI
 
 class DetailViewModel: ObservableObject {
     private let coin: CoinType
-    private var service: DetailChartServices
+    private let restAPIManager = RestAPIManager()
+    private var candleCoreDataManager = CandleCoreDataManager()
 
     @Published var highPriceList: [Double] = []
     @Published var candleData: [CandleData] = []
     
     init(coin: CoinType) {
         self.coin = coin
-        service = DetailChartServices(coin: coin)
-        NotificationCenter.default.addObserver(self, selector: #selector(fetchDataToViewModel), name: .sendCandleDataToViewModelNotification, object: nil)
+        restAPIManager.fetch(type: .candlestick,
+                             paymentCurrency: .KRW,
+                             coin: coin,
+                             chartIntervals: .oneMinute) { (parsedResult: Result<CandleStick, Error>) in
+            switch parsedResult {
+            case .success(let parsedData):
+                self.candleCoreDataManager.addToCoreData(parsedData.data)
+                let candleData = self.candleCoreDataManager.read()
+                self.calculateHighPriceList(candleData)
+            case .failure(let error):
+                assertionFailure(error.localizedDescription)
+            }
+        }
     }
     
-    @objc func fetchDataToViewModel(notification: Notification) {
-        guard let data = notification.userInfo?["data"] as? [CandleData], let firstData = data.first, let lastData = data.last else {
-            return }
+    private func calculateHighPriceList(_ candleData: [CandleData]?) {
+        guard let candleData = candleData,
+        let firstData = candleData.first,
+            let lastData = candleData.last else { return }
         
-        candleData = [firstData, lastData]
-        highPriceList = data[data.count - 60..<data.count].map { $0.highPrice}
+        self.candleData = [firstData, lastData]
+        highPriceList = candleData[candleData.count - 60..<candleData.count].map { $0.highPrice}
     }
     
     var maxY: Double {
