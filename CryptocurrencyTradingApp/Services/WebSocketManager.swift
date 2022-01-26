@@ -16,7 +16,7 @@ class WebSocketManager: NSObject {
         return webSocket
     }()
     
-    func resume() {
+    func createWebSocket() {
         let url = URL(string: "wss://pubwss.bithumb.com/pub/ws")!
         webSocket = URLSession.shared.webSocketTask(with: url)
         webSocket.delegate = self

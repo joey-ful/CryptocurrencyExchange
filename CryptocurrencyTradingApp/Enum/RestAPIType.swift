@@ -32,11 +32,11 @@ enum RestAPIType: String {
         if path.contains("ALL") {
             return baseURL + path + "_\(paymentCurrency)"
         } else if path.contains("candlestick") {
-            guard let coin = coin?.symbol, let chartIntervals = chartIntervals else { return nil }
-            return baseURL + path + "\(coin)_\(paymentCurrency)\(chartIntervals.rawValue)"
+            guard let coinSymbolKRW = coin?.symbolKRW, let chartIntervals = chartIntervals else { return nil }
+            return baseURL + path + "\(coinSymbolKRW)_\(chartIntervals.rawValue)"
         } else {
-            guard let coin = coin?.symbol else { return nil }
-            return baseURL + path + "\(coin)_\(paymentCurrency)"
+            guard let coinSymbolKRW = coin?.symbolKRW else { return nil }
+            return baseURL + path + "\(coinSymbolKRW)_\(paymentCurrency)"
         }
     }
 }

@@ -11,11 +11,13 @@ typealias TransactionsDataSource = UITableViewDiffableDataSource<Int, Transactio
 
 class TransactionsViewController: UIViewController {
     private var viewModel: TransactionsViewModel
+    private let coinType: CoinType
     private let tableView = UITableView(frame: .zero, style: .grouped)
     private var dataSource: TransactionsDataSource?
     
     init(coin: CoinType) {
         self.viewModel = TransactionsViewModel(coinType: coin)
+        coinType = coin
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -34,6 +36,7 @@ class TransactionsViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        viewModel.initiateWebSocket()
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(makeSnapshot),
                                                name: .webSocketTransactionsNotification,
@@ -42,7 +45,6 @@ class TransactionsViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         NotificationCenter.default.removeObserver(self, name: .webSocketTransactionsNotification, object: nil)
-        viewModel.closeWebSocket()
     }
 }
 

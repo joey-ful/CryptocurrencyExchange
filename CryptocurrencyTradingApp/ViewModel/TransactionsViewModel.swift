@@ -24,7 +24,6 @@ class TransactionsViewModel {
     init(coinType: CoinType) {
         self.coinType = coinType
         initiateWithRestAPI()
-        updateWithWebSocket(coinType)
     }
     
     func transactionViewModel(at index: Int) -> TransactionViewModel {
@@ -49,7 +48,8 @@ class TransactionsViewModel {
         }
     }
     
-    private func updateWithWebSocket(_ coinType: CoinType) {
+    func initiateWebSocket() {
+        webSocketManager.createWebSocket()
         webSocketManager.connectWebSocket(.transaction,
                                           [coinType],
                                           nil) { (parsedResult: Result<WebSocketTransaction?, Error>) in

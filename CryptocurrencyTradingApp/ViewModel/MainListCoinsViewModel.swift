@@ -77,7 +77,7 @@ extension MainListCoinsViewModel {
 // MARK: WebSocket
 extension MainListCoinsViewModel {
     func initiateWebSocket() {
-        webSocketManager.resume()
+        webSocketManager.createWebSocket()
         initiateTransactionWebSocket()
         initiateTickerWebSocket()
     }
