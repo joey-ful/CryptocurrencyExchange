@@ -7,14 +7,14 @@
 
 import Foundation
 
-struct WebsocketParameter: Codable {
+struct WebSocketParameter: Codable {
     let type: String
     let symbols: [String]
     let tickTypes: [String]?
     
     init(_ type: RequestType, _ symbols: [CoinType], _ tickTypes: [RequestTik]? = nil) {
         self.type = type.name
-        self.symbols = symbols.map {$0.sysmbol}
+        self.symbols = symbols.map {$0.symbolKRW}
         self.tickTypes = tickTypes?.map { $0.name }
     }
 }

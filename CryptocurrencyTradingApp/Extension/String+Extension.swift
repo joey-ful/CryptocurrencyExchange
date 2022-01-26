@@ -38,7 +38,7 @@ extension String {
     }
     
     func toDouble() -> Double {
-        let number = self.filter { $0.isNumber }
+        let number = self.filter { $0.isNumber || $0 == "-" }
         return Double(number) ?? 0
     }
     
@@ -57,5 +57,20 @@ extension String {
             return formatter.string(from: date)
         }
         return convert(data: data)
+
+    func lose(from separator: String.Element) -> String {
+        return String(self.split(separator: separator)[0])
+    }
+    
+    func leaveFractionDigits(count: Int) -> String {
+        guard let number = Double(self) as NSNumber? else { return .zero }
+        
+        let numberFormatter = NumberFormatter()
+        numberFormatter.maximumFractionDigits = count
+        numberFormatter.minimumFractionDigits = count
+        
+        guard let formatted = numberFormatter.string(from: number) else { return .zero }
+        
+        return formatted
     }
 }

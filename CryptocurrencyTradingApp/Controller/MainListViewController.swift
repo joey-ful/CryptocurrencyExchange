@@ -11,154 +11,165 @@ import SnapKit
 typealias MainListDataSource = UITableViewDiffableDataSource<Int, MainListCoin>
 
 class MainListViewController: UIViewController {
-    private let tableView = UITableView(frame: .zero, style: .plain)
+    private let viewModel: MainListCoinsViewModel
+    private let tableView = UITableView(frame: .zero, style: .grouped)
     private var dataSource: MainListDataSource?
-    private var mainListCoins: [MainListCoin] = []
-    private var snapshot: NSDiffableDataSourceSnapshot<Int, MainListCoin>?
-    private let restAPIManager = RestAPIManager()
-    private let webSocketManager = WebsocketManger()
-
+    
+    init(viewModel: MainListCoinsViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = .white
+
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(initializeMainList),
+                                               selector: #selector(makeSnapshot),
                                                name: .restAPITickerAllNotification,
                                                object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(updateCoin),
-                                               name: .webSocketTickerNotification,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(updateTradeValue),
-                                               name: .webSocketTicker24HNotification,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(updateTransaction),
-                                               name: .webSocketTransactionNotification,
-                                               object: nil)
-        
-        restAPIManager.fetch(type: .tickerAll, paymentCurrency: .KRW)
-        webSocketManager.connectWebSocket(.transaction, CoinType.allCoins, nil)
-        webSocketManager.connectWebSocket(.ticker, CoinType.allCoins, [.twentyfour, .yesterday])
-        setUpTableView()
+        viewModel.initiateWebSocket()
+        buildUI()
     }
 
-}
+    override func viewWillAppear(_ animated: Bool) {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(makeSnapshot),
+                                               name: .tradeValueNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(updateDataSource),
+                                               name: .currentPriceNotification,
+                                               object: nil)
+    }
 
-extension MainListViewController {
-    @objc private func initializeMainList(notification: Notification) {
-        if let data = notification.userInfo?["data"] as? [MainListCoin] {
-            mainListCoins = data.sorted { $0.tradeValue.toDouble() > $1.tradeValue.toDouble() }
-            makeSnapshot()
-        }
-    }
-    
-    @objc private func updateTradeValue(notification: Notification) {
-        guard let ticker = notification.userInfo?["data"] as? Ticker else { return }
-        
-        DispatchQueue.main.async { [weak self] in
-            self?.mainListCoins.enumerated().forEach { index, oldCoin in
-                if self?.mainListCoins[index].symbol == ticker.symbol.replacingOccurrences(of: "_", with: "/") {
-                    self?.mainListCoins[index].tradeValue = ticker.accumulatedTradeValue.dividedByMillion() + .million
-                    self?.makeSnapshot()
-                }
-            }
-        }
-    }
-    
-    @objc private func updateCoin(notification: Notification) {
-        guard let ticker = notification.userInfo?["data"] as? Ticker else { return }
-        
-        DispatchQueue.main.async { [weak self] in
-            self?.mainListCoins.enumerated().forEach { index, oldCoin in
-                if self?.mainListCoins[index].symbol == ticker.symbol.replacingOccurrences(of: "_", with: "/") {
-                    
-                    let sign = ticker.fluctuationRate.contains("-") ? "" : "+"
-                    self?.mainListCoins[index].fluctuationRate = sign + ticker.fluctuationRate.toDecimal() + .percent
-                    self?.mainListCoins[index].fluctuationAmount = sign + ticker.fluctuationAmount.toDecimal()
-                    self?.mainListCoins[index].textColor = sign == "+" ? .systemRed : .systemBlue
-                    self?.makeSnapshot()
-                }
-            }
-        }
-    }
-    
-    @objc private func updateTransaction(notification: Notification) {
-        guard let transactions = notification.userInfo?["data"] as? [Transaction] else { return }
-        
-        DispatchQueue.main.async { [weak self] in
-            transactions.forEach { transaction in
-                self?.mainListCoins.enumerated().forEach { index, oldCoin in
-                    if self?.mainListCoins[index].symbol == transaction.symbol.replacingOccurrences(of: "_", with: "/") {
-                        let textColor: UIColor = transaction.upDown == "up" ? .systemRed : .systemBlue
-                        self?.mainListCoins[index].currentPrice = transaction.price.toDecimal()
-                        self?.makeSnapshot()
-                        (self?.tableView.cellForRow(at: IndexPath(row: index, section: 0)) as? MainListTableViewCell)?.blink(in: textColor)
-                    }
-                }
-            }
-        }
+    override func viewWillDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self, name: .tradeValueNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .currentPriceNotification, object: nil)
+        viewModel.closeWebSocket()
     }
 }
 
+// MARK: Handle Notification
 extension MainListViewController {
-    private func setUpTableView() {
-        setTableViewAutoLayout()
-        registerCell()
+    @objc private func updateDataSource(notification: Notification) {
+        guard let userInfo = notification.userInfo, let index = userInfo["index"] as? Int else { return }
+        let cell = (tableView.cellForRow(at: IndexPath(row: index, section: 0)) as? MainListTableViewCell)
+        cell?.blink(viewModel.coinViewModel(at: index))
         makeSnapshot()
     }
-    
-    private func makeSnapshot() {
+}
+
+// MARK: SearchBar
+extension MainListViewController {
+
+    private func buildUI() {
+        view.backgroundColor = .white
+        buildSearchBar()
+        buildTableView()
+    }
+
+    private func buildSearchBar() {
+        let searchController = UISearchController(searchResultsController: nil)
+        searchController.searchResultsUpdater = self
+        navigationItem.searchController = searchController
+        searchController.searchBar.placeholder = "코인명 또는 심볼 검색"
+        searchController.searchBar.searchTextField.font = .preferredFont(forTextStyle: .subheadline)
+        searchController.searchBar.searchTextField.backgroundColor = .white
+        searchController.searchBar.autocapitalizationType = .none
+        definesPresentationContext = true
+    }
+}
+
+// MARK: SearchResultsUpdating
+extension MainListViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        let text = searchController.searchBar.text
+        viewModel.filter(text)
+        makeSnapshot()
+    }
+}
+
+// MARK: TableView UI
+extension MainListViewController {
+    private func buildTableView() {
+        setUpTableView()
+        setTableViewAutoLayout()
+        registerCell()
+    }
+
+    @objc private func makeSnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<Int, MainListCoin>()
         snapshot.appendSections([0])
-        snapshot.appendItems(mainListCoins, toSection: 0)
-        self.snapshot = snapshot
-        dataSource?.apply(snapshot, animatingDifferences: false)
+        snapshot.appendItems(viewModel.filtered, toSection: 0)
+        dataSource?.apply(snapshot, animatingDifferences: true)
     }
-    
-    private func setTableViewAutoLayout() {
+
+    private func setUpTableView() {
         tableView.register(MainListTableViewCell.self, forCellReuseIdentifier: "mainListCell")
+        tableView.register(MainListHeaderView.self, forHeaderFooterViewReuseIdentifier: "mainListHeader")
         tableView.delegate = self
+    }
+
+    private func setTableViewAutoLayout() {
         view.addSubview(tableView)
+        tableView.backgroundColor = .white
         tableView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-20)
-            make.top.equalToSuperview().offset(200)
+            make.trailing.equalToSuperview()
+            make.top.equalToSuperview()
             make.bottom.equalToSuperview()
         }
-        
+
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
         tableView.estimatedRowHeight = UIFont.preferredFont(forTextStyle: .subheadline).pointSize
         + UIFont.preferredFont(forTextStyle: .caption1).pointSize
         + 30
-        
-    
     }
-    
+
     private func registerCell() {
         dataSource = MainListDataSource(tableView: tableView,
                                         cellProvider: { tableView, indexPath, mainListCoin in
-            
+
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "mainListCell",
                                                            for: indexPath) as? MainListTableViewCell else {
                 return UITableViewCell()
             }
-            
-            cell.configure(mainListCoin)
-            
+
+            let mainListCoinViewModel = self.viewModel.coinViewModel(at: indexPath.row)
+            cell.configure(mainListCoinViewModel)
+
             return cell
         })
         tableView.dataSource = dataSource
     }
 }
 
+// MARK: TableViewHeader
 extension MainListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let chartViewController = ChartViewController()
-        let coinName = mainListCoins[indexPath.row].symbol.split(separator: "/")[0].lowercased()
-        guard let coin = CoinType.coin(coinName: coinName) else { return }
-        chartViewController.initiate(paymentCurrency: .KRW, coin: coin)
-        navigationController?.pushViewController(chartViewController, animated: true)
+//        let chartViewController = ChartViewController()
+        
+        let mainListCoinViewModel = self.viewModel.coinViewModel(at: indexPath.row)
+        guard let coin = mainListCoinViewModel.coinType else { return }
+        let transactionsViewController = TransactionsViewController(coin: coin)
+        navigationController?.pushViewController(transactionsViewController, animated: true)
+//        chartViewController.initiate(paymentCurrency: .KRW, coin: coin)
+//        navigationController?.pushViewController(chartViewController, animated: true)
+    }
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "mainListHeader")
+                as? MainListHeaderView
+        else {
+            return UIView()
+        }
+
+        header.configure(viewModel.headerViewModel)
+
+        return header
     }
 }
