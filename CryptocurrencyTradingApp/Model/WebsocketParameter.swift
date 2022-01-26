@@ -14,7 +14,7 @@ struct WebsocketParameter: Codable {
     
     init(_ type: RequestType, _ symbols: [CoinType], _ tickTypes: [RequestTik]? = nil) {
         self.type = type.name
-        self.symbols = symbols.map {$0.sysmbol}
+        self.symbols = symbols.map {$0.symbol}
         self.tickTypes = tickTypes?.map { $0.name }
     }
 }

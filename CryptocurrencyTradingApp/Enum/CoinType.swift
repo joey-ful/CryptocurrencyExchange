@@ -55,7 +55,7 @@ enum CoinType: String, CaseIterable {
     case nft, sun, xec, pci
     case sol, boba, gala, btt
     
-    var sysmbol: String {
+    var symbol: String {
         return "\(self.rawValue.uppercased())_KRW"
     }
     

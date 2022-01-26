@@ -41,4 +41,8 @@ extension String {
         let number = self.filter { $0.isNumber || $0 == "-" }
         return Double(number) ?? 0
     }
+    
+    func lose(from separator: String.Element) -> String {
+        return String(self.split(separator: separator)[0])
+    }
 }
