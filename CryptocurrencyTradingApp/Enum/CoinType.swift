@@ -56,7 +56,7 @@ enum CoinType: String, CaseIterable {
     case sol, boba, gala, btt
     
     var symbol: String {
-        return "\(self.rawValue.uppercased())_KRW"
+        return self.rawValue.uppercased()
     }
     
     static var allCoins: [CoinType] {
