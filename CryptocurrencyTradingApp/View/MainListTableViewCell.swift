@@ -39,8 +39,8 @@ class MainListTableViewCell: UITableViewCell {
 
 extension MainListTableViewCell {
     
-    func configure(_ coin: MainListCoin) {
-        configureLabel(coin)
+    func configure(_ viewModel: MainListCoinViewModel) {
+        configureLabel(viewModel)
         layoutLabel()
         layoutStackViews()
     }
@@ -73,17 +73,18 @@ extension MainListTableViewCell {
         cellStackView.alignment = .center
     }
     
-    private func configureLabel(_ coin: MainListCoin) {
-        nameLabel.text = coin.name
-        symbolLabel.text = coin.symbol
-        currentPriceLabel.text = coin.currentPrice
-        fluctuationRateLabel.text = coin.fluctuationRate
-        fluctuationAmountLabel.text = coin.fluctuationAmount
-        tradeValueLabel.text = coin.tradeValue
+    private func configureLabel(_ viewModel: MainListCoinViewModel) {
+        nameLabel.text = viewModel.name
+        symbolLabel.text = viewModel.symbolForView
+        currentPriceLabel.text = viewModel.currentPrice
+        fluctuationRateLabel.text = viewModel.fluctuationRate
+        fluctuationAmountLabel.text = viewModel.fluctuationAmount
+        tradeValueLabel.text = viewModel.tradeValue
         
-        currentPriceLabel.textColor = coin.textColor
-        fluctuationRateLabel.textColor = coin.textColor
-        fluctuationAmountLabel.textColor = coin.textColor
+        let textColor: UIColor = viewModel.sign == "+" ? .systemRed : .systemBlue
+        currentPriceLabel.textColor = textColor
+        fluctuationRateLabel.textColor = textColor
+        fluctuationAmountLabel.textColor = textColor
     }
     
     private func layoutLabel() {
@@ -102,7 +103,9 @@ extension MainListTableViewCell {
         ])
     }
     
-    func blink(in color: UIColor) {
+    func blink(_ viewModel: MainListCoinViewModel) {
+        let color: UIColor = viewModel.sign == "+" ? .systemRed : .systemBlue
+        
         UIView.animate(withDuration: 0.2, delay: 0, options: []) {
             self.backgroundColor = color.withAlphaComponent(0.1)
             self.underline.widthAnchor.constraint(equalTo: self.currentPriceLabel.widthAnchor).isActive = true

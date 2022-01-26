@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TickerAll: Codable, RestAPIDataModel {
+struct TickerAll: Codable {
     let status: String
     let data: Data
     

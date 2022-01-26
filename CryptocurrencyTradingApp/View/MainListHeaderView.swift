@@ -8,6 +8,7 @@
 import UIKit
 
 class MainListHeaderView: UITableViewHeaderFooterView {
+    private var viewModel: MainListHeaderViewModel?
     private let nameLabel = UILabel.makeLabel(font: .caption1, text: "가상자산명", color: .systemGray)
     private let priceLabel = UILabel.makeLabel(font: .caption1, text: "현재가", color: .systemGray)
     private let fluctuationLabel = UILabel.makeLabel(font: .caption1, text: "변동률", color: .systemGray)
@@ -39,29 +40,40 @@ class MainListHeaderView: UITableViewHeaderFooterView {
         tradeValueStackView
     ])
 
-    
     private var nameTapGestureRecognizer = UITapGestureRecognizer()
     private var priceTapGestureRecognizer = UITapGestureRecognizer()
     private var fluctuationTapGestureRecognizer = UITapGestureRecognizer()
     private var tradeValueTapGestureRecognizer = UITapGestureRecognizer()
-    private var sorts: [Sort] = [.none, .none, .none, .down]
-    private var sortingMethods: [((Sort) -> Void)?] = []
     
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(updateSortIcons),
+                                               name: .updateSortIconsNotification,
+                                               object: nil)
+    }
     
-    func configure(sortName: ((Sort) -> Void)?,
-                   sortPrice: ((Sort) -> Void)?,
-                   sortFluctuation: ((Sort) -> Void)?,
-                   sortTradeValue: ((Sort) -> Void)?)
-    {
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    @objc private func updateSortIcons() {
+        nameSortIcon.image = viewModel?.nameSort.image
+        priceSortIcon.image = viewModel?.priceSort.image
+        fluctuationSortIcon.image = viewModel?.fluctuationSort.image
+        tradeValueSortIcon.image = viewModel?.tradeValueSort.image
+    }
+    
+    func configure(_ viewModel: MainListHeaderViewModel) {
+        self.viewModel = viewModel
         resizeIcons()
         layoutLabels()
         layoutStackViews()
-        addGestureRecognizers(sortingMethods: [sortName, sortPrice, sortFluctuation, sortTradeValue])
+        addGestureRecognizers(viewModel)
     }
 }
 
 extension MainListHeaderView {
-    
     
     private func layoutStackViews() {
         
@@ -106,53 +118,16 @@ extension MainListHeaderView {
             tradeValueSortIcon.widthAnchor.constraint(equalToConstant: 6)
         ])
     }
-}
-
-extension MainListHeaderView {
     
-    private func addGestureRecognizers(sortingMethods: [((Sort) -> Void)?]) {
-        self.sortingMethods = sortingMethods
-        
+    private func addGestureRecognizers(_ viewModel: MainListHeaderViewModel) {
         nameStackView.addGestureRecognizer(nameTapGestureRecognizer)
         priceStackView.addGestureRecognizer(priceTapGestureRecognizer)
         fluctuationStackView.addGestureRecognizer(fluctuationTapGestureRecognizer)
         tradeValueStackView.addGestureRecognizer(tradeValueTapGestureRecognizer)
         
-        nameTapGestureRecognizer.addTarget(self, action: #selector(sortNameTapped))
-        priceTapGestureRecognizer.addTarget(self, action: #selector(sortPriceTapped))
-        fluctuationTapGestureRecognizer.addTarget(self, action: #selector(sortFluctuationTapped))
-        tradeValueTapGestureRecognizer.addTarget(self, action: #selector(sortTradeValueTapped))
-    }
-    
-    @objc private func sortNameTapped() {
-        updateSorts(targetIndex: 0)
-    }
-    
-    @objc private func sortPriceTapped() {
-        updateSorts(targetIndex: 1)
-    }
-    
-    @objc private func sortFluctuationTapped() {
-        updateSorts(targetIndex: 2)
-    }
-    
-    @objc private func sortTradeValueTapped() {
-        updateSorts(targetIndex: 3)
-    }
-    
-    private func updateSorts(targetIndex: Int) {
-        sorts = sorts.enumerated().map { index, value in
-            if index == targetIndex {
-                return sorts[targetIndex] == .down ? .up : .down
-            } else {
-                return .none
-            }
-        }
-        sortingMethods[targetIndex]?(sorts[targetIndex])
-        
-        nameSortIcon.image = sorts[0].image
-        priceSortIcon.image = sorts[1].image
-        fluctuationSortIcon.image = sorts[2].image
-        tradeValueSortIcon.image = sorts[3].image
+        nameTapGestureRecognizer.addTarget(viewModel, action: #selector(viewModel.sortName))
+        priceTapGestureRecognizer.addTarget(viewModel, action: #selector(viewModel.sortPrice))
+        fluctuationTapGestureRecognizer.addTarget(viewModel, action: #selector(viewModel.sortFluctuation))
+        tradeValueTapGestureRecognizer.addTarget(viewModel, action: #selector(viewModel.sortTradeValue))
     }
 }
