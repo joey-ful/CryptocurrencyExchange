@@ -51,7 +51,6 @@
 		E64BFA3927959D3100BC17A1 /* NotificationName+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFA3827959D3100BC17A1 /* NotificationName+Extension.swift */; };
 		E68713602798422B0036CA0D /* CandleStick.swift in Sources */ = {isa = PBXBuildFile; fileRef = E687135F2798422B0036CA0D /* CandleStick.swift */; };
 		E6899C73279546320006C980 /* ParsingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6899C72279546320006C980 /* ParsingError.swift */; };
-		E69FEBD0279F985900E9B1FA /* DetailChartServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69FEBCF279F985900E9B1FA /* DetailChartServices.swift */; };
 		E6C96497279A9A7F0007B55E /* RequestChartInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C96496279A9A7F0007B55E /* RequestChartInterval.swift */; };
 		E6EC8683279AC36C005A6534 /* ChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6EC8682279AC36C005A6534 /* ChartViewController.swift */; };
 		E6FA20B5279EFAAF00CCB1CC /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FA20B4279EFAAF00CCB1CC /* ChartView.swift */; };
@@ -103,7 +102,6 @@
 		E64BFA3827959D3100BC17A1 /* NotificationName+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationName+Extension.swift"; sourceTree = "<group>"; };
 		E687135F2798422B0036CA0D /* CandleStick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleStick.swift; sourceTree = "<group>"; };
 		E6899C72279546320006C980 /* ParsingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsingError.swift; sourceTree = "<group>"; };
-		E69FEBCF279F985900E9B1FA /* DetailChartServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailChartServices.swift; sourceTree = "<group>"; };
 		E6C96496279A9A7F0007B55E /* RequestChartInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestChartInterval.swift; sourceTree = "<group>"; };
 		E6EC8682279AC36C005A6534 /* ChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewController.swift; sourceTree = "<group>"; };
 		E6FA20B4279EFAAF00CCB1CC /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
@@ -136,8 +134,6 @@
 			isa = PBXGroup;
 			children = (
 				D47D009A2797A09400E8E305 /* MainListTableViewCell.swift */,
-				E69FEBCF279F985900E9B1FA /* DetailChartServices.swift */,
-				E6FA20B7279F04F700CCB1CC /* DetailViewModel.swift */,
 				E6FA20B4279EFAAF00CCB1CC /* ChartView.swift */,
 				D4D0D29B279B083200734C42 /* MainListHeaderView.swift */,
 				D4D0D2AD27A0010200734C42 /* TransactionsTableViewCell.swift */,
@@ -167,7 +163,6 @@
 		D4CC01EF27953FAF00F15957 /* CryptocurrencyTradingApp */ = {
 			isa = PBXGroup;
 			children = (
-				D4D0D296279AE79400734C42 /* CoreData */,
 				E64BFA3727959D1600BC17A1 /* Extension */,
 				D4CC021E27954F3D00F15957 /* Enum */,
 				D4CC020E27954AEC00F15957 /* Protocol */,
@@ -225,17 +220,10 @@
 			path = Enum;
 			sourceTree = "<group>";
 		};
-		D4D0D296279AE79400734C42 /* CoreData */ = {
-			isa = PBXGroup;
-			children = (
-				D4D0D297279AE7A000734C42 /* CandleCoreDataManager.swift */,
-			);
-			path = CoreData;
-			sourceTree = "<group>";
-		};
 		D4D0D2AA27A000CD00734C42 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				E6FA20B7279F04F700CCB1CC /* DetailViewModel.swift */,
 				D4D0D2AB27A000E200734C42 /* TransactionsViewModel.swift */,
 				D4D0D2B127A0024B00734C42 /* TransactionViewModel.swift */,
 				D4AFEB2E27A03FB300011251 /* MainListCoinViewModel.swift */,
@@ -261,6 +249,7 @@
 			children = (
 				E64BFA262795616600BC17A1 /* WebSocketManager.swift */,
 				D4CC02262795B3C700F15957 /* RestAPIManager.swift */,
+				D4D0D297279AE7A000734C42 /* CandleCoreDataManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -379,7 +368,6 @@
 				D4D0D2AE27A0010200734C42 /* TransactionsTableViewCell.swift in Sources */,
 				E6C96497279A9A7F0007B55E /* RequestChartInterval.swift in Sources */,
 				D4CC02272795B3C700F15957 /* RestAPIManager.swift in Sources */,
-				E69FEBD0279F985900E9B1FA /* DetailChartServices.swift in Sources */,
 				D47D009B2797A09400E8E305 /* MainListTableViewCell.swift in Sources */,
 				E6899C73279546320006C980 /* ParsingError.swift in Sources */,
 				D4CC021427954B7000F15957 /* NetworkError.swift in Sources */,

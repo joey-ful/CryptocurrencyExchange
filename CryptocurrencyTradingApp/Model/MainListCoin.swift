@@ -8,7 +8,6 @@
 import UIKit
 
 struct MainListCoin: Hashable {
-    let id = UUID()
     let name: String
     let symbol: String
     var currentPrice: String
@@ -17,10 +16,20 @@ struct MainListCoin: Hashable {
     var tradeValue: String
     
     static func == (lhs: MainListCoin, rhs: MainListCoin) -> Bool {
-        return lhs.id == rhs.id
+        return lhs.name == rhs.name
+        && lhs.symbol == rhs.symbol
+        && lhs.currentPrice == rhs.currentPrice
+        && lhs.fluctuationRate == rhs.fluctuationRate
+        && lhs.fluctuationAmount == rhs.fluctuationAmount
+        && lhs.tradeValue == rhs.tradeValue
     }
     
     func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
+        hasher.combine(name)
+        hasher.combine(symbol)
+        hasher.combine(currentPrice)
+        hasher.combine(fluctuationRate)
+        hasher.combine(fluctuationAmount)
+        hasher.combine(tradeValue)
     }
 }

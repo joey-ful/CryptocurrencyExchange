@@ -57,6 +57,7 @@ extension String {
             return formatter.string(from: date)
         }
         return convert(data: data)
+    }
 
     func lose(from separator: String.Element) -> String {
         return String(self.split(separator: separator)[0])

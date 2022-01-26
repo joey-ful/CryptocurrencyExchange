@@ -31,11 +31,11 @@ class MainListViewController: UIViewController {
                                                selector: #selector(makeSnapshot),
                                                name: .restAPITickerAllNotification,
                                                object: nil)
-        viewModel.initiateWebSocket()
         buildUI()
     }
 
     override func viewWillAppear(_ animated: Bool) {
+        viewModel.initiateWebSocket()
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(makeSnapshot),
                                                name: .tradeValueNotification,
@@ -44,11 +44,19 @@ class MainListViewController: UIViewController {
                                                selector: #selector(updateDataSource),
                                                name: .currentPriceNotification,
                                                object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(makeSnapshot),
+                                               name: .fluctuationNotification,
+                                               object: nil)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         NotificationCenter.default.removeObserver(self, name: .tradeValueNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: .currentPriceNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .fluctuationNotification, object: nil)
+    }
+    
+    deinit {
         viewModel.closeWebSocket()
     }
 }
@@ -56,7 +64,9 @@ class MainListViewController: UIViewController {
 // MARK: Handle Notification
 extension MainListViewController {
     @objc private func updateDataSource(notification: Notification) {
-        guard let userInfo = notification.userInfo, let index = userInfo["index"] as? Int else { return }
+        guard let userInfo = notification.userInfo,
+              let index = userInfo["index"] as? Int else { return }
+        
         let cell = (tableView.cellForRow(at: IndexPath(row: index, section: 0)) as? MainListTableViewCell)
         cell?.blink(viewModel.coinViewModel(at: index))
         makeSnapshot()
@@ -105,7 +115,7 @@ extension MainListViewController {
         var snapshot = NSDiffableDataSourceSnapshot<Int, MainListCoin>()
         snapshot.appendSections([0])
         snapshot.appendItems(viewModel.filtered, toSection: 0)
-        dataSource?.apply(snapshot, animatingDifferences: true)
+        dataSource?.apply(snapshot, animatingDifferences: false)
     }
 
     private func setUpTableView() {
