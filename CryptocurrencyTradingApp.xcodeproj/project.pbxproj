@@ -12,6 +12,8 @@
 		D47D009F2797A0EA00E8E305 /* UIStackView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47D009E2797A0EA00E8E305 /* UIStackView+Extension.swift */; };
 		D47D00A32797A1A600E8E305 /* MainListCoin.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47D00A22797A1A600E8E305 /* MainListCoin.swift */; };
 		D47D00A52797A70400E8E305 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47D00A42797A70400E8E305 /* String+Extension.swift */; };
+		D4AFEB2B27A01FC300011251 /* RestAPITransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AFEB2A27A01FC300011251 /* RestAPITransaction.swift */; };
+		D4AFEB2D27A0350800011251 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AFEB2C27A0350800011251 /* Transaction.swift */; };
 		D4AFEB2F27A03FB300011251 /* MainListCoinViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AFEB2E27A03FB300011251 /* MainListCoinViewModel.swift */; };
 		D4AFEB3127A0414200011251 /* MainListCoinsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AFEB3027A0414200011251 /* MainListCoinsViewModel.swift */; };
 		D4AFEB3327A0552500011251 /* MainListHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AFEB3227A0552500011251 /* MainListHeaderViewModel.swift */; };
@@ -58,6 +60,8 @@
 		D47D009E2797A0EA00E8E305 /* UIStackView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Extension.swift"; sourceTree = "<group>"; };
 		D47D00A22797A1A600E8E305 /* MainListCoin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainListCoin.swift; sourceTree = "<group>"; };
 		D47D00A42797A70400E8E305 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
+		D4AFEB2A27A01FC300011251 /* RestAPITransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestAPITransaction.swift; sourceTree = "<group>"; };
+		D4AFEB2C27A0350800011251 /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 		D4AFEB2E27A03FB300011251 /* MainListCoinViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainListCoinViewModel.swift; sourceTree = "<group>"; };
 		D4AFEB3027A0414200011251 /* MainListCoinsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainListCoinsViewModel.swift; sourceTree = "<group>"; };
 		D4AFEB3227A0552500011251 /* MainListHeaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainListHeaderViewModel.swift; sourceTree = "<group>"; };
@@ -181,6 +185,8 @@
 				D4CC020C2795411A00F15957 /* WebSocketTransaction.swift */,
 				E64BFA2B27956FAC00BC17A1 /* WebsocketParameter.swift */,
 				D47D00A22797A1A600E8E305 /* MainListCoin.swift */,
+				D4AFEB2A27A01FC300011251 /* RestAPITransaction.swift */,
+				D4AFEB2C27A0350800011251 /* Transaction.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -337,6 +343,7 @@
 				E6899C70279544CC0006C980 /* ParsingManager.swift in Sources */,
 				E6EC8683279AC36C005A6534 /* ChartViewController.swift in Sources */,
 				D4D0D29E279C29B500734C42 /* Sort.swift in Sources */,
+				D4AFEB2B27A01FC300011251 /* RestAPITransaction.swift in Sources */,
 				D4D0D2002799A35100734C42 /* MainListViewController.swift in Sources */,
 				E64BFA3027956FF400BC17A1 /* RequestType.swift in Sources */,
 				D4CC01F527953FAF00F15957 /* ViewController.swift in Sources */,
@@ -363,6 +370,7 @@
 				E64BFA3927959D3100BC17A1 /* NotificationName+Extension.swift in Sources */,
 				D47D009D2797A0C700E8E305 /* UILable+Extension.swift in Sources */,
 				D4D0D29C279B083200734C42 /* MainListHeaderView.swift in Sources */,
+				D4AFEB2D27A0350800011251 /* Transaction.swift in Sources */,
 				D4CC02222795504900F15957 /* RestAPIType.swift in Sources */,
 				D4AFEB3127A0414200011251 /* MainListCoinsViewModel.swift in Sources */,
 				E64BFA3227958BD900BC17A1 /* CoinType.swift in Sources */,
