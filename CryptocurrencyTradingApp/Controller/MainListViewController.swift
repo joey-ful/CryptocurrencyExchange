@@ -44,7 +44,7 @@ class MainListViewController: UIViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-//        viewModel.initiateWebSocket()
+        viewModel.initiateWebSocket()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -103,7 +103,6 @@ extension MainListViewController {
     @objc private func makeSnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<Int, MainListCoin>()
         snapshot.appendSections([0])
-        print(viewModel.filtered)
         snapshot.appendItems(viewModel.filtered, toSection: 0)
         dataSource?.apply(snapshot, animatingDifferences: true)
     }

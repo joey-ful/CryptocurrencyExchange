@@ -49,7 +49,6 @@
 		E64BFA3627959B7100BC17A1 /* WebSocketDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFA3527959B7100BC17A1 /* WebSocketDataModel.swift */; };
 		E64BFA3927959D3100BC17A1 /* NotificationName+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFA3827959D3100BC17A1 /* NotificationName+Extension.swift */; };
 		E68713602798422B0036CA0D /* CandleStick.swift in Sources */ = {isa = PBXBuildFile; fileRef = E687135F2798422B0036CA0D /* CandleStick.swift */; };
-		E6899C70279544CC0006C980 /* ParsingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6899C6F279544CC0006C980 /* ParsingManager.swift */; };
 		E6899C73279546320006C980 /* ParsingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6899C72279546320006C980 /* ParsingError.swift */; };
 		E6C96497279A9A7F0007B55E /* RequestChartInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C96496279A9A7F0007B55E /* RequestChartInterval.swift */; };
 		E6EC8683279AC36C005A6534 /* ChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6EC8682279AC36C005A6534 /* ChartViewController.swift */; };
@@ -98,7 +97,6 @@
 		E64BFA3527959B7100BC17A1 /* WebSocketDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketDataModel.swift; sourceTree = "<group>"; };
 		E64BFA3827959D3100BC17A1 /* NotificationName+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationName+Extension.swift"; sourceTree = "<group>"; };
 		E687135F2798422B0036CA0D /* CandleStick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleStick.swift; sourceTree = "<group>"; };
-		E6899C6F279544CC0006C980 /* ParsingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsingManager.swift; sourceTree = "<group>"; };
 		E6899C72279546320006C980 /* ParsingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsingError.swift; sourceTree = "<group>"; };
 		E6C96496279A9A7F0007B55E /* RequestChartInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestChartInterval.swift; sourceTree = "<group>"; };
 		E6EC8682279AC36C005A6534 /* ChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewController.swift; sourceTree = "<group>"; };
@@ -249,7 +247,6 @@
 		E6899C6E2795444E0006C980 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				E6899C6F279544CC0006C980 /* ParsingManager.swift */,
 				E64BFA262795616600BC17A1 /* WebsocketManager.swift */,
 				D4CC02262795B3C700F15957 /* RestAPIManager.swift */,
 			);
@@ -344,7 +341,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D4D0D295279AE73000734C42 /* CandleData+CoreDataProperties.swift in Sources */,
-				E6899C70279544CC0006C980 /* ParsingManager.swift in Sources */,
 				E6EC8683279AC36C005A6534 /* ChartViewController.swift in Sources */,
 				D4D0D29E279C29B500734C42 /* Sort.swift in Sources */,
 				D4D0D2B027A0011600734C42 /* TransactionsViewController.swift in Sources */,
