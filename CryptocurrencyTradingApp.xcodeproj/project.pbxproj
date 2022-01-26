@@ -147,6 +147,7 @@
 				E6899C6E2795444E0006C980 /* Manager */,
 				D4CC020727953FCD00F15957 /* Model */,
 				D47D00992797A01800E8E305 /* View */,
+				E6899C6E2795444E0006C980 /* Services */,
 				D47D00982797983B00E8E305 /* Controller */,
 				D4CC01F027953FAF00F15957 /* AppDelegate.swift */,
 				D4CC01F227953FAF00F15957 /* SceneDelegate.swift */,
@@ -214,14 +215,14 @@
 			path = Extension;
 			sourceTree = "<group>";
 		};
-		E6899C6E2795444E0006C980 /* Manager */ = {
+		E6899C6E2795444E0006C980 /* Services */ = {
 			isa = PBXGroup;
 			children = (
 				E6899C6F279544CC0006C980 /* ParsingManager.swift */,
 				E64BFA262795616600BC17A1 /* WebsocketManager.swift */,
 				D4CC02262795B3C700F15957 /* RestAPIManager.swift */,
 			);
-			path = Manager;
+			path = Services;
 			sourceTree = "<group>";
 		};
 		E6899C712795460E0006C980 /* ErrorCase */ = {

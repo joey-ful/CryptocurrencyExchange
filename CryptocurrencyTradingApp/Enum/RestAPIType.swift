@@ -32,10 +32,10 @@ enum RestAPIType: String {
         if path.contains("ALL") {
             return baseURL + path + "_\(paymentCurrency)"
         } else if path.contains("candlestick") {
-            guard let coin = coin, let chartIntervals = chartIntervals else { return nil }
+            guard let coin = coin?.symbol, let chartIntervals = chartIntervals else { return nil }
             return baseURL + path + "\(coin)_\(paymentCurrency)\(chartIntervals.rawValue)"
         } else {
-            guard let coin = coin else { return nil }
+            guard let coin = coin?.symbol else { return nil }
             return baseURL + path + "\(coin)_\(paymentCurrency)"
         }
     }
