@@ -161,14 +161,10 @@ extension MainListViewController {
 // MARK: TableViewHeader
 extension MainListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let chartViewController = ChartViewController()
-        
         let mainListCoinViewModel = self.viewModel.coinViewModel(at: indexPath.row)
         guard let coin = mainListCoinViewModel.coinType else { return }
-        let transactionsViewController = TransactionsViewController(coin: coin)
+        let transactionsViewController = TransactionsViewController(coin: coin, isTime: false)
         navigationController?.pushViewController(transactionsViewController, animated: true)
-//        chartViewController.initiate(paymentCurrency: .KRW, coin: coin)
-//        navigationController?.pushViewController(chartViewController, animated: true)
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

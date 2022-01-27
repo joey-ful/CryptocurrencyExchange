@@ -63,7 +63,7 @@ extension String {
         return String(self.split(separator: separator)[0])
     }
     
-    func leaveFractionDigits(count: Int) -> String {
+    func setFractionDigits(to count: Int) -> String {
         guard let number = Double(self) as NSNumber? else { return .zero }
         
         let numberFormatter = NumberFormatter()
