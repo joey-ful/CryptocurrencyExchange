@@ -23,9 +23,9 @@ class TransactionsViewModel {
         transactions.count
     }
     
-    init(coinType: CoinType) {
+    init(coinType: CoinType, isTime: Bool) {
         self.coinType = coinType
-        initiateWithRestAPI()
+        isTime ? initiateTimeRestAPI() : initiateDayRestAPI()
     }
     
     func transactionViewModel(at index: Int) -> TransactionViewModel {

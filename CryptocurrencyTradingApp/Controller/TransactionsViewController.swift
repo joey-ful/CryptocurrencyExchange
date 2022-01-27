@@ -14,10 +14,12 @@ class TransactionsViewController: UIViewController {
     private let coinType: CoinType
     private let tableView = UITableView(frame: .zero, style: .grouped)
     private var dataSource: TransactionsDataSource?
+    private let isTime: Bool
     
-    init(coin: CoinType) {
-        self.viewModel = TransactionsViewModel(coinType: coin)
+    init(coin: CoinType, isTime: Bool) {
+        self.viewModel = TransactionsViewModel(coinType: coin, isTime: isTime)
         coinType = coin
+        self.isTime = isTime
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -28,15 +30,27 @@ class TransactionsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(makeSnapshot),
-                                               name: .restAPITransactionsNotification,
-                                               object: nil)
+        if isTime {
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(makeSnapshot),
+                                                   name: .restAPITransactionsNotification,
+                                                   object: nil)
+        } else {
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(makeSnapshot),
+                                                   name: .candlestickNotification,
+                                                   object: nil)
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(makeSnapshot),
+                                                   name: .restAPITickerNotification,
+                                                   object: nil)
+        }
         configureTableView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        viewModel.initiateWebSocket()
+        if isTime == false { return }
+        viewModel.initiateTimeWebSocket()
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(makeSnapshot),
                                                name: .webSocketTransactionsNotification,
@@ -44,7 +58,21 @@ class TransactionsViewController: UIViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        NotificationCenter.default.removeObserver(self, name: .webSocketTransactionsNotification, object: nil)
+        if isTime {
+            NotificationCenter.default.removeObserver(self,
+                                                      name: .restAPITransactionsNotification,
+                                                      object: nil)
+            NotificationCenter.default.removeObserver(self,
+                                                      name: .webSocketTransactionsNotification,
+                                                      object: nil)
+        } else {
+            NotificationCenter.default.removeObserver(self,
+                                                      name: .candlestickNotification,
+                                                      object: nil)
+            NotificationCenter.default.removeObserver(self,
+                                                      name: .restAPITickerNotification,
+                                                      object: nil)
+        }
     }
 }
 
@@ -53,7 +81,7 @@ extension TransactionsViewController {
     @objc private func makeSnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<Int, Transaction>()
         snapshot.appendSections([0])
-        snapshot.appendItems(viewModel.transactions, toSection: 0)
+        snapshot.appendItems(isTime ?  viewModel.transactions : viewModel.dayTransactions, toSection: 0)
         dataSource?.apply(snapshot, animatingDifferences: false)
     }
     
@@ -64,8 +92,10 @@ extension TransactionsViewController {
     }
     
     private func setUpTableView() {
-        tableView.register(TransactionsTableViewCell.self, forCellReuseIdentifier: "transactionsCell")
-        tableView.register(TransactionsTableViewTimeHeader.self, forHeaderFooterViewReuseIdentifier: "transactionsTimeHeader")
+        tableView.register(TransactionsCell.self,
+                           forCellReuseIdentifier: "transactionsCell")
+        tableView.register(TransactionsHeader.self,
+                           forHeaderFooterViewReuseIdentifier: "transactionsTimeHeader")
     }
     
     private func setTableViewAutoLayout() {
@@ -87,11 +117,14 @@ extension TransactionsViewController {
         dataSource = TransactionsDataSource(tableView: tableView,
                                             cellProvider: { tableView, indexPath, itemIdentifier in
             
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "transactionsCell") as? TransactionsTableViewCell else {
-                return UITableViewCell()
-            }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "transactionsCell")
+                    as? TransactionsCell
+            else { return UITableViewCell() }
             
-            cell.configure(viewModel: self.viewModel.transactionViewModel(at: indexPath.row))
+            cell.configure(isTimeCell: self.isTime,
+                           viewModel: self.isTime
+                           ? self.viewModel.transactionViewModel(at: indexPath.row)
+                           : self.viewModel.dayTransactionViewModel(at: indexPath.row))
             
             return cell
         })
@@ -102,9 +135,11 @@ extension TransactionsViewController {
 
 extension TransactionsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "transactionsTimeHeader") as? TransactionsTableViewTimeHeader else { return UITableViewHeaderFooterView() }
+        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "transactionsTimeHeader")
+                as? TransactionsHeader
+        else { return UITableViewHeaderFooterView() }
         
-        header.configure()
+        header.configure(isTimeCell: isTime)
         
         return header
     }
