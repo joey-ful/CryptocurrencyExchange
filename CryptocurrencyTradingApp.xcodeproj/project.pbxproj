@@ -24,8 +24,10 @@
 		D4B40DF627A2637C00EDA235 /* RestAPITicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40DF527A2637C00EDA235 /* RestAPITicker.swift */; };
 		D4B40DF827A2FA6500EDA235 /* OrderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40DF727A2FA6500EDA235 /* OrderViewController.swift */; };
 		D4B40DFC27A36B6100EDA235 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40DFB27A36B6100EDA235 /* UIButton+Extension.swift */; };
+		D4B40DFE27A3C00300EDA235 /* OrderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40DFD27A3C00200EDA235 /* OrderViewModel.swift */; };
 		D4B40E0027A3C09400EDA235 /* Orderbook.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40DFF27A3C09400EDA235 /* Orderbook.swift */; };
 		D4B40E0227A3C33D00EDA235 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E0127A3C33D00EDA235 /* Order.swift */; };
+		D4B40E0427A3C4AC00EDA235 /* OrdersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E0327A3C4AC00EDA235 /* OrdersViewModel.swift */; };
 		D4CC01F127953FAF00F15957 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F027953FAF00F15957 /* AppDelegate.swift */; };
 		D4CC01F327953FAF00F15957 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F227953FAF00F15957 /* SceneDelegate.swift */; };
 		D4CC01F527953FAF00F15957 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F427953FAF00F15957 /* ViewController.swift */; };
@@ -82,8 +84,10 @@
 		D4B40DF527A2637C00EDA235 /* RestAPITicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestAPITicker.swift; sourceTree = "<group>"; };
 		D4B40DF727A2FA6500EDA235 /* OrderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderViewController.swift; sourceTree = "<group>"; };
 		D4B40DFB27A36B6100EDA235 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
+		D4B40DFD27A3C00200EDA235 /* OrderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderViewModel.swift; sourceTree = "<group>"; };
 		D4B40DFF27A3C09400EDA235 /* Orderbook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Orderbook.swift; sourceTree = "<group>"; };
 		D4B40E0127A3C33D00EDA235 /* Order.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
+		D4B40E0327A3C4AC00EDA235 /* OrdersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrdersViewModel.swift; sourceTree = "<group>"; };
 		D4CC01ED27953FAE00F15957 /* CryptocurrencyTradingApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CryptocurrencyTradingApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4CC01F027953FAF00F15957 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D4CC01F227953FAF00F15957 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -249,6 +253,8 @@
 				D4AFEB3027A0414200011251 /* MainListCoinsViewModel.swift */,
 				D4AFEB3227A0552500011251 /* MainListHeaderViewModel.swift */,
 				D4B40DF127A250C000EDA235 /* DayTransactionViewModel.swift */,
+				D4B40DFD27A3C00200EDA235 /* OrderViewModel.swift */,
+				D4B40E0327A3C4AC00EDA235 /* OrdersViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -400,7 +406,9 @@
 				E64BFA2C27956FAC00BC17A1 /* WebSocketParameter.swift in Sources */,
 				D4D0D2AC27A000E200734C42 /* TransactionsViewModel.swift in Sources */,
 				E64BFA3927959D3100BC17A1 /* NotificationName+Extension.swift in Sources */,
+				D4B40E0427A3C4AC00EDA235 /* OrdersViewModel.swift in Sources */,
 				D47D009D2797A0C700E8E305 /* UILable+Extension.swift in Sources */,
+				D4B40DFE27A3C00300EDA235 /* OrderViewModel.swift in Sources */,
 				D4D0D29C279B083200734C42 /* MainListHeaderView.swift in Sources */,
 				D4AFEB2D27A0350800011251 /* Transaction.swift in Sources */,
 				D4CC02222795504900F15957 /* RestAPIType.swift in Sources */,
