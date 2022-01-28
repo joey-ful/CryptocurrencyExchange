@@ -10,6 +10,7 @@ import Foundation
 class OrdersViewModel {
     private let coinType: CoinType
     private let restAPIManager = RestAPIManager()
+    private let webSocketManager = WebSocketManager()
     private var asks: [Order] = []
     private var bids: [Order] = []
     
@@ -61,4 +62,16 @@ extension OrdersViewModel {
         }
     }
     
+}
+
+// MARK: WebSocket
+extension OrdersViewModel {
+    func initiateWebSocket() {
+        initiateWebSocketTicker()
+        
+    }
+    
+    private func initiateWebSocketTicker() {
+        
+    }
 }
