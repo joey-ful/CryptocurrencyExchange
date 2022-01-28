@@ -22,6 +22,8 @@
 		D4B40DF227A250C000EDA235 /* DayTransactionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40DF127A250C000EDA235 /* DayTransactionViewModel.swift */; };
 		D4B40DF427A25BBA00EDA235 /* TransactionViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40DF327A25BBA00EDA235 /* TransactionViewModelType.swift */; };
 		D4B40DF627A2637C00EDA235 /* RestAPITicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40DF527A2637C00EDA235 /* RestAPITicker.swift */; };
+		D4B40DF827A2FA6500EDA235 /* OrderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40DF727A2FA6500EDA235 /* OrderViewController.swift */; };
+		D4B40DFC27A36B6100EDA235 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40DFB27A36B6100EDA235 /* UIButton+Extension.swift */; };
 		D4CC01F127953FAF00F15957 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F027953FAF00F15957 /* AppDelegate.swift */; };
 		D4CC01F327953FAF00F15957 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F227953FAF00F15957 /* SceneDelegate.swift */; };
 		D4CC01F527953FAF00F15957 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F427953FAF00F15957 /* ViewController.swift */; };
@@ -76,6 +78,8 @@
 		D4B40DF127A250C000EDA235 /* DayTransactionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayTransactionViewModel.swift; sourceTree = "<group>"; };
 		D4B40DF327A25BBA00EDA235 /* TransactionViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionViewModelType.swift; sourceTree = "<group>"; };
 		D4B40DF527A2637C00EDA235 /* RestAPITicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestAPITicker.swift; sourceTree = "<group>"; };
+		D4B40DF727A2FA6500EDA235 /* OrderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderViewController.swift; sourceTree = "<group>"; };
+		D4B40DFB27A36B6100EDA235 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
 		D4CC01ED27953FAE00F15957 /* CryptocurrencyTradingApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CryptocurrencyTradingApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4CC01F027953FAF00F15957 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D4CC01F227953FAF00F15957 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -132,6 +136,7 @@
 			children = (
 				D4D0D1FF2799A35100734C42 /* MainListViewController.swift */,
 				D4D0D2AF27A0011600734C42 /* TransactionsViewController.swift */,
+				D4B40DF727A2FA6500EDA235 /* OrderViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -249,6 +254,7 @@
 				D47D009C2797A0C700E8E305 /* UILable+Extension.swift */,
 				D47D009E2797A0EA00E8E305 /* UIStackView+Extension.swift */,
 				D47D00A42797A70400E8E305 /* String+Extension.swift */,
+				D4B40DFB27A36B6100EDA235 /* UIButton+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -391,12 +397,14 @@
 				D4AFEB2D27A0350800011251 /* Transaction.swift in Sources */,
 				D4CC02222795504900F15957 /* RestAPIType.swift in Sources */,
 				D4AFEB3127A0414200011251 /* MainListCoinsViewModel.swift in Sources */,
+				D4B40DFC27A36B6100EDA235 /* UIButton+Extension.swift in Sources */,
 				E64BFA3227958BD900BC17A1 /* CoinType.swift in Sources */,
 				E68713602798422B0036CA0D /* CandleStick.swift in Sources */,
 				D47D009F2797A0EA00E8E305 /* UIStackView+Extension.swift in Sources */,
 				D4B40DEC27A2065000EDA235 /* TransactionsCell.swift in Sources */,
 				D4AFEB2F27A03FB300011251 /* MainListCoinViewModel.swift in Sources */,
 				D4CC01FB27953FAF00F15957 /* CryptocurrencyTradingApp.xcdatamodeld in Sources */,
+				D4B40DF827A2FA6500EDA235 /* OrderViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
