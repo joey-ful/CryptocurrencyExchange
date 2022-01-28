@@ -25,12 +25,15 @@ class OrderViewModel {
     }
     
     var orderType: String {
-        let index = parent?.index(of: order) ?? 0
-        return index <= 29 ? "ask" : "bid"
+        return parent?.type(of: order) ?? "bid"
     }
     
     var ratio: Double {
         let maxQuantity = (orderType == "ask" ? parent?.maxAskQuantity : parent?.maxBidQuantity) ?? 1
         return quantity.toDouble() / maxQuantity
+    }
+    
+    var max: Double? {
+        return (orderType == "ask" ? parent?.maxAskQuantity : parent?.maxBidQuantity)
     }
 }

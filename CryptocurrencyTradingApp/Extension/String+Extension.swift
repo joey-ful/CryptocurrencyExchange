@@ -38,7 +38,7 @@ extension String {
     }
     
     func toDouble() -> Double {
-        let number = self.filter { $0.isNumber || $0 == "-" }
+        let number = self.filter { $0.isNumber || $0 == "-" || $0 == "." }
         return Double(number) ?? 0
     }
     

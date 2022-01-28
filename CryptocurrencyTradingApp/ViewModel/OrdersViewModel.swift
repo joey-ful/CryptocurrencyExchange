@@ -17,12 +17,20 @@ class OrdersViewModel {
         return asks + bids
     }
     
+    var middleIndex: Int {
+        return asks.count - 1
+    }
+    
     var maxAskQuantity: Double? {
-        return asks.max { $0.quantity.toDouble() < $1.quantity.toDouble() }?.quantity.toDouble()
+        return asks.map { $0.quantity.toDouble() }.max()
     }
     
     var maxBidQuantity: Double? {
-        return bids.max { $0.quantity.toDouble() < $1.quantity.toDouble() }?.quantity.toDouble()
+        return bids.map { $0.quantity.toDouble() }.max()
+    }
+    
+    func type(of order: Order) -> String {
+        return asks.contains(order) ? "ask" : "bid"
     }
     
     init(coin: CoinType) {
@@ -44,8 +52,9 @@ extension OrdersViewModel {
         restAPIManager.fetch(type: .orderbook, paymentCurrency: .KRW, coin: coinType) { (parsedResult: Result<Orderbook, Error>) in
             switch parsedResult {
             case .success(let parsedData):
-                self.asks = parsedData.data.asks
+                self.asks = parsedData.data.asks.sorted { $0.price > $1.price }
                 self.bids = parsedData.data.bids
+                NotificationCenter.default.post(name: .restAPIOrderNotification, object: nil)
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
             }

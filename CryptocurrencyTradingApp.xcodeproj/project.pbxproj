@@ -28,6 +28,7 @@
 		D4B40E0027A3C09400EDA235 /* Orderbook.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40DFF27A3C09400EDA235 /* Orderbook.swift */; };
 		D4B40E0227A3C33D00EDA235 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E0127A3C33D00EDA235 /* Order.swift */; };
 		D4B40E0427A3C4AC00EDA235 /* OrdersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E0327A3C4AC00EDA235 /* OrdersViewModel.swift */; };
+		D4B40E0627A3CBB100EDA235 /* OrderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E0527A3CBB100EDA235 /* OrderCell.swift */; };
 		D4CC01F127953FAF00F15957 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F027953FAF00F15957 /* AppDelegate.swift */; };
 		D4CC01F327953FAF00F15957 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F227953FAF00F15957 /* SceneDelegate.swift */; };
 		D4CC01F527953FAF00F15957 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F427953FAF00F15957 /* ViewController.swift */; };
@@ -88,6 +89,7 @@
 		D4B40DFF27A3C09400EDA235 /* Orderbook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Orderbook.swift; sourceTree = "<group>"; };
 		D4B40E0127A3C33D00EDA235 /* Order.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
 		D4B40E0327A3C4AC00EDA235 /* OrdersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrdersViewModel.swift; sourceTree = "<group>"; };
+		D4B40E0527A3CBB100EDA235 /* OrderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCell.swift; sourceTree = "<group>"; };
 		D4CC01ED27953FAE00F15957 /* CryptocurrencyTradingApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CryptocurrencyTradingApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4CC01F027953FAF00F15957 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D4CC01F227953FAF00F15957 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -157,6 +159,7 @@
 				D4D0D29B279B083200734C42 /* MainListHeaderView.swift */,
 				D4B40DEB27A2065000EDA235 /* TransactionsCell.swift */,
 				D4AFEB3727A1292600011251 /* TransactionsHeader.swift */,
+				D4B40E0527A3CBB100EDA235 /* OrderCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -408,6 +411,7 @@
 				E64BFA3927959D3100BC17A1 /* NotificationName+Extension.swift in Sources */,
 				D4B40E0427A3C4AC00EDA235 /* OrdersViewModel.swift in Sources */,
 				D47D009D2797A0C700E8E305 /* UILable+Extension.swift in Sources */,
+				D4B40E0627A3CBB100EDA235 /* OrderCell.swift in Sources */,
 				D4B40DFE27A3C00300EDA235 /* OrderViewModel.swift in Sources */,
 				D4D0D29C279B083200734C42 /* MainListHeaderView.swift in Sources */,
 				D4AFEB2D27A0350800011251 /* Transaction.swift in Sources */,
