@@ -43,12 +43,6 @@ class OrderViewController: UIViewController {
                                                                 highPriceLabel,
                                                                 lowPriceLabelLabel
                                                              ])
-    private let volumePowerTitleLabel = UILabel.makeLabel(font: .caption1, text: "체결강도", color: .systemGray)
-    private var volumePowerValueLabel = UILabel.makeLabel(font: .caption1)
-    private lazy var volumePowerStackView = UIStackView.makeStackView(alignment: .center,
-                                                                      spacing: 5,
-                                                                      subviews: [volumePowerTitleLabel,
-                                                                                 volumePowerValueLabel])
     private var transactionTableView = UITableView(frame: .zero, style: .plain)
     
     init(ordersViewModel: OrdersViewModel, transactionsViewModel: TransactionsViewModel) {
@@ -103,7 +97,6 @@ extension OrderViewController {
         volumePowerStackView.backgroundColor = .systemMint
         transactionTableView.backgroundColor = .systemBlue
         
-        
         selectionStackView.snp.makeConstraints { make in
             make.width.equalToSuperview().multipliedBy(0.65).offset(-20)
             make.top.equalToSuperview()
@@ -138,24 +131,14 @@ extension OrderViewController {
             make.top.equalToSuperview()
             make.trailing.equalToSuperview().offset(-10)
         }
-        
-        volumePowerStackView.snp.makeConstraints { make in
-            make.width.equalToSuperview().multipliedBy(0.35).offset(-10)
-            make.top.equalTo(summaryStackView.snp.bottom)
-            make.trailing.equalToSuperview().offset(-10)
-        }
-        
-        volumePowerTitleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(10)
-            make.bottom.equalToSuperview().offset(-10)
-        }
 
         transactionTableView.snp.makeConstraints { make in
             make.width.equalToSuperview().multipliedBy(0.35).offset(-10)
-            make.top.equalTo(volumePowerStackView.snp.bottom)
+            make.top.equalTo(summaryStackView.snp.bottom)
             make.trailing.equalToSuperview().offset(-10)
             make.bottom.equalToSuperview()
         }
+        transactionTableView.separatorStyle = .none
     }
 }
 

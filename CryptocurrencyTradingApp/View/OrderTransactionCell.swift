@@ -28,8 +28,8 @@ class OrderTransactionCell: UITableViewCell {
         cellStackView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.top.equalToSuperview().offset(5)
+            make.bottom.equalToSuperview().offset(-5)
         }
     }
     
@@ -44,7 +44,7 @@ class OrderTransactionCell: UITableViewCell {
         priceLabel.text = viewModel.price
         quantityLabel.text = viewModel.quantity
         
-        let textColor: UIColor = viewModel.type == "bid" ? .systemBlue : .systemRed
+        let textColor: UIColor = viewModel.type == "bid" ? .systemBlue.withAlphaComponent(0.7) : .systemRed.withAlphaComponent(0.7)
         priceLabel.textColor = textColor
         quantityLabel.textColor = textColor
     }
