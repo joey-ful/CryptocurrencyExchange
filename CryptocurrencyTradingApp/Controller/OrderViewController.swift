@@ -17,13 +17,6 @@ class OrderViewController: UIViewController {
     private let orderInfoViewModel: RestAPITickerViewModel
     private var orderDataSource: OrderDataSource?
     private var transactionDataSource: TransactionDataSource?
-    private var minusButton = UIButton.makeButton(imageSymbol: "minus.square")
-    private var unitLabel = UILabel.makeLabel(font: .body, text: "1000")
-    private var plusButton = UIButton.makeButton(imageSymbol: "plus.square")
-    private lazy var selectionStackView = UIStackView.makeStackView(alignment: .center,
-                                                                    subviews: [minusButton,
-                                                                               unitLabel,
-                                                                               plusButton])
     private let orderTableView = UITableView(frame: .zero, style: .plain)
     private var transactionTableView = UITableView(frame: .zero, style: .plain)
     private let orderInfoTableView = UITableView(frame: .zero, style: .plain)
@@ -84,35 +77,13 @@ extension OrderViewController {
 
     private func setUpUI() {
         view.backgroundColor = .white
-        view.addSubview(selectionStackView)
         view.addSubview(orderTableView)
         view.addSubview(orderInfoTableView)
         view.addSubview(transactionTableView)
         
-        selectionStackView.snp.makeConstraints { make in
-            make.width.equalToSuperview().multipliedBy(0.6).offset(-20)
-            make.top.equalToSuperview()
-            make.leading.equalToSuperview().offset(10)
-        }
-        
-        minusButton.snp.makeConstraints { make in
-            make.width.equalToSuperview().multipliedBy(0.15)
-        }
-        
-        plusButton.snp.makeConstraints { make in
-            make.width.equalToSuperview().multipliedBy(0.15)
-        }
-        
-        unitLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(5)
-            make.bottom.equalToSuperview().offset(-5)
-        }
-        
-        unitLabel.textAlignment = .center
-        
         orderTableView.snp.makeConstraints { make in
             make.width.equalToSuperview().multipliedBy(0.6).offset(-20)
-            make.top.equalTo(selectionStackView.snp.bottom)
+            make.top.equalToSuperview().offset(20)
             make.leading.equalToSuperview()
             make.bottom.equalToSuperview()
         }
