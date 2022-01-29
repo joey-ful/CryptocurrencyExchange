@@ -30,7 +30,7 @@ class OrderCell: UITableViewCell {
         addSubview(cellStackView)
         cellStackView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
+            make.trailing.equalToSuperview().offset(-20)
             make.top.equalToSuperview().offset(7)
             make.bottom.equalToSuperview().offset(-7)
         }

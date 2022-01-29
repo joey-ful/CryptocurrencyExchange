@@ -116,6 +116,7 @@ extension OrderViewController {
             make.leading.equalToSuperview()
             make.bottom.equalToSuperview()
         }
+        orderTableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
 
         transactionTableView.snp.makeConstraints { make in
             make.width.equalToSuperview().multipliedBy(0.4).offset(-10)
