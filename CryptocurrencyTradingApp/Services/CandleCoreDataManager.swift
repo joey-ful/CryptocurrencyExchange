@@ -31,31 +31,87 @@ final class CandleCoreDataManager {
         }
     }
     
-    func read(date: String) -> CandleData? {
-        guard let candleDataList = try? context.fetch(CandleData.fetchRequest()) else { return nil }
+//    func read<T:CandleStickCoreDataEntity>(date: String) -> T? {
+//        guard let candleDataList = try? context.fetch(CandleData1M.fetchRequest()) else { return nil }
+//        let matchingCandleData = candleDataList.filter { $0.date == date }
+//        return matchingCandleData == [] ? nil : matchingCandleData[0] as! T
+//    }
+    
+    func read(entityName: RequestChartInterval, coin: CoinType) -> [CandleStickCoreDataEntity]? {
+        let candlePredicate = NSPredicate(format: "coin == %@", coin.rawValue)
         
-        let matchingCandleData = candleDataList.filter { $0.date == date }
-        return matchingCandleData == [] ? nil : matchingCandleData[0]
+        if entityName.rawValue.contains("1m") {
+            let fetchRequest = CandleData1M.fetchRequest()
+            fetchRequest.predicate = candlePredicate
+            return try? context.fetch(fetchRequest)
+            
+        } else if entityName.rawValue.contains("10m") {
+            let fetchRequest = CandleData10M.fetchRequest()
+            fetchRequest.predicate = candlePredicate
+            return try? context.fetch(fetchRequest)
+            
+        } else if entityName.rawValue.contains("30m") {
+            let fetchRequest = CandleData30M.fetchRequest()
+            fetchRequest.predicate = candlePredicate
+            return try? context.fetch(fetchRequest)
+            
+        } else if entityName.rawValue.contains("1h") {
+            let fetchRequest = CandleData1H.fetchRequest()
+            fetchRequest.predicate = candlePredicate
+            return try? context.fetch(fetchRequest)
+            
+        } else if entityName.rawValue.contains("24h") {
+            let fetchRequest = CandleData24H.fetchRequest()
+            fetchRequest.predicate = candlePredicate
+            return try? context.fetch(fetchRequest)
+            
+        } else {
+            return nil
+        }
+
+
+
     }
     
-    func read() -> [CandleData]? {
-        return try? context.fetch(CandleData.fetchRequest())
+    func filter(_ entity: RequestChartInterval) -> NSManagedObject? {
+        if entity.rawValue.contains("1m") {
+            return CandleData1M(context: context)
+            
+        } else if entity.rawValue.contains("10m") {
+            return CandleData10M(context: context)
+            
+        } else if entity.rawValue.contains("30m") {
+            return CandleData30M(context: context)
+            
+        } else if entity.rawValue.contains("1h"){
+            return CandleData1H(context: context)
+            
+        } else if entity.rawValue.contains("24h") {
+            return CandleData24H(context: context)
+            
+        } else {
+            return nil
+        }
     }
     
-    func create(date: String, openPrice: Double, closePrice: Double, highPrice: Double, lowPrice: Double, tradeVolume: Double) {
-        let candleData = CandleData(context: context)
-        candleData.date = date
-        candleData.openPrice = openPrice
-        candleData.closePrice = closePrice
-        candleData.highPrice = highPrice
-        candleData.lowPrice = lowPrice
-        candleData.tradeVolume = tradeVolume
+    func create(coin: CoinType,entityName: RequestChartInterval, date: String, openPrice: Double, closePrice: Double, highPrice: Double, lowPrice: Double, tradeVolume: Double) {
+        guard let entity = filter(entityName) else {
+            return
+        }
+        entity.setValue(coin.rawValue, forKey: "coin")
+        entity.setValue(date, forKey: "date")
+        entity.setValue(openPrice, forKey: "openPrice")
+        entity.setValue(closePrice, forKey: "closePrice")
+        entity.setValue(highPrice, forKey: "highPrice")
+        entity.setValue(lowPrice, forKey: "lowPrice")
+        entity.setValue(tradeVolume, forKey: "tradeVolume")
+
         saveContext()
     }
     
-    func addToCoreData(_ candleStick: [[CandleStick.CandleStickData]]) {
+    func addToCoreData(coin: CoinType, _ candleStick: [[CandleStick.CandleStickData]], entityName: RequestChartInterval) {
         candleStick.forEach { index in
-            create(date: convert(index[0]), openPrice: convert(index[1]), closePrice: convert(index[2]), highPrice: convert(index[3]), lowPrice: convert(index[4]), tradeVolume: convert(index[5]))
+            create(coin: coin, entityName: entityName, date: convert(index[0]), openPrice: convert(index[1]), closePrice: convert(index[2]), highPrice: convert(index[3]), lowPrice: convert(index[4]), tradeVolume: convert(index[5]))
         }
     }
     

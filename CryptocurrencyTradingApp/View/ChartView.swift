@@ -9,14 +9,18 @@
 import SwiftUI
 
 struct ChartView: View {
-    @StateObject var viewModel: DetailViewModel
+//    @StateObject var viewModel: DetailViewModel
+    @ObservedObject var viewModel: ChartViewModel
+
     @State private var percentage: CGFloat = 0
     
-    init(coin: CoinType) {
-        _viewModel = StateObject(wrappedValue: DetailViewModel(coin: coin))
+    init(coin: CoinType, chartIntervals: RequestChartInterval) {
+//        _viewModel = StateObject(wrappedValue: DetailViewModel(coin: coin, chartIntervals: chartIntervals))
+        _viewModel = ObservedObject(wrappedValue: ChartViewModel(coin: coin, chartIntervals: chartIntervals))
     }
     
     var body: some View {
+        
         VStack {
             chartView
                 .frame(height: 200)
@@ -34,12 +38,13 @@ struct ChartView: View {
                 }
             }
         }
+        
     }
 }
 
 struct ChartView_ViewProvider: PreviewProvider {
     static var previews: some View {
-        ChartView(coin: .btc)
+        ChartView(coin: .btc, chartIntervals: .twentyFourHour)
     }
 }
 

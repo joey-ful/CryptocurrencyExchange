@@ -8,40 +8,45 @@
 import UIKit
 import SwiftUI
 
-class DetailViewModel: ObservableObject {
+class ChartViewModel: ObservableObject {
     private let coin: CoinType
     private let restAPIManager = RestAPIManager()
     private var candleCoreDataManager = CandleCoreDataManager()
 
     @Published var highPriceList: [Double] = []
-    @Published var candleData: [CandleData] = []
-    
-    init(coin: CoinType) {
+    @Published var candleDate = Array<CandleStickCoreDataEntity>()
+
+    init(coin: CoinType, chartIntervals: RequestChartInterval) {
         self.coin = coin
+        initializationViewModel(coin: coin, chartIntervals: chartIntervals)
+    }
+    
+    func initializationViewModel(coin: CoinType, chartIntervals: RequestChartInterval) {
         restAPIManager.fetch(type: .candlestick,
                              paymentCurrency: .KRW,
                              coin: coin,
-                             chartIntervals: .oneMinute) { (parsedResult: Result<CandleStick, Error>) in
+                             chartIntervals: chartIntervals) { (parsedResult: Result<CandleStick, Error>) in
             switch parsedResult {
             case .success(let parsedData):
-                self.candleCoreDataManager.addToCoreData(parsedData.data)
-                let candleData = self.candleCoreDataManager.read()
-                self.calculateHighPriceList(candleData)
+                self.candleCoreDataManager.addToCoreData(coin: coin, parsedData.data, entityName: chartIntervals)
+                let candleData = self.candleCoreDataManager.read(entityName: chartIntervals, coin: coin)
+                self.calculateHighPriceList(candleData, chartIntervals: chartIntervals)
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
             }
         }
     }
     
-    private func calculateHighPriceList(_ candleData: [CandleData]?) {
+    private func calculateHighPriceList(_ candleData: [CandleStickCoreDataEntity]?, chartIntervals: RequestChartInterval) {
         guard let candleData = candleData,
         let firstData = candleData.first,
-            let lastData = candleData.last else { return }
-        
-        self.candleData = [firstData, lastData]
+              let lastData = candleData.last
+        else { return }
+
         highPriceList = candleData[candleData.count - 60..<candleData.count].map { $0.highPrice}
+        self.candleDate = [firstData, lastData]
     }
-    
+
     var maxY: Double {
         highPriceList.max() ?? 0
     }
@@ -55,16 +60,16 @@ class DetailViewModel: ObservableObject {
     }
     
     var startDate: String {
-        if candleData.count > 0 {
-            return candleData[.zero].date.toDate()
+        if candleDate.count > 0 {
+            return candleDate[.zero].date.toDate()
         } else {
             return "0"
         }
     }
     
     var endDate: String {
-        if candleData.count > 0 {
-            return candleData[candleData.count - 1].date.toDate()
+        if candleDate.count > 0 {
+            return candleDate[candleDate.count - 1].date.toDate()
         } else {
             return "0"
         }

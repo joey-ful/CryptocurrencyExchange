@@ -9,7 +9,9 @@
 import Foundation
 import CoreData
 
-@objc(CandleData)
-public class CandleData: NSManagedObject {
+@objc(CandleData1M)
+
+public class CandleData1M: CandleStickCoreDataEntity {
 
 }
+
