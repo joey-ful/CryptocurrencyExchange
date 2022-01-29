@@ -68,10 +68,42 @@ extension OrdersViewModel {
 extension OrdersViewModel {
     func initiateWebSocket() {
         initiateWebSocketTicker()
-        
     }
     
     private func initiateWebSocketTicker() {
-        
+        webSocketManager.connectWebSocket(.orderbookdepth, [coinType], nil) { (parsedResult: Result<WebSocketOrderBook?, Error>) in
+            self.initiateRestAPI()
+//            switch parsedResult {
+//            case .success(let parsedData):
+//                guard let newOrders = parsedData?.content.list else { return }
+//                newOrders.forEach { newOrder in
+//                    if newOrder.orderType == "ask" {
+//                        self.asks.enumerated().forEach { index, order in
+//                            if order.price == newOrder.price {
+//                                self.asks[index].quantity += newOrder.quantity
+//                            } else {
+//                                self.asks.append(Order(price: newOrder.price, quantity: newOrder.quantity))
+//                                self.asks = self.asks.sorted { $0.price > $1.price }
+//                                self.asks.removeFirst()
+//                            }
+//                        }
+//                    } else if newOrder.orderType == "bid" {
+//                        self.bids.enumerated().forEach { index, order in
+//                            if order.price == newOrder.price {
+//                                self.bids[index].quantity += newOrder.quantity
+//                            } else {
+//                                self.bids.append(Order(price: newOrder.price, quantity: newOrder.quantity))
+//                                self.bids = self.bids.sorted { $0.price > $1.price }
+//                                self.bids.removeLast()
+//                            }
+//                        }
+//                    }
+//                }
+//                NotificationCenter.default.post(name: .webSocketOrderbookNotification, object: nil)
+//
+//            case .failure(let error):
+//                assertionFailure(error.localizedDescription)
+//            }
+        }
     }
 }

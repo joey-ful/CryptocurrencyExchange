@@ -27,6 +27,7 @@ class OrderViewController: UIViewController {
     private let orderTableView = UITableView(frame: .zero, style: .plain)
     private var transactionTableView = UITableView(frame: .zero, style: .plain)
     private let orderInfoTableView = UITableView(frame: .zero, style: .plain)
+    private var orderInitialized: Bool = false
     
     init(coin: CoinType) {
         ordersViewModel = OrdersViewModel(coin: coin)
@@ -46,10 +47,6 @@ class OrderViewController: UIViewController {
         setUpUI()
         configureTableView()
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(initializeOrderSnapshot),
-                                               name: .restAPIOrderNotification,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
                                                selector: #selector(makeTransactionSnapshot),
                                                name: .restAPITransactionsNotification,
                                                object: nil)
@@ -66,10 +63,15 @@ class OrderViewController: UIViewController {
                                                selector: #selector(makeTransactionSnapshot),
                                                name: .webSocketTransactionsNotification,
                                                object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(makeOrderSnapshot),
+                                               name: .restAPIOrderNotification,
+                                               object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         NotificationCenter.default.removeObserver(self, name: .webSocketTransactionsNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .restAPIOrderNotification, object: nil)
     }
 }
 
@@ -114,7 +116,6 @@ extension OrderViewController {
             make.leading.equalToSuperview()
             make.bottom.equalToSuperview()
         }
-//        orderTableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
 
         transactionTableView.snp.makeConstraints { make in
             make.width.equalToSuperview().multipliedBy(0.4).offset(-10)
@@ -140,17 +141,18 @@ extension OrderViewController {
         registerCell()
     }
     
-    @objc private func initializeOrderSnapshot() {
-        makeOrderSnapshot()
-        let middleIndexPath = IndexPath(row: ordersViewModel.middleIndex, section: 0)
-        orderTableView.scrollToRow(at: middleIndexPath, at: .middle, animated: false)
-    }
-    
     @objc private func makeOrderSnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<Int, Order>()
         snapshot.appendSections([0])
         snapshot.appendItems(ordersViewModel.orders, toSection: 0)
         orderDataSource?.apply(snapshot, animatingDifferences: false)
+        
+        if orderInitialized == false {
+            print("-------------------------------------------------------")
+            let middleIndexPath = IndexPath(row: ordersViewModel.middleIndex, section: 0)
+            orderTableView.scrollToRow(at: middleIndexPath, at: .middle, animated: false)
+            orderInitialized = true
+        }
     }
     
     @objc private func makeTransactionSnapshot() {

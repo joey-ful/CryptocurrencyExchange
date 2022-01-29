@@ -74,6 +74,8 @@ class WebSocketManager: NSObject {
                 parsedData = try JSONDecoder().decode(WebSocketTicker.self, from: data) as? T
             } else if text.contains("transaction") {
                 parsedData = try JSONDecoder().decode(WebSocketTransaction.self, from: data) as? T
+            } else if text.contains("orderbookdepth") {
+                parsedData = try JSONDecoder().decode(WebSocketOrderBook.self, from: data) as? T
             }
             guard let parsedData = parsedData else { return }
             DispatchQueue.main.async {

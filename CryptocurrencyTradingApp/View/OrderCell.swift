@@ -9,7 +9,6 @@ import UIKit
 import SnapKit
 
 class OrderCell: UITableViewCell {
-    private var viewModel: OrderViewModel?
     private var priceLabel = UILabel.makeLabel(font: .subheadline)
     private var ratio: Double = .zero
     private var ratioBar = UIView()
@@ -22,10 +21,9 @@ class OrderCell: UITableViewCell {
                                                                subviews: [priceLabel, quantityStackView])
     
     func configure(_ viewModel: OrderViewModel) {
-        self.viewModel = viewModel
         configureData(viewModel)
         layoutStackView()
-        layoutViews()
+        layoutViews(viewModel)
     }
     
     private func layoutStackView() {
@@ -38,32 +36,30 @@ class OrderCell: UITableViewCell {
         }
     }
     
-    private func layoutViews() {
-        priceLabel.snp.makeConstraints { make in
-            make.width.equalToSuperview().multipliedBy(0.5)
-        }
-        
+    private func layoutViews(_ viewModel: OrderViewModel) {
+        priceLabel.snp.makeConstraints { $0.width.equalToSuperview().multipliedBy(0.5) }
+        quantityStackView.snp.makeConstraints { $0.width.equalToSuperview().multipliedBy(0.5) }
+
         priceLabel.textAlignment = .center
+        
+        let ratio = viewModel.ratio == 0 ? 0.1 : viewModel.ratio
         
         ratioBar.snp.makeConstraints { make in
             make.height.equalTo(quantityLabel)
-            make.width.equalToSuperview().multipliedBy(ratio)
+            make.width.equalTo(quantityStackView.snp.width).multipliedBy(ratio)
         }
-        let color: UIColor = (viewModel?.orderType == "ask" ? .systemBlue.withAlphaComponent(0.7) : .systemRed.withAlphaComponent(0.7))
         
+        quantityLabel.snp.makeConstraints { $0.width.equalTo(safeAreaLayoutGuide.snp.width).multipliedBy(0.5) }
+        
+        let color: UIColor = (viewModel.orderType == "ask" ? .systemBlue.withAlphaComponent(0.7) : .systemRed.withAlphaComponent(0.7))
         ratioBar.backgroundColor = color
         ratioBar.layer.cornerRadius = 1
         priceLabel.textColor = color
         priceLabel.font = .boldSystemFont(ofSize: UIFont.preferredFont(forTextStyle: .caption1).pointSize)
-        
-        quantityStackView.snp.makeConstraints { make in
-            make.width.equalToSuperview().multipliedBy(0.5)
-        }
     }
     
     private func configureData(_ viewModel: OrderViewModel) {
         priceLabel.text = viewModel.price
         quantityLabel.text = viewModel.quantity
-        ratio = viewModel.ratio
     }
 }
