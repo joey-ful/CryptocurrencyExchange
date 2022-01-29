@@ -37,7 +37,8 @@ class TransactionsViewModel {
     }
     
     func readDayTransactions() -> [Transaction] {
-        guard let candleData = candleCoreDataManager.read() else { return [] }
+        guard let candleData = candleCoreDataManager.read(entityName: .twentyFourHour, coin: coinType)
+                as? [CandleData24H] else { return [] }
         
         return candleData.enumerated().map { index, data in
             let prevPrice = (index == 0 ? candleData[0].closePrice : candleData[index - 1].closePrice)

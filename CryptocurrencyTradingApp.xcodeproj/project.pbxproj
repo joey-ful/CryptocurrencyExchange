@@ -64,7 +64,6 @@
 		E6BDEFAF27A3E31A00018967 /* CandleData30M+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BDEFAE27A3E31A00018967 /* CandleData30M+CoreDataProperties.swift */; };
 		E6BDEFB127A3E32D00018967 /* CandleData24H+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BDEFB027A3E32D00018967 /* CandleData24H+CoreDataProperties.swift */; };
 		E6C96497279A9A7F0007B55E /* RequestChartInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C96496279A9A7F0007B55E /* RequestChartInterval.swift */; };
-		E6EC8683279AC36C005A6534 /* ChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6EC8682279AC36C005A6534 /* ChartViewController.swift */; };
 		E6FA20B5279EFAAF00CCB1CC /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FA20B4279EFAAF00CCB1CC /* ChartView.swift */; };
 		E6FA20B8279F04F700CCB1CC /* ChartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FA20B7279F04F700CCB1CC /* ChartViewModel.swift */; };
 /* End PBXBuildFile section */
@@ -127,7 +126,6 @@
 		E6BDEFAE27A3E31A00018967 /* CandleData30M+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CandleData30M+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E6BDEFB027A3E32D00018967 /* CandleData24H+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CandleData24H+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E6C96496279A9A7F0007B55E /* RequestChartInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestChartInterval.swift; sourceTree = "<group>"; };
-		E6EC8682279AC36C005A6534 /* ChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewController.swift; sourceTree = "<group>"; };
 		E6FA20B4279EFAAF00CCB1CC /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
 		E6FA20B7279F04F700CCB1CC /* ChartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -208,7 +206,6 @@
 				D4CC01F027953FAF00F15957 /* AppDelegate.swift */,
 				D4CC01F227953FAF00F15957 /* SceneDelegate.swift */,
 				D4CC01F427953FAF00F15957 /* ViewController.swift */,
-				E6EC8682279AC36C005A6534 /* ChartViewController.swift */,
 				D4CC01FC27953FB000F15957 /* Assets.xcassets */,
 				D4CC01FE27953FB000F15957 /* LaunchScreen.storyboard */,
 				D4CC020127953FB000F15957 /* Info.plist */,
@@ -377,11 +374,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E6EC8683279AC36C005A6534 /* ChartViewController.swift in Sources */,
 				D4D0D295279AE73000734C42 /* CandleData1M+CoreDataProperties.swift in Sources */,
 				D4B40DF627A2637C00EDA235 /* RestAPITicker.swift in Sources */,
 				D4D0D295279AE73000734C42 /* CandleData+CoreDataProperties.swift in Sources */,
-				E6EC8683279AC36C005A6534 /* ChartViewController.swift in Sources */,
 				D4B40DF227A250C000EDA235 /* DayTransactionViewModel.swift in Sources */,
 				D4D0D29E279C29B500734C42 /* Sort.swift in Sources */,
 				D4D0D2B027A0011600734C42 /* TransactionsViewController.swift in Sources */,
