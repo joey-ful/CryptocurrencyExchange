@@ -63,7 +63,7 @@
 		E6C96497279A9A7F0007B55E /* RequestChartInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C96496279A9A7F0007B55E /* RequestChartInterval.swift */; };
 		E6EC8683279AC36C005A6534 /* ChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6EC8682279AC36C005A6534 /* ChartViewController.swift */; };
 		E6FA20B5279EFAAF00CCB1CC /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FA20B4279EFAAF00CCB1CC /* ChartView.swift */; };
-		E6FA20B8279F04F700CCB1CC /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FA20B7279F04F700CCB1CC /* DetailViewModel.swift */; };
+		E6FA20B8279F04F700CCB1CC /* ChartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FA20B7279F04F700CCB1CC /* ChartViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -123,7 +123,7 @@
 		E6C96496279A9A7F0007B55E /* RequestChartInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestChartInterval.swift; sourceTree = "<group>"; };
 		E6EC8682279AC36C005A6534 /* ChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewController.swift; sourceTree = "<group>"; };
 		E6FA20B4279EFAAF00CCB1CC /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
-		E6FA20B7279F04F700CCB1CC /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
+		E6FA20B7279F04F700CCB1CC /* ChartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -250,7 +250,7 @@
 		D4D0D2AA27A000CD00734C42 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				E6FA20B7279F04F700CCB1CC /* DetailViewModel.swift */,
+				E6FA20B7279F04F700CCB1CC /* ChartViewModel.swift */,
 				D4D0D2AB27A000E200734C42 /* TransactionsViewModel.swift */,
 				D4D0D2B127A0024B00734C42 /* TransactionViewModel.swift */,
 				D4AFEB2E27A03FB300011251 /* MainListCoinViewModel.swift */,
@@ -380,7 +380,6 @@
 				D4AFEB3327A0552500011251 /* MainListHeaderViewModel.swift in Sources */,
 				D4D0D298279AE7A000734C42 /* CandleCoreDataManager.swift in Sources */,
 				D4AFEB3827A1292600011251 /* TransactionsTableViewTimeHeader.swift in Sources */,
-				D4D0D294279AE73000734C42 /* CandleData+CoreDataClass.swift in Sources */,
 				D4D0D294279AE73000734C42 /* CandleData1M+CoreDataClass.swift in Sources */,
 				D4CC01F127953FAF00F15957 /* AppDelegate.swift in Sources */,
 				E6BDEFB127A3E32D00018967 /* CandleData24H+CoreDataProperties.swift in Sources */,
@@ -390,7 +389,7 @@
 				D4D0D2B227A0024B00734C42 /* TransactionViewModel.swift in Sources */,
 				D47D00A52797A70400E8E305 /* String+Extension.swift in Sources */,
 				D4CC020D2795411A00F15957 /* WebSocketTransaction.swift in Sources */,
-				E6FA20B8279F04F700CCB1CC /* DetailViewModel.swift in Sources */,
+				E6FA20B8279F04F700CCB1CC /* ChartViewModel.swift in Sources */,
 				E64BFA3627959B7100BC17A1 /* WebSocketDataModel.swift in Sources */,
 				E6BDEFA927A3E1F700018967 /* CandleData10M+CoreDataClass.swift in Sources */,
 				E6FA20B5279EFAAF00CCB1CC /* ChartView.swift in Sources */,
