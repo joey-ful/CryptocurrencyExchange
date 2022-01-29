@@ -58,18 +58,18 @@ extension MainListCoinsViewModel {
         return Array(mirror.children).compactMap {
             
             guard let symbol = $0.label,
-                  let coinName = CoinType.coin(symbol: symbol)?.name
-                  let coin = ($0.value as? RestAPITickerAll.Data.Coin),
+                  let coinName = CoinType.coin(symbol: symbol)?.name,
+                  let coin = ($0.value as? RestAPITickerAll.Data.Coin)
             else {
                 return nil
             }
             
             return Ticker(name: coinName,
-                                symbol: symbol,
-                                currentPrice: coin.closingPrice,
-                                fluctuationRate: coin.fluctateRate24H,
-                                fluctuationAmount: coin.fluctate24H,
-                                tradeValue: coin.accTradeValue24H)
+                          symbol: symbol,
+                          currentPrice: coin.closingPrice,
+                          fluctuationRate: coin.fluctateRate24H,
+                          fluctuationAmount: coin.fluctate24H,
+                          tradeValue: coin.accTradeValue24H)
         }
     }
 }
