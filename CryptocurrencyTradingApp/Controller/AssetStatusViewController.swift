@@ -98,6 +98,7 @@ extension AssetStatusViewController {
     }
 
     private func setUpTableView() {
+        tableView.delegate = self
         tableView.register(StatusCell.self, forCellReuseIdentifier: "statusCell")
         tableView.register(StatusHeader.self, forHeaderFooterViewReuseIdentifier: "statusHeader")
     }
@@ -146,7 +147,7 @@ extension AssetStatusViewController: UITableViewDelegate {
             return UIView()
         }
 
-        header.configure(viewModel.headerViewModel)
+        header.configure()
 
         return header
     }

@@ -47,7 +47,7 @@ class StatusCell: UITableViewCell {
         coinNameLabel.textAlignment = .left
         symbolLabel.textAlignment = .left
         withdrawStatusLabel.textAlignment = .center
-        depositStatusLabel.textAlignment = .right
+        depositStatusLabel.textAlignment = .center
     }
     
     private func configureLabels(viewModel: AssetStatusViewModel) {

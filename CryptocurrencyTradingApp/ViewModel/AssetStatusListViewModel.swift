@@ -12,10 +12,6 @@ class AssetStatusListViewModel {
     private(set) var filtered: [AssetStatus] = []
     private let restAPIManager = RestAPIManager()
     
-    var headerViewModel: AssetStatusHeaderViewModel {
-        return AssetStatusHeaderViewModel(assetStatusListViewModel: self)
-    }
-    
     func assetStatusViewModel(at index: Int) -> AssetStatusViewModel {
         return AssetStatusViewModel(data: filtered[index])
     }
@@ -62,42 +58,6 @@ extension AssetStatusListViewModel {
             filtered = assetStatusList
         } else {
             filtered = assetStatusList.filter { return $0.coinName.contains(text) || $0.symbol.contains(text) }
-        }
-    }
-}
-
-// MARK: Sorts
-extension AssetStatusListViewModel {
-    func sortName(type: Sort) {
-        switch type {
-        case .up:
-            assetStatusList.sort { $0.coinName < $1.coinName }
-        case .down:
-            assetStatusList.sort { $0.coinName > $1.coinName }
-        case .none:
-            break
-        }
-    }
-
-    func sortWithdraw(type: Sort) {
-        switch type {
-        case .up:
-            assetStatusList.sort { $0.withdraw < $1.withdraw }
-        case .down:
-            assetStatusList.sort { $0.withdraw > $1.withdraw }
-        case .none:
-            break
-        }
-    }
-
-    func sortDeposit(type: Sort) {
-        switch type {
-        case .up:
-            assetStatusList.sort { $0.deposit < $1.deposit }
-        case .down:
-            assetStatusList.sort { $0.deposit > $1.deposit }
-        case .none:
-            break
         }
     }
 }
