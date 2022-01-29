@@ -65,7 +65,8 @@ class WebSocketManager: NSObject {
         })
     }
     
-    private func parse<T: WebSocketDataModel>(text: String, completion: @escaping (Result<T?, Error>) -> Void) {
+    private func parse<T: WebSocketDataModel>(text: String,
+                                              completion: @escaping (Result<T?, Error>) -> Void) {
         let data = Data(text.utf8)
         
         do {
@@ -74,6 +75,8 @@ class WebSocketManager: NSObject {
                 parsedData = try JSONDecoder().decode(WebSocketTicker.self, from: data) as? T
             } else if text.contains("transaction") {
                 parsedData = try JSONDecoder().decode(WebSocketTransaction.self, from: data) as? T
+            } else if text.contains("orderbookdepth") {
+                parsedData = try JSONDecoder().decode(WebSocketOrderBook.self, from: data) as? T
             }
             guard let parsedData = parsedData else { return }
             DispatchQueue.main.async {
@@ -104,12 +107,19 @@ class WebSocketManager: NSObject {
 }
 
 extension WebSocketManager: URLSessionWebSocketDelegate {
-    func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol: String?) {
+    func urlSession(_ session: URLSession,
+                    webSocketTask: URLSessionWebSocketTask,
+                    didOpenWithProtocol protocol: String?)
+    {
         print("WebSocket에 연결되었습니다.")
         ping()
     }
     
-    func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didCloseWith closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
+    func urlSession(_ session: URLSession,
+                    webSocketTask: URLSessionWebSocketTask,
+                    didCloseWith closeCode: URLSessionWebSocketTask.CloseCode,
+                    reason: Data?)
+    {
         
         if let reason = reason,
            let closeReason = String(data: reason, encoding: .utf8) {
