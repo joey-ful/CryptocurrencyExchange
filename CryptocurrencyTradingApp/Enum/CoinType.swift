@@ -54,6 +54,31 @@ enum CoinType: String, CaseIterable {
     case ksm, ctk, xym, bnb
     case nft, sun, xec, pci
     case sol, boba, gala, btt
+    case dao, rnt, ppt, stpt
+    case hyc, chl, bznt, lzm
+    case ethos, keos, xsr, news
+    case front, npxs, add, bxa
+    case horus, ven, wpx, hc
+    case smr, cbk, bttold, rom
+    case oneInch = "1inch"
+    case poly, meetone, apis, bhp
+    case woo, dvc, mco, cmt
+    case cvt, qbz, salt, ae
+    case pay, srt, fab, drm
+    case qi, zec, gto, sun_old
+    case asta, fleta, dash, don
+    case wet, c98, plx, auto
+    case dac, em, rpg, xvg
+    case itc, pcm, etz, bcha
+    case abt, ln, bnp, lamb
+    case ogo, dvp, ocn, lba
+    case eosdac, win, pch, `true`
+    case sgb, dacc, onx, med
+    case cpay, ibp, arm, fnb
+    case fzz, pst, cosm, bcdc
+    case rdn, aoa, atd, mith, inx
+    case black, pivx, anc, beth
+    case xmr, nsbt, arn, ins
     
     var symbol: String {
         return self.rawValue.uppercased()

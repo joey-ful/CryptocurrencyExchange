@@ -89,6 +89,7 @@ extension AssetStatusViewController {
     }
 
     private func setUpTableView() {
+        tableView.register(StatusCell.self, forCellReuseIdentifier: "statusCell")
         tableView.register(StatusHeader.self, forHeaderFooterViewReuseIdentifier: "statusHeader")
     }
 
