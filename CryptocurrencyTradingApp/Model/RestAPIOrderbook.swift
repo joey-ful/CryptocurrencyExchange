@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Orderbook: Decodable {
+struct RestAPIOrderbook: Decodable {
     let data: Data
     
     struct Data: Decodable {

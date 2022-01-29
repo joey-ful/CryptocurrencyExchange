@@ -8,13 +8,13 @@
 import UIKit
 
 class MainListCoinsViewModel {
-    private(set) var mainListCoins: [MainListCoin] = [] {
+    private(set) var mainListCoins: [Ticker] = [] {
         didSet {
             filtered = mainListCoins.filter { existsInFiltered($0) }
         }
     }
     
-    private(set) var filtered: [MainListCoin] = []
+    private(set) var filtered: [Ticker] = []
     private let restAPIManager = RestAPIManager()
     private let webSocketManager = WebSocketManager()
     
@@ -37,7 +37,7 @@ extension MainListCoinsViewModel {
     private func initiateRestAPI() {
         restAPIManager.fetch(type: .tickerAll,
                              paymentCurrency: .KRW)
-        { (parsedResult: Result<TickerAll, Error>) in
+        { (parsedResult: Result<RestAPITickerAll, Error>) in
             
             switch parsedResult {
             case .success(let parsedData):
@@ -52,19 +52,19 @@ extension MainListCoinsViewModel {
         }
     }
     
-    private func mirror(_ data: TickerAll.Data) -> [MainListCoin] {
+    private func mirror(_ data: RestAPITickerAll.Data) -> [Ticker] {
         let mirror = Mirror(reflecting: data)
         
         return Array(mirror.children).compactMap {
             
             guard let symbol = $0.label,
-                  let coin = ($0.value as? TickerAll.Data.Coin),
+                  let coin = ($0.value as? RestAPITickerAll.Data.Coin),
                   let coinName = CoinType.name(symbol: symbol)
             else {
                 return nil
             }
             
-            return MainListCoin(name: coinName,
+            return Ticker(name: coinName,
                                 symbol: symbol,
                                 currentPrice: coin.closingPrice,
                                 fluctuationRate: coin.fluctateRate24H,
@@ -175,7 +175,7 @@ extension MainListCoinsViewModel {
         }
     }
     
-    private func existsInFiltered(_ coin: MainListCoin) -> Bool {
+    private func existsInFiltered(_ coin: Ticker) -> Bool {
         for filteredCoin in filtered {
             if filteredCoin.symbol == coin.symbol {
                 return true

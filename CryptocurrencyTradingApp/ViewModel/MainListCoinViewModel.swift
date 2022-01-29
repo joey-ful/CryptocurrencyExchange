@@ -8,9 +8,9 @@
 import UIKit
 
 class MainListCoinViewModel {
-    private let coin: MainListCoin
+    private let coin: Ticker
     
-    init(coin: MainListCoin) {
+    init(coin: Ticker) {
         self.coin = coin
     }
     

@@ -50,7 +50,7 @@ class OrdersViewModel {
 
 extension OrdersViewModel {
     private func initiateRestAPI() {
-        restAPIManager.fetch(type: .orderbook, paymentCurrency: .KRW, coin: coinType) { (parsedResult: Result<Orderbook, Error>) in
+        restAPIManager.fetch(type: .orderbook, paymentCurrency: .KRW, coin: coinType) { (parsedResult: Result<RestAPIOrderbook, Error>) in
             switch parsedResult {
             case .success(let parsedData):
                 self.asks = parsedData.data.asks.sorted { $0.price > $1.price }

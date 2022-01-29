@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TickerAll: Codable {
+struct RestAPITickerAll: Codable {
     let status: String
     let data: Data
     
@@ -268,7 +268,7 @@ struct TickerAll: Codable {
                 case fluctateRate24H = "fluctate_rate_24H"
             }
 
-            static func == (lhs: TickerAll.Data.Coin, rhs: TickerAll.Data.Coin) -> Bool {
+            static func == (lhs: RestAPITickerAll.Data.Coin, rhs: RestAPITickerAll.Data.Coin) -> Bool {
                 return lhs.openingPrice == rhs.openingPrice
                 && lhs.closingPrice == rhs.closingPrice
                 && lhs.unitsTraded == rhs.unitsTraded

@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-typealias MainListDataSource = UITableViewDiffableDataSource<Int, MainListCoin>
+typealias MainListDataSource = UITableViewDiffableDataSource<Int, Ticker>
 
 class MainListViewController: UIViewController {
     private let viewModel: MainListCoinsViewModel
@@ -112,7 +112,7 @@ extension MainListViewController {
     }
 
     @objc private func makeSnapshot() {
-        var snapshot = NSDiffableDataSourceSnapshot<Int, MainListCoin>()
+        var snapshot = NSDiffableDataSourceSnapshot<Int, Ticker>()
         snapshot.appendSections([0])
         snapshot.appendItems(viewModel.filtered, toSection: 0)
         dataSource?.apply(snapshot, animatingDifferences: false)
