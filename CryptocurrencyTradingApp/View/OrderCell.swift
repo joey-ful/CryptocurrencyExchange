@@ -37,21 +37,17 @@ class OrderCell: UITableViewCell {
     }
     
     private func layoutViews(_ viewModel: OrderViewModel) {
-        priceLabel.snp.makeConstraints { $0.width.equalToSuperview().multipliedBy(0.5) }
-        quantityStackView.snp.makeConstraints { $0.width.equalToSuperview().multipliedBy(0.5) }
-
+        priceLabel.snp.makeConstraints { $0.width.equalTo(cellStackView.snp.width).multipliedBy(0.5) }
         priceLabel.textAlignment = .center
-        
-        let ratio = viewModel.ratio == 0 ? 0.1 : viewModel.ratio
         
         ratioBar.snp.makeConstraints { make in
             make.height.equalTo(quantityLabel)
-            make.width.equalTo(quantityStackView.snp.width).multipliedBy(ratio)
+            make.width.equalTo(priceLabel.snp.width).multipliedBy(viewModel.ratio).priority(1000)
         }
         
-        quantityLabel.snp.makeConstraints { $0.width.equalTo(safeAreaLayoutGuide.snp.width).multipliedBy(0.5) }
-        
-        let color: UIColor = (viewModel.orderType == "ask" ? .systemBlue.withAlphaComponent(0.7) : .systemRed.withAlphaComponent(0.7))
+        let color: UIColor = viewModel.orderType == "ask" ?
+            .systemBlue.withAlphaComponent(0.7) :
+            .systemRed.withAlphaComponent(0.7)
         ratioBar.backgroundColor = color
         ratioBar.layer.cornerRadius = 1
         priceLabel.textColor = color
@@ -61,5 +57,9 @@ class OrderCell: UITableViewCell {
     private func configureData(_ viewModel: OrderViewModel) {
         priceLabel.text = viewModel.price
         quantityLabel.text = viewModel.quantity
+    }
+    
+    override func prepareForReuse() {
+        ratioBar.snp.removeConstraints()
     }
 }
