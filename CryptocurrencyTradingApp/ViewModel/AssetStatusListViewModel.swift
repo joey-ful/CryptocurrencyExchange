@@ -20,46 +20,33 @@ class AssetStatusListViewModel {
         return AssetStatusViewModel(data: assetStatusList[index])
     }
     
-    
+    init() {
+        initiateRestAPI()
+    }
 }
 
 // MARK: RestAPI
 extension AssetStatusListViewModel {
     
     private func initiateRestAPI() {
-        restAPIManager.fetch(type: .tickerAll,
+        restAPIManager.fetch(type: .assetsStatusAll,
                              paymentCurrency: .KRW)
         { (parsedResult: Result<RestAPIAssetStatus, Error>) in
             
             switch parsedResult {
             case .success(let parsedData):
-                let data = self.mirror(parsedData.data)
-//                self.assetStatusList = data
+                self.assetStatusList = parsedData.data.map { symbol, assetStatus in
+                    let coin = CoinType.coin(symbol: symbol) ?? .btc
+                    return AssetStatus(coinName: coin.name,
+                                       symbol: coin.symbol,
+                                       withdraw: assetStatus.withdrawStatus,
+                                       deposit: assetStatus.depositStatus)
+                }
+                
                 NotificationCenter.default.post(name: .assetStatusNotification, object: nil)
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
             }
-        }
-    }
-    
-    private func mirror(_ data: RestAPIAssetStatus.Data) -> [MainListCoin] {
-        let mirror = Mirror(reflecting: data)
-        
-        return Array(mirror.children).compactMap {
-            
-            guard let symbol = $0.label,
-                  let coin = ($0.value as? TickerAll.Data.Coin),
-                  let coinName = CoinType.name(symbol: symbol)
-            else {
-                return nil
-            }
-            
-            return MainListCoin(name: coinName,
-                                symbol: symbol,
-                                currentPrice: coin.closingPrice,
-                                fluctuationRate: coin.fluctateRate24H,
-                                fluctuationAmount: coin.fluctate24H,
-                                tradeValue: coin.accTradeValue24H)
         }
     }
 }

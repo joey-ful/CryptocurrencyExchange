@@ -8,10 +8,15 @@
 import Foundation
 
 struct RestAPIAssetStatus: Decodable {
-    let data: Data
+    let data: [String: AssetStatus]
     
-    struct Data: Decodable {
+    struct AssetStatus: Decodable {
         let withdrawStatus: Int
         let depositStatus: Int
+        
+        enum CodingKeys: String, CodingKey {
+            case withdrawStatus = "withdrawal_status"
+            case depositStatus = "deposit_status"
+        }
     }
 }

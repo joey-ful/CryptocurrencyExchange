@@ -59,7 +59,7 @@ extension MainListCoinsViewModel {
             
             guard let symbol = $0.label,
                   let coin = ($0.value as? TickerAll.Data.Coin),
-                  let coinName = CoinType.name(symbol: symbol)
+                  let coinName = CoinType.coin(symbol: symbol)?.name
             else {
                 return nil
             }

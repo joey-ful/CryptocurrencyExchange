@@ -27,7 +27,7 @@ class MainListCoinViewModel {
     }
 
     var coinType: CoinType? {
-        return CoinType.coin(coinName: coin.symbol.lowercased())
+        return CoinType.coin(symbol: coin.symbol.lowercased())
     }
     
     var currentPrice: String {

@@ -13,8 +13,8 @@ enum RestAPIType: String {
     case orderbook = "orderbook/"
     case orderbookAll = "orderbook/ALL"
     case transactionHistory = "transaction_history/"
-    case assetStatus = "assetstatus/"
-    case assetStatusAll = "assetstatus/ALL"
+    case assetsStatus = "assetsstatus/"
+    case assetsStatusAll = "assetsstatus/ALL"
     case candlestick = "candlestick/"
 
     var baseURL: String {

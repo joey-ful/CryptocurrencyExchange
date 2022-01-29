@@ -67,18 +67,18 @@ enum CoinType: String, CaseIterable {
         return CoinType.allCases
     }
     
-    static func coin(coinName: String) -> CoinType? {
-        let matchList = CoinType.allCases.filter { $0.rawValue == coinName }
+    static func coin(symbol: String) -> CoinType? {
+        let matchList = CoinType.allCases.filter { $0.rawValue == symbol.lowercased() }
         return matchList == [] ? nil : matchList[0]
     }
     
-    static func name(symbol: String) -> String? {
-        switch symbol {
-        case "btc":
+    var name: String {
+        switch self {
+        case .btc:
             return "비트코인"
-        case "eth":
+        case .eth:
             return "이더리움"
-        case "etc":
+        case .etc:
             return "이더리움 클래식"
         default:
             return "나머지"
