@@ -161,10 +161,11 @@ extension MainListViewController {
 // MARK: TableViewHeader
 extension MainListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let mainListCoinViewModel = self.viewModel.coinViewModel(at: indexPath.row)
-        guard let coin = mainListCoinViewModel.coinType else { return }
-        let transactionsViewController = TransactionsViewController(coin: coin, isTime: false)
-        navigationController?.pushViewController(transactionsViewController, animated: true)
+//        let mainListCoinViewModel = self.viewModel.coinViewModel(at: indexPath.row)
+//        guard let coin = mainListCoinViewModel.coinType else { return }
+//        let transactionsViewController = TransactionsViewController(coin: coin, isTime: false)
+        let childVC = AssetStatusViewController(viewModel: AssetStatusListViewModel())
+        navigationController?.pushViewController(childVC, animated: true)
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

@@ -14,6 +14,7 @@ class AssetStatusViewController: UIViewController {
     private let viewModel: AssetStatusListViewModel
     private let tableView = UITableView(frame: .zero, style: .grouped)
     private var dataSource: StatusDataSource?
+    private let searchBar = UISearchBar(frame: .zero)
     
     init(viewModel: AssetStatusListViewModel) {
         self.viewModel = viewModel
@@ -26,7 +27,6 @@ class AssetStatusViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(makeSnapshot),
                                                name: .assetStatusNotification,
@@ -49,14 +49,23 @@ extension AssetStatusViewController {
     }
 
     private func buildSearchBar() {
-        let searchController = UISearchController(searchResultsController: nil)
-        searchController.searchResultsUpdater = self
-        navigationItem.searchController = searchController
-        searchController.searchBar.placeholder = "코인명 또는 심볼 검색"
-        searchController.searchBar.searchTextField.font = .preferredFont(forTextStyle: .subheadline)
-        searchController.searchBar.searchTextField.backgroundColor = .white
-        searchController.searchBar.autocapitalizationType = .none
+        view.addSubview(searchBar)
+        searchBar.delegate = self
+        searchBar.placeholder = "코인명 또는 심볼 검색"
+        searchBar.searchTextField.font = .preferredFont(forTextStyle: .subheadline)
+        searchBar.searchTextField.backgroundColor = .white
+        searchBar.autocapitalizationType = .none
         definesPresentationContext = true
+        
+        searchBar.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.leading.equalToSuperview().offset(20)
+            make.trailing.equalToSuperview().offset(-20)
+            make.height.equalToSuperview().multipliedBy(0.05)
+        }
+        searchBar.layer.borderColor = UIColor.systemGray.cgColor
+        searchBar.layer.borderWidth = 0.5
+        searchBar.layer.cornerRadius = 4
     }
     
     private func buildSelection() {
@@ -65,9 +74,9 @@ extension AssetStatusViewController {
 }
 
 // MARK: SearchResultsUpdating
-extension AssetStatusViewController: UISearchResultsUpdating {
-    func updateSearchResults(for searchController: UISearchController) {
-        let text = searchController.searchBar.text
+extension AssetStatusViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        let text = searchBar.text
         viewModel.filter(text)
         makeSnapshot()
     }
@@ -84,7 +93,7 @@ extension AssetStatusViewController {
     @objc private func makeSnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<Int, AssetStatus>()
         snapshot.appendSections([0])
-        snapshot.appendItems(viewModel.assetStatusList, toSection: 0)
+        snapshot.appendItems(viewModel.filtered, toSection: 0)
         dataSource?.apply(snapshot, animatingDifferences: false)
     }
 
@@ -97,9 +106,9 @@ extension AssetStatusViewController {
         view.addSubview(tableView)
         tableView.backgroundColor = .white
         tableView.snp.makeConstraints { make in
+            make.top.equalTo(searchBar.snp.bottom)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.top.equalToSuperview()
             make.bottom.equalToSuperview()
         }
 

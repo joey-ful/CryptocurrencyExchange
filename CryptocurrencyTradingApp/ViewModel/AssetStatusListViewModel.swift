@@ -17,7 +17,7 @@ class AssetStatusListViewModel {
     }
     
     func assetStatusViewModel(at index: Int) -> AssetStatusViewModel {
-        return AssetStatusViewModel(data: assetStatusList[index])
+        return AssetStatusViewModel(data: filtered[index])
     }
     
     init() {
@@ -35,14 +35,15 @@ extension AssetStatusListViewModel {
             
             switch parsedResult {
             case .success(let parsedData):
-                self.assetStatusList = parsedData.data.map { symbol, assetStatus in
+                let data: [AssetStatus] = parsedData.data.map { symbol, assetStatus in
                     let coin = CoinType.coin(symbol: symbol) ?? .btc
                     return AssetStatus(coinName: coin.name,
                                        symbol: coin.symbol,
                                        withdraw: assetStatus.withdrawStatus,
                                        deposit: assetStatus.depositStatus)
                 }
-                
+                self.filtered = data
+                self.assetStatusList = data
                 NotificationCenter.default.post(name: .assetStatusNotification, object: nil)
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
@@ -55,22 +56,13 @@ extension AssetStatusListViewModel {
 extension AssetStatusListViewModel {
     
     func filter(_ target: String?) {
-        let text = target?.lowercased() ?? ""
+        let text = target?.uppercased() ?? ""
 
         if text == "" {
             filtered = assetStatusList
         } else {
             filtered = assetStatusList.filter { return $0.coinName.contains(text) || $0.symbol.contains(text) }
         }
-    }
-    
-    private func existsInFiltered(_ coin: AssetStatus) -> Bool {
-        for filteredCoin in filtered {
-            if filteredCoin.symbol == coin.symbol {
-                return true
-            }
-        }
-        return false
     }
 }
 
