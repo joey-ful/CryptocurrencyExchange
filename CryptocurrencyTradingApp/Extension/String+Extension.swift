@@ -12,8 +12,10 @@ extension String {
     static let empty = ""
     static let million = "백만"
     static let zero = "0"
+    static let tenMillion = "억"
     
-    func toDecimal() -> String { // 3자리마다 comma
+    /// 3자리마다 comma
+    func toDecimal() -> String {
         guard let number = Double(self) as NSNumber? else { return .zero }
         
         let numberFormatter = NumberFormatter()
@@ -24,28 +26,44 @@ extension String {
         return formatted
     }
     
-    func dividedByMillion() -> String { // 거래금액, 3자리마다 comma + 소수점 버리기 + 백만으로 나누기
+    /// 3자리마다 comma + 소수점 버리기 + 백만으로 나누기
+    func dividedByMillion() -> String {
         guard let number = Double(self) else { return .zero }
         
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .decimal
-        numberFormatter.maximumFractionDigits = 0
+        numberFormatter.maximumFractionDigits = .zero
         
-        let millionNumber = number / 1000000
-        guard let formatted = numberFormatter.string(from: NSNumber(value: millionNumber)) else { return .zero }
+        let numberOverMillion = number / .million
+        guard let formatted = numberFormatter.string(from: NSNumber(value: numberOverMillion)) else { return .zero }
         
         return formatted
     }
     
+    /// 3자리마다 comma + 소수점 버리기 + 1억으로 나누기
+    func dividedByHundredMillion() -> String {
+        guard let number = Double(self) else { return .zero }
+        
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        numberFormatter.maximumFractionDigits = .zero
+        
+        let numberOverTenMillion = number / .tenMillion
+        guard let formatted = numberFormatter.string(from: NSNumber(value: numberOverTenMillion)) else { return .zero }
+        
+        return formatted
+    }
+    
+    /// 숫자, - 기호, . 기호를 제외한 문자열을 Double로 변환
     func toDouble() -> Double {
         let number = self.filter { $0.isNumber || $0 == "-" || $0 == "." }
-        return Double(number) ?? 0
+        return Double(number) ?? .zero
     }
     
     func toDate() -> String {
         let start = self.startIndex
         let end = self.index(self.endIndex, offsetBy: -3)
-        let data = Double(self[start..<end]) ?? 0
+        let data = Double(self[start..<end]) ?? .zero
         
         func convert(data: Double) -> String{
             let date = Date(timeIntervalSince1970: data)
@@ -59,10 +77,12 @@ extension String {
         return convert(data: data)
     }
 
+    /// separator 이후의 모든 것을 제거한 문자열을 반환
     func lose(from separator: String.Element) -> String {
         return String(self.split(separator: separator)[0])
     }
     
+    /// 지정한 개수만큼의 소수점 아래 자리를 고정
     func setFractionDigits(to count: Int) -> String {
         guard let number = Double(self) as NSNumber? else { return .zero }
         

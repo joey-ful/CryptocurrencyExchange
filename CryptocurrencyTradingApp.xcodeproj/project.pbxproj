@@ -30,6 +30,9 @@
 		D4B40E0427A3C4AC00EDA235 /* OrdersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E0327A3C4AC00EDA235 /* OrdersViewModel.swift */; };
 		D4B40E0627A3CBB100EDA235 /* OrderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E0527A3CBB100EDA235 /* OrderCell.swift */; };
 		D4B40E0827A404BA00EDA235 /* OrderTransactionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E0727A404BA00EDA235 /* OrderTransactionCell.swift */; };
+		D4B40E0A27A4110F00EDA235 /* RestAPITickerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E0927A4110F00EDA235 /* RestAPITickerViewModel.swift */; };
+		D4B40E0C27A4EDD400EDA235 /* Double+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E0B27A4EDD400EDA235 /* Double+Extension.swift */; };
+		D4B40E1027A4F84A00EDA235 /* OrderInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E0F27A4F84A00EDA235 /* OrderInfoCell.swift */; };
 		D4CC01F127953FAF00F15957 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F027953FAF00F15957 /* AppDelegate.swift */; };
 		D4CC01F327953FAF00F15957 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F227953FAF00F15957 /* SceneDelegate.swift */; };
 		D4CC01F527953FAF00F15957 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F427953FAF00F15957 /* ViewController.swift */; };
@@ -92,6 +95,9 @@
 		D4B40E0327A3C4AC00EDA235 /* OrdersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrdersViewModel.swift; sourceTree = "<group>"; };
 		D4B40E0527A3CBB100EDA235 /* OrderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCell.swift; sourceTree = "<group>"; };
 		D4B40E0727A404BA00EDA235 /* OrderTransactionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderTransactionCell.swift; sourceTree = "<group>"; };
+		D4B40E0927A4110F00EDA235 /* RestAPITickerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestAPITickerViewModel.swift; sourceTree = "<group>"; };
+		D4B40E0B27A4EDD400EDA235 /* Double+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extension.swift"; sourceTree = "<group>"; };
+		D4B40E0F27A4F84A00EDA235 /* OrderInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderInfoCell.swift; sourceTree = "<group>"; };
 		D4CC01ED27953FAE00F15957 /* CryptocurrencyTradingApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CryptocurrencyTradingApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4CC01F027953FAF00F15957 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D4CC01F227953FAF00F15957 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -163,6 +169,7 @@
 				D4AFEB3727A1292600011251 /* TransactionsHeader.swift */,
 				D4B40E0527A3CBB100EDA235 /* OrderCell.swift */,
 				D4B40E0727A404BA00EDA235 /* OrderTransactionCell.swift */,
+				D4B40E0F27A4F84A00EDA235 /* OrderInfoCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -261,6 +268,7 @@
 				D4B40DF127A250C000EDA235 /* DayTransactionViewModel.swift */,
 				D4B40DFD27A3C00200EDA235 /* OrderViewModel.swift */,
 				D4B40E0327A3C4AC00EDA235 /* OrdersViewModel.swift */,
+				D4B40E0927A4110F00EDA235 /* RestAPITickerViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -273,6 +281,7 @@
 				D47D009E2797A0EA00E8E305 /* UIStackView+Extension.swift */,
 				D47D00A42797A70400E8E305 /* String+Extension.swift */,
 				D4B40DFB27A36B6100EDA235 /* UIButton+Extension.swift */,
+				D4B40E0B27A4EDD400EDA235 /* Double+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -385,6 +394,7 @@
 				E64BFA3027956FF400BC17A1 /* RequestType.swift in Sources */,
 				D4CC01F527953FAF00F15957 /* ViewController.swift in Sources */,
 				D4B40E0227A3C33D00EDA235 /* Order.swift in Sources */,
+				D4B40E0C27A4EDD400EDA235 /* Double+Extension.swift in Sources */,
 				D4CC020B279540CF00F15957 /* WebSockerTicker.swift in Sources */,
 				D4AFEB3327A0552500011251 /* MainListHeaderViewModel.swift in Sources */,
 				D4D0D298279AE7A000734C42 /* CandleCoreDataManager.swift in Sources */,
@@ -395,6 +405,7 @@
 				E64BFA2E27956FCF00BC17A1 /* RequestTik.swift in Sources */,
 				D4CC01F327953FAF00F15957 /* SceneDelegate.swift in Sources */,
 				D4D0D2B227A0024B00734C42 /* TransactionViewModel.swift in Sources */,
+				D4B40E1027A4F84A00EDA235 /* OrderInfoCell.swift in Sources */,
 				D47D00A52797A70400E8E305 /* String+Extension.swift in Sources */,
 				D4CC020D2795411A00F15957 /* WebSocketTransaction.swift in Sources */,
 				E6FA20B8279F04F700CCB1CC /* DetailViewModel.swift in Sources */,
@@ -404,6 +415,7 @@
 				E64BFA272795616600BC17A1 /* WebSocketManager.swift in Sources */,
 				D4B40E0827A404BA00EDA235 /* OrderTransactionCell.swift in Sources */,
 				E6C96497279A9A7F0007B55E /* RequestChartInterval.swift in Sources */,
+				D4B40E0A27A4110F00EDA235 /* RestAPITickerViewModel.swift in Sources */,
 				D4CC02272795B3C700F15957 /* RestAPIManager.swift in Sources */,
 				D47D009B2797A09400E8E305 /* MainListTableViewCell.swift in Sources */,
 				E6899C73279546320006C980 /* ParsingError.swift in Sources */,
