@@ -7,8 +7,8 @@
 
 import Foundation
 
-class TransactionViewModel {
-    var transaction: Transaction
+class TransactionViewModel: TransactionViewModelType {
+    private var transaction: Transaction
     
     init(transaction: Transaction) {
         self.transaction = transaction
@@ -25,12 +25,12 @@ class TransactionViewModel {
         case "2":
             return "ask"
         default:
-            return transaction.type
+            return transaction.type ?? "1"
         }
     }
     
     var amount: String {
-        return transaction.amount.dividedByMillion() + .million
+        return transaction.amount?.dividedByMillion() ?? .zero + .million
     }
     
     var time: String {
@@ -43,6 +43,6 @@ class TransactionViewModel {
     }
     
     var quantity: String {
-        return transaction.quantity.leaveFractionDigits(count: 4)
+        return (transaction.quantity ?? .zero).setFractionDigits(to: 4)
     }
 }
