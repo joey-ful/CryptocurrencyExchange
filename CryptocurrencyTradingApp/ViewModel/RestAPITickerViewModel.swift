@@ -21,20 +21,20 @@ class RestAPITickerViewModel {
     }
     
     func valueType(at index: Int) -> String {
-        if index == 5 {
+        if infoList[index].title.contains("고가") {
             return "high"
-        } else if index == 6 {
+        } else if infoList[index].title.contains("저가") {
             return "low"
         }
         return "default"
     }
     
     private var quantity: String {
-        return mainListCoin.quantity?.setFractionDigits(to: 3) ?? .zero + coin.symbol
+        return (mainListCoin.quantity?.setFractionDigits(to: 3) ?? .zero) + .whiteSpace + coin.symbol
     }
     
     private var tradeValue: String {
-        return mainListCoin.tradeValue.dividedByHundredMillion() + .tenMillion
+        return mainListCoin.tradeValue.dividedByHundredMillion() + .whiteSpace + .tenMillion
     }
     
     private var prevPrice: String {
@@ -71,7 +71,7 @@ class RestAPITickerViewModel {
                                                  highPrice: ticker.maxiumumPrice,
                                                  lowPrice: ticker.minimumPrice,
                                                  prevPrice: ticker.previousClosingPrice,
-                                                 quantity: ticker.unitsTraded,
+                                                 quantity: ticker.unitsTradedWithin24H,
                                                  tradeValue: ticker.tradeValueWithin24H)
                 NotificationCenter.default.post(name: .restAPITickerNotification, object: nil)
             case .failure(let error):

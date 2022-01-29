@@ -13,6 +13,7 @@ extension String {
     static let million = "백만"
     static let zero = "0"
     static let tenMillion = "억"
+    static let whiteSpace = " "
     
     /// 3자리마다 comma
     func toDecimal() -> String {

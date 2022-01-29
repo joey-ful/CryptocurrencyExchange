@@ -14,6 +14,7 @@ typealias TransactionDataSource = UITableViewDiffableDataSource<Int, Transaction
 class OrderViewController: UIViewController {
     private let ordersViewModel: OrdersViewModel
     private let transactionsViewModel: TransactionsViewModel
+    private let orderInfoViewModel: RestAPITickerViewModel
     private var orderDataSource: OrderDataSource?
     private var transactionDataSource: TransactionDataSource?
     private var minusButton = UIButton.makeButton(imageSymbol: "minus.square")
@@ -24,30 +25,13 @@ class OrderViewController: UIViewController {
                                                                                unitLabel,
                                                                                plusButton])
     private let orderTableView = UITableView(frame: .zero, style: .plain)
-    private var quantityLabel = UILabel.makeLabel()
-    private var tradeValueLabel = UILabel.makeLabel()
-    private var separator = UIView()
-    private var prevClosePriceLabel = UILabel.makeLabel()
-    private var openPriceLabel = UILabel.makeLabel()
-    private var highPriceLabel = UILabel.makeLabel()
-    private var lowPriceLabelLabel = UILabel.makeLabel()
-    private lazy var summaryStackView = UIStackView.makeStackView(alignment: .leading,
-                                                             axis: .vertical,
-                                                             spacing: 5,
-                                                             subviews: [
-                                                                quantityLabel,
-                                                                tradeValueLabel,
-                                                                separator,
-                                                                prevClosePriceLabel,
-                                                                openPriceLabel,
-                                                                highPriceLabel,
-                                                                lowPriceLabelLabel
-                                                             ])
     private var transactionTableView = UITableView(frame: .zero, style: .plain)
+    private let orderInfoTableView = UITableView(frame: .zero, style: .plain)
     
-    init(ordersViewModel: OrdersViewModel, transactionsViewModel: TransactionsViewModel) {
-        self.ordersViewModel = ordersViewModel
-        self.transactionsViewModel = transactionsViewModel
+    init(coin: CoinType) {
+        ordersViewModel = OrdersViewModel(coin: coin)
+        transactionsViewModel = TransactionsViewModel(coinType: coin, isTime: true)
+        orderInfoViewModel = RestAPITickerViewModel(coin: coin)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -69,6 +53,10 @@ class OrderViewController: UIViewController {
                                                selector: #selector(makeTransactionSnapshot),
                                                name: .restAPITransactionsNotification,
                                                object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(initInfoData),
+                                               name: .restAPITickerNotification,
+                                               object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -79,26 +67,28 @@ class OrderViewController: UIViewController {
                                                name: .webSocketTransactionsNotification,
                                                object: nil)
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self, name: .webSocketTransactionsNotification, object: nil)
+    }
 }
 
 // MARK: UI
 extension OrderViewController {
+    
+    @objc private func initInfoData() {
+        orderInfoTableView.reloadData()
+    }
 
     private func setUpUI() {
         view.backgroundColor = .white
         view.addSubview(selectionStackView)
         view.addSubview(orderTableView)
-        view.addSubview(summaryStackView)
-        view.addSubview(volumePowerStackView)
+        view.addSubview(orderInfoTableView)
         view.addSubview(transactionTableView)
-        selectionStackView.backgroundColor = .systemPink
-        orderTableView.backgroundColor = .systemPurple
-        summaryStackView.backgroundColor = .systemCyan
-        volumePowerStackView.backgroundColor = .systemMint
-        transactionTableView.backgroundColor = .systemBlue
         
         selectionStackView.snp.makeConstraints { make in
-            make.width.equalToSuperview().multipliedBy(0.65).offset(-20)
+            make.width.equalToSuperview().multipliedBy(0.6).offset(-20)
             make.top.equalToSuperview()
             make.leading.equalToSuperview().offset(10)
         }
@@ -119,26 +109,26 @@ extension OrderViewController {
         unitLabel.textAlignment = .center
         
         orderTableView.snp.makeConstraints { make in
-            make.width.equalToSuperview().multipliedBy(0.65).offset(-20)
+            make.width.equalToSuperview().multipliedBy(0.6).offset(-20)
             make.top.equalTo(selectionStackView.snp.bottom)
             make.leading.equalToSuperview()
             make.bottom.equalToSuperview()
         }
-
-        summaryStackView.snp.makeConstraints { make in
-            make.width.equalToSuperview().multipliedBy(0.35).offset(-10)
-            make.height.equalToSuperview().multipliedBy(0.4)
-            make.top.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-10)
-        }
+//        orderTableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
 
         transactionTableView.snp.makeConstraints { make in
-            make.width.equalToSuperview().multipliedBy(0.35).offset(-10)
-            make.top.equalTo(summaryStackView.snp.bottom)
+            make.width.equalToSuperview().multipliedBy(0.4).offset(-10)
+            make.height.equalToSuperview().multipliedBy(0.6)
             make.trailing.equalToSuperview().offset(-10)
             make.bottom.equalToSuperview()
         }
-        transactionTableView.separatorStyle = .none
+        
+        orderInfoTableView.snp.makeConstraints { make in
+            make.width.equalToSuperview().multipliedBy(0.4).offset(-10)
+            make.height.equalToSuperview().multipliedBy(0.2)
+            make.trailing.equalToSuperview().offset(-10)
+            make.bottom.equalTo(transactionTableView.snp.top)
+        }
     }
 }
 
@@ -174,6 +164,10 @@ extension OrderViewController {
     private func setUpTableView() {
         orderTableView.register(OrderCell.self, forCellReuseIdentifier: "orderCell")
         transactionTableView.register(OrderTransactionCell.self, forCellReuseIdentifier: "transactionCell")
+        transactionTableView.separatorStyle = .none
+        orderInfoTableView.register(OrderInfoCell.self, forCellReuseIdentifier: "infoCell")
+        orderInfoTableView.dataSource = self
+        orderInfoTableView.separatorStyle = .none
     }
     
     private func registerCell() {
@@ -207,4 +201,21 @@ extension OrderViewController {
         })
         transactionTableView.dataSource = transactionDataSource
     }
+}
+
+extension OrderViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return orderInfoViewModel.infoListCount
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "infoCell") as? OrderInfoCell else { return UITableViewCell() }
+        
+        cell.configure(data: orderInfoViewModel.infoList[indexPath.row],
+                       valueType: orderInfoViewModel.valueType(at: indexPath.row))
+        
+        return cell
+    }
+    
+    
 }
