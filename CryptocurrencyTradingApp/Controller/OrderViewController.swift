@@ -148,7 +148,6 @@ extension OrderViewController {
         orderDataSource?.apply(snapshot, animatingDifferences: false)
         
         if orderInitialized == false {
-            print("-------------------------------------------------------")
             let middleIndexPath = IndexPath(row: ordersViewModel.middleIndex, section: 0)
             orderTableView.scrollToRow(at: middleIndexPath, at: .middle, animated: false)
             orderInitialized = true
@@ -211,13 +210,13 @@ extension OrderViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "infoCell") as? OrderInfoCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "infoCell") as? OrderInfoCell else {
+            return UITableViewCell()
+        }
         
         cell.configure(data: orderInfoViewModel.infoList[indexPath.row],
                        valueType: orderInfoViewModel.valueType(at: indexPath.row))
         
         return cell
     }
-    
-    
 }

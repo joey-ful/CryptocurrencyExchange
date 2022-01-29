@@ -13,7 +13,15 @@ class RestAPITickerViewModel {
     private let restAPIManager = RestAPIManager()
     
     var infoList: [(title: String, value: String)] {
-        return [("거래량", quantity), ("거래금", tradeValue), ("separator", "separator"), ("전일종가", prevPrice), ("시가(당일)", openPrice), ("고가(당일)", highPrice), ("저가(당일)", lowPrice)]
+        return [
+            ("거래량", quantity),
+            ("거래금", tradeValue),
+            ("separator", "separator"),
+            ("전일종가", prevPrice),
+            ("시가(당일)", openPrice),
+            ("고가(당일)", highPrice),
+            ("저가(당일)", lowPrice)
+        ]
     }
     
     var infoListCount: Int {

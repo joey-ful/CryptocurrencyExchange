@@ -14,8 +14,7 @@ class OrderTransactionCell: UITableViewCell {
     private lazy var quantityLabel = UILabel.makeLabel(font: font)
     private lazy var cellStackView = UIStackView.makeStackView(alignment: .center,
                                                                spacing: 0,
-                                                               subviews: [priceLabel,
-                                                                          quantityLabel])
+                                                               subviews: [priceLabel, quantityLabel])
 
     func configure(viewModel: TransactionViewModel) {
         configureLabels(viewModel: viewModel)
@@ -44,7 +43,9 @@ class OrderTransactionCell: UITableViewCell {
         priceLabel.text = viewModel.price
         quantityLabel.text = viewModel.quantity
         
-        let textColor: UIColor = viewModel.type == "bid" ? .systemBlue.withAlphaComponent(0.7) : .systemRed.withAlphaComponent(0.7)
+        let textColor: UIColor = viewModel.type == "bid" ?
+            .systemBlue.withAlphaComponent(0.7) :
+            .systemRed.withAlphaComponent(0.7)
         priceLabel.textColor = textColor
         quantityLabel.textColor = textColor
     }
