@@ -19,6 +19,9 @@ extension Notification.Name {
     static let webSocketTicker24HNotification = Notification.Name("webSocketTicker24HNotification")
     static let webSocketTickerNotification = Notification.Name("webSocketTickerNotification")
     static let webSocketOrderbookNotification = Notification.Name("webSocketOrderbookNotification")
+    static let coinDetailNotificaion = Notification.Name("coinDetailNotificaion")
+    static let coinChartDataReceiveNotificaion = Notification.Name("coinChartDataReceiveNotificaion")
+    static let coinChartWebSocketReceiveNotificaion = Notification.Name("coinChartWebSocketReceiveNotificaion")
     
     static let updateSortIconsNotification = Notification.Name("updateSortIconsNotification")
 }
