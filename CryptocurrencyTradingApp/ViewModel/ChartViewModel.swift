@@ -18,10 +18,10 @@ class ChartViewModel: ObservableObject {
 
     init(coin: CoinType, chartIntervals: RequestChartInterval) {
         self.coin = coin
-        initializationViewModel(coin: coin, chartIntervals: chartIntervals)
+        initiateViewModel(coin: coin, chartIntervals: chartIntervals)
     }
     
-    func initializationViewModel(coin: CoinType, chartIntervals: RequestChartInterval) {
+    func initiateViewModel(coin: CoinType, chartIntervals: RequestChartInterval) {
         restAPIManager.fetch(type: .candlestick,
                              paymentCurrency: .KRW,
                              coin: coin,
@@ -31,6 +31,7 @@ class ChartViewModel: ObservableObject {
                 self.candleCoreDataManager.addToCoreData(coin: coin, parsedData.data, entityName: chartIntervals)
                 let candleData = self.candleCoreDataManager.read(entityName: chartIntervals, coin: coin)
                 self.calculateHighPriceList(candleData, chartIntervals: chartIntervals)
+                
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
             }
@@ -44,6 +45,7 @@ class ChartViewModel: ObservableObject {
         else { return }
 
         highPriceList = candleData[candleData.count - 60..<candleData.count].map { $0.highPrice}
+        NotificationCenter.default.post(name: .coinChartDataReceiveNotificaion, object: nil)
         self.candleDate = [firstData, lastData]
     }
 

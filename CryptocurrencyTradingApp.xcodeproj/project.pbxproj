@@ -62,6 +62,7 @@
 		D4D0D2AC27A000E200734C42 /* TransactionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0D2AB27A000E200734C42 /* TransactionsViewModel.swift */; };
 		D4D0D2B027A0011600734C42 /* TransactionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0D2AF27A0011600734C42 /* TransactionsViewController.swift */; };
 		D4D0D2B227A0024B00734C42 /* TransactionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0D2B127A0024B00734C42 /* TransactionViewModel.swift */; };
+		E6197F9127A6A9B900EF207B /* DetailChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6197F9027A6A9B900EF207B /* DetailChartViewController.swift */; };
 		E6197F9527A6AD7000EF207B /* DetailCoinViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6197F9427A6AD7000EF207B /* DetailCoinViewModel.swift */; };
 		E6197F9727A6AD9800EF207B /* DetailCoinModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6197F9627A6AD9800EF207B /* DetailCoinModel.swift */; };
 		E61B2C032796BC4100E919B0 /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = E61B2C022796BC4100E919B0 /* Charts */; };
@@ -147,6 +148,7 @@
 		D4D0D2AB27A000E200734C42 /* TransactionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsViewModel.swift; sourceTree = "<group>"; };
 		D4D0D2AF27A0011600734C42 /* TransactionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsViewController.swift; sourceTree = "<group>"; };
 		D4D0D2B127A0024B00734C42 /* TransactionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionViewModel.swift; sourceTree = "<group>"; };
+		E6197F9027A6A9B900EF207B /* DetailChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailChartViewController.swift; sourceTree = "<group>"; };
 		E6197F9427A6AD7000EF207B /* DetailCoinViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCoinViewModel.swift; sourceTree = "<group>"; };
 		E6197F9627A6AD9800EF207B /* DetailCoinModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCoinModel.swift; sourceTree = "<group>"; };
 		E644D50B27A40E200086972E /* CandleData1H+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CandleData1H+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -192,6 +194,7 @@
 				D4D0D2AF27A0011600734C42 /* TransactionsViewController.swift */,
 				D4B40E1327A5565B00EDA235 /* AssetStatusViewController.swift */,
 				D4B40DF727A2FA6500EDA235 /* OrderViewController.swift */,
+				E6197F9027A6A9B900EF207B /* DetailChartViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -322,6 +325,7 @@
 				D4B40DFD27A3C00200EDA235 /* OrderViewModel.swift */,
 				D4B40E0327A3C4AC00EDA235 /* OrdersViewModel.swift */,
 				D4B40E0927A4110F00EDA235 /* RestAPITickerViewModel.swift */,
+				E6FA20B7279F04F700CCB1CC /* ChartViewModel.swift */,
 				E6197F9427A6AD7000EF207B /* DetailCoinViewModel.swift */,
 			);
 			path = ViewModel;
@@ -472,6 +476,7 @@
 				D47D00A52797A70400E8E305 /* String+Extension.swift in Sources */,
 				D4CC020D2795411A00F15957 /* WebSocketTransaction.swift in Sources */,
 				E6FA20B8279F04F700CCB1CC /* DetailViewModel.swift in Sources */,
+				E6FA20B8279F04F700CCB1CC /* ChartViewModel.swift in Sources */,
 				D4B40E0027A3C09400EDA235 /* RestAPIOrderbook.swift in Sources */,
 				E6FA20B8279F04F700CCB1CC /* ChartViewModel.swift in Sources */,
 				E64BFA3627959B7100BC17A1 /* WebSocketDataModel.swift in Sources */,
@@ -501,6 +506,7 @@
 				D4B40E0627A3CBB100EDA235 /* OrderCell.swift in Sources */,
 				D4B40DFE27A3C00300EDA235 /* OrderViewModel.swift in Sources */,
 				E6BDEFAD27A3E2FD00018967 /* CandleData10M+CoreDataProperties.swift in Sources */,
+				E6197F9127A6A9B900EF207B /* DetailChartViewController.swift in Sources */,
 				E6BDEFAB27A3E23200018967 /* CandleData30M+CoreDataClass.swift in Sources */,
 				D4D0D29C279B083200734C42 /* MainListHeaderView.swift in Sources */,
 				D4AFEB2D27A0350800011251 /* Transaction.swift in Sources */,
