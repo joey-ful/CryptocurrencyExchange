@@ -25,7 +25,7 @@ class DetailCoinViewController: UIViewController {
     lazy var headerVerticalStackView = UIStackView.makeStackView(alignment: .leading, distribution: .fillEqually, axis: .vertical, spacing: 1, subviews: [priceLabel, headerHorizontalStackView])
     
     var controller: UIHostingController<ChartView> = {
-        let chartView = ChartView(coin: .btc, chartIntervals: .oneHour)
+        let chartView = ChartView(coin: .btc, chartIntervals: .oneMinute)
         let controller = UIHostingController(rootView: chartView)
         controller.view.translatesAutoresizingMaskIntoConstraints = false
         return controller
@@ -41,7 +41,7 @@ class DetailCoinViewController: UIViewController {
         return menuControl
     }()
     
-    var chartView = UIHostingController(rootView: ChartView(coin: .btc, chartIntervals: .oneHour))
+    var chartView = UIHostingController(rootView: ChartView(coin: .btc, chartIntervals: .oneMinute))
     
     let chartViewController = DetailChartViewController()
     lazy var transactionVC = TransactionsViewController(coin: coin ?? .btc, isTime: true)
@@ -73,9 +73,10 @@ class DetailCoinViewController: UIViewController {
     }
 
     @objc func setDataForLabel() {
-        priceLabel.text = viewModel.coinInfomation?.data.openingPrice.toDecimal()
-        incrementLabel.text = viewModel.coinInfomation?.data.fluctate24H
-        percentLabel.text = viewModel.coinInfomation?.data.fluctateRate24H
+
+        priceLabel.text = viewModel.coinInfomation?.currentPrice.toDecimal()
+        incrementLabel.text = viewModel.coinInfomation?.fluctuationAmount.toDecimal()
+        percentLabel.text = viewModel.coinInfomation?.fluctuationRate
     }
     
     @objc func addTapped(_ sender: Any) {

@@ -95,4 +95,18 @@ extension Ticker {
         self.prevPrice = nil
         self.quantity = nil
     }
+    
+    init(symbol: String, currentPrice: String, fluctuationAmount: String, fluctuationRate: String) {
+        self.name = ""
+        self.symbol = symbol
+        self.currentPrice = currentPrice
+        self.fluctuationRate = fluctuationRate
+        self.fluctuationAmount = fluctuationAmount
+        self.tradeValue = ""
+        self.openPrice = nil
+        self.highPrice = nil
+        self.lowPrice = nil
+        self.prevPrice = nil
+        self.quantity = nil
+    }
 }

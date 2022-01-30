@@ -12,7 +12,7 @@ class DetailCoinViewModel {
     private let webSocketManager = WebSocketManager()
     
     var coin: CoinType?
-    var coinInfomation: DetailCoinModel? = DetailCoinModel(status: "", data: DetailCoinModel.CoinData(openingPrice: "", closingPrice: "", minPrice: "", maxPrice: "", unitsTraded: "", accTradeValue: "", prevClosingPrice: "", unitsTraded24H: "", accTradeValue24H: "", fluctate24H: "", fluctateRate24H: "", date: "")) {
+    var coinInfomation: Ticker? = nil {
         didSet(newData) {
             NotificationCenter.default.post(name: .coinDetailNotificaion, object: ["detailCoin": newData])
         }
@@ -21,39 +21,46 @@ class DetailCoinViewModel {
     init(coin: CoinType) {
         self.coin = coin
         initiateViewModel()
-//        repeatData(coin: coin)
+        repeatData(coin: coin)
+        repeatCurrentPrice(coin: coin)
     }
     
     func initiateViewModel () {
-        restAPIManager.fetch(type: .ticker, paymentCurrency: .KRW, coin: coin) { [weak self]  (parsedResult: Result<DetailCoinModel, Error>) in
+        restAPIManager.fetch(type: .ticker, paymentCurrency: .KRW, coin: coin) { [weak self]  (parsedResult: Result<RestAPITicker, Error>) in
             switch parsedResult {
             case .success(let parsedData):
-                self?.coinInfomation = parsedData
+                self?.coinInfomation = Ticker(symbol: self?.coin?.rawValue ?? "btc", currentPrice: parsedData.data.closingPrice, fluctuationAmount: parsedData.data.fluctuation24H, fluctuationRate: parsedData.data.fluctuationRate24H)
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
             }
         }
     }
-//
-//    func repeatData(coin: CoinType) {
-//
-//        webSocketManager.connectWebSocket(.ticker, [coin], nil) { [weak self] (parsedResult: Result<DetailCoinModel?, Error>) in
-//            switch parsedResult {
-//            case.success(let data):
-//                print(data?.data.openingPrice)
-//                NotificationCenter.default.post(name: .coinChartWebSocketReceiveNotificaion, object: ["detailCoin": data])
-//
-//            case.failure(let error):
-//                print(error.localizedDescription)
-//            }
-////            guard case .success(let parsedData) = parsedResult else {
-////
-////                return
-////            }
-////            print(parsedData)
-////            self?.coinInfomation = parsedData
-////            NotificationCenter.default.post(name: .coinChartWebSocketReceiveNotificaion, object: ["detailCoin": parsedData])
-//
-//        }
-//    }
+    //
+    func repeatData(coin: CoinType) {
+        webSocketManager.connectWebSocket(.ticker, [coin],[.yesterday]) { [weak self] (parsedResult: Result<WebSocketTicker?, Error>) in
+            guard case .success(let data) = parsedResult, let dataContent = data?.content else {
+                return
+            }
+            self?.coinInfomation?.fluctuationRate = dataContent.fluctuationRate
+            self?.coinInfomation?.fluctuationAmount = dataContent.fluctuationAmount
+            
+        }
+    }
+    
+    func repeatCurrentPrice(coin: CoinType) {
+        print(#function)
+        webSocketManager.connectWebSocket(.transaction, [coin],nil) { [weak self] (parsedResult: Result<WebSocketTransaction?, Error>) in
+            print(#function, "웹소켓받음")
+            guard case .success(let data) = parsedResult, let dataContent = data?.content.list else {
+                return
+            }
+            dataContent.forEach {
+                print("---------------", $0.symbol)
+                if $0.symbol.lose(from: "_").lowercased() == self?.coinInfomation?.symbol {
+                    self?.coinInfomation?.currentPrice = $0.price
+                }
+            }
+            
+        }
+    }
 }
