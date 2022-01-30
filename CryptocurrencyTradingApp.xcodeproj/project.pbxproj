@@ -22,6 +22,13 @@
 		D4B40DF227A250C000EDA235 /* DayTransactionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40DF127A250C000EDA235 /* DayTransactionViewModel.swift */; };
 		D4B40DF427A25BBA00EDA235 /* TransactionViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40DF327A25BBA00EDA235 /* TransactionViewModelType.swift */; };
 		D4B40DF627A2637C00EDA235 /* RestAPITicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40DF527A2637C00EDA235 /* RestAPITicker.swift */; };
+		D4B40E1427A5565B00EDA235 /* AssetStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E1327A5565B00EDA235 /* AssetStatusViewController.swift */; };
+		D4B40E1627A556D000EDA235 /* AssetStatusListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E1527A556D000EDA235 /* AssetStatusListViewModel.swift */; };
+		D4B40E1827A5570200EDA235 /* RestAPIAssetStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E1727A5570200EDA235 /* RestAPIAssetStatus.swift */; };
+		D4B40E1A27A55A3000EDA235 /* AssetStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E1927A55A3000EDA235 /* AssetStatus.swift */; };
+		D4B40E1C27A55B8300EDA235 /* AssetStatusViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E1B27A55B8200EDA235 /* AssetStatusViewModel.swift */; };
+		D4B40E1E27A55BFC00EDA235 /* StatusCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E1D27A55BFC00EDA235 /* StatusCell.swift */; };
+		D4B40E2027A5646900EDA235 /* StatusHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E1F27A5646900EDA235 /* StatusHeader.swift */; };
 		D4B40DF827A2FA6500EDA235 /* OrderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40DF727A2FA6500EDA235 /* OrderViewController.swift */; };
 		D4B40DFC27A36B6100EDA235 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40DFB27A36B6100EDA235 /* UIButton+Extension.swift */; };
 		D4B40DFE27A3C00300EDA235 /* OrderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40DFD27A3C00200EDA235 /* OrderViewModel.swift */; };
@@ -76,7 +83,6 @@
 		E6BDEFAF27A3E31A00018967 /* CandleData30M+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BDEFAE27A3E31A00018967 /* CandleData30M+CoreDataProperties.swift */; };
 		E6BDEFB127A3E32D00018967 /* CandleData24H+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BDEFB027A3E32D00018967 /* CandleData24H+CoreDataProperties.swift */; };
 		E6C96497279A9A7F0007B55E /* RequestChartInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C96496279A9A7F0007B55E /* RequestChartInterval.swift */; };
-		E6EC8683279AC36C005A6534 /* ChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6EC8682279AC36C005A6534 /* ChartViewController.swift */; };
 		E6FA20B5279EFAAF00CCB1CC /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FA20B4279EFAAF00CCB1CC /* ChartView.swift */; };
 		E6FA20B8279F04F700CCB1CC /* ChartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FA20B7279F04F700CCB1CC /* ChartViewModel.swift */; };
 /* End PBXBuildFile section */
@@ -97,6 +103,13 @@
 		D4B40DF127A250C000EDA235 /* DayTransactionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayTransactionViewModel.swift; sourceTree = "<group>"; };
 		D4B40DF327A25BBA00EDA235 /* TransactionViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionViewModelType.swift; sourceTree = "<group>"; };
 		D4B40DF527A2637C00EDA235 /* RestAPITicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestAPITicker.swift; sourceTree = "<group>"; };
+		D4B40E1327A5565B00EDA235 /* AssetStatusViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetStatusViewController.swift; sourceTree = "<group>"; };
+		D4B40E1527A556D000EDA235 /* AssetStatusListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetStatusListViewModel.swift; sourceTree = "<group>"; };
+		D4B40E1727A5570200EDA235 /* RestAPIAssetStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestAPIAssetStatus.swift; sourceTree = "<group>"; };
+		D4B40E1927A55A3000EDA235 /* AssetStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetStatus.swift; sourceTree = "<group>"; };
+		D4B40E1B27A55B8200EDA235 /* AssetStatusViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetStatusViewModel.swift; sourceTree = "<group>"; };
+		D4B40E1D27A55BFC00EDA235 /* StatusCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusCell.swift; sourceTree = "<group>"; };
+		D4B40E1F27A5646900EDA235 /* StatusHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusHeader.swift; sourceTree = "<group>"; };
 		D4B40DF727A2FA6500EDA235 /* OrderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderViewController.swift; sourceTree = "<group>"; };
 		D4B40DFB27A36B6100EDA235 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
 		D4B40DFD27A3C00200EDA235 /* OrderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderViewModel.swift; sourceTree = "<group>"; };
@@ -151,7 +164,6 @@
 		E6BDEFAE27A3E31A00018967 /* CandleData30M+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CandleData30M+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E6BDEFB027A3E32D00018967 /* CandleData24H+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CandleData24H+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E6C96496279A9A7F0007B55E /* RequestChartInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestChartInterval.swift; sourceTree = "<group>"; };
-		E6EC8682279AC36C005A6534 /* ChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewController.swift; sourceTree = "<group>"; };
 		E6FA20B4279EFAAF00CCB1CC /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
 		E6FA20B7279F04F700CCB1CC /* ChartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -174,6 +186,7 @@
 			children = (
 				D4D0D1FF2799A35100734C42 /* MainListViewController.swift */,
 				D4D0D2AF27A0011600734C42 /* TransactionsViewController.swift */,
+				D4B40E1327A5565B00EDA235 /* AssetStatusViewController.swift */,
 				D4B40DF727A2FA6500EDA235 /* OrderViewController.swift */,
 			);
 			path = Controller;
@@ -187,6 +200,8 @@
 				D4D0D29B279B083200734C42 /* MainListHeaderView.swift */,
 				D4B40DEB27A2065000EDA235 /* TransactionsCell.swift */,
 				D4AFEB3727A1292600011251 /* TransactionsHeader.swift */,
+				D4B40E1D27A55BFC00EDA235 /* StatusCell.swift */,
+				D4B40E1F27A5646900EDA235 /* StatusHeader.swift */,
 				D4B40E0527A3CBB100EDA235 /* OrderCell.swift */,
 				D4B40E0727A404BA00EDA235 /* OrderTransactionCell.swift */,
 				D4B40E0F27A4F84A00EDA235 /* OrderInfoCell.swift */,
@@ -236,7 +251,6 @@
 				D4CC01F027953FAF00F15957 /* AppDelegate.swift */,
 				D4CC01F227953FAF00F15957 /* SceneDelegate.swift */,
 				D4CC01F427953FAF00F15957 /* ViewController.swift */,
-				E6EC8682279AC36C005A6534 /* ChartViewController.swift */,
 				D4CC01FC27953FB000F15957 /* Assets.xcassets */,
 				D4CC01FE27953FB000F15957 /* LaunchScreen.storyboard */,
 				D4CC020127953FB000F15957 /* Info.plist */,
@@ -257,6 +271,8 @@
 				D4AFEB2A27A01FC300011251 /* RestAPITransaction.swift */,
 				D4AFEB2C27A0350800011251 /* Transaction.swift */,
 				D4B40DF527A2637C00EDA235 /* RestAPITicker.swift */,
+				D4B40E1727A5570200EDA235 /* RestAPIAssetStatus.swift */,
+				D4B40E1927A55A3000EDA235 /* AssetStatus.swift */,
 				D4B40DFF27A3C09400EDA235 /* RestAPIOrderbook.swift */,
 				D4B40E0127A3C33D00EDA235 /* Order.swift */,
 				D4B40E1127A5111200EDA235 /* WebSocketOrderbook.swift */,
@@ -296,6 +312,8 @@
 				D4AFEB3027A0414200011251 /* MainListCoinsViewModel.swift */,
 				D4AFEB3227A0552500011251 /* MainListHeaderViewModel.swift */,
 				D4B40DF127A250C000EDA235 /* DayTransactionViewModel.swift */,
+				D4B40E1527A556D000EDA235 /* AssetStatusListViewModel.swift */,
+				D4B40E1B27A55B8200EDA235 /* AssetStatusViewModel.swift */,
 				D4B40DFD27A3C00200EDA235 /* OrderViewModel.swift */,
 				D4B40E0327A3C4AC00EDA235 /* OrdersViewModel.swift */,
 				D4B40E0927A4110F00EDA235 /* RestAPITickerViewModel.swift */,
@@ -413,16 +431,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E6EC8683279AC36C005A6534 /* ChartViewController.swift in Sources */,
 				D4D0D295279AE73000734C42 /* CandleData1M+CoreDataProperties.swift in Sources */,
 				D4B40DF627A2637C00EDA235 /* RestAPITicker.swift in Sources */,
 				D4D0D295279AE73000734C42 /* CandleData+CoreDataProperties.swift in Sources */,
-				E6EC8683279AC36C005A6534 /* ChartViewController.swift in Sources */,
 				D4B40DF227A250C000EDA235 /* DayTransactionViewModel.swift in Sources */,
 				D4D0D29E279C29B500734C42 /* Sort.swift in Sources */,
+				D4B40E1427A5565B00EDA235 /* AssetStatusViewController.swift in Sources */,
 				D4D0D2B027A0011600734C42 /* TransactionsViewController.swift in Sources */,
 				D4AFEB2B27A01FC300011251 /* RestAPITransaction.swift in Sources */,
 				D4D0D2002799A35100734C42 /* MainListViewController.swift in Sources */,
+				D4B40E1C27A55B8300EDA235 /* AssetStatusViewModel.swift in Sources */,
 				E64BFA3027956FF400BC17A1 /* RequestType.swift in Sources */,
 				D4CC01F527953FAF00F15957 /* ViewController.swift in Sources */,
 				D4B40E0227A3C33D00EDA235 /* Order.swift in Sources */,
@@ -430,10 +448,11 @@
 				D4CC020B279540CF00F15957 /* WebSockerTicker.swift in Sources */,
 				D4AFEB3327A0552500011251 /* MainListHeaderViewModel.swift in Sources */,
 				D4D0D298279AE7A000734C42 /* CandleCoreDataManager.swift in Sources */,
-				D4AFEB3827A1292600011251 /* TransactionsTableViewTimeHeader.swift in Sources */,
+				D4AFEB3827A1292600011251 /* TransactionsHeader.swift in Sources */,
 				D4D0D294279AE73000734C42 /* CandleData1M+CoreDataClass.swift in Sources */,
 				D4AFEB3827A1292600011251 /* TransactionsHeader.swift in Sources */,
 				D4D0D294279AE73000734C42 /* CandleData+CoreDataClass.swift in Sources */,
+				D4B40E1A27A55A3000EDA235 /* AssetStatus.swift in Sources */,
 				D4B40E1227A5111200EDA235 /* WebSocketOrderbook.swift in Sources */,
 				D4CC01F127953FAF00F15957 /* AppDelegate.swift in Sources */,
 				D4CC020927953FD300F15957 /* RestAPITickerAll.swift in Sources */,
@@ -452,8 +471,10 @@
 				E6BDEFA927A3E1F700018967 /* CandleData10M+CoreDataClass.swift in Sources */,
 				E6FA20B5279EFAAF00CCB1CC /* ChartView.swift in Sources */,
 				E6A8694527A29F1800D568B3 /* CandleStickCoreDataEntity.swift in Sources */,
+				D4B40E1827A5570200EDA235 /* RestAPIAssetStatus.swift in Sources */,
 				E6BDEFAF27A3E31A00018967 /* CandleData30M+CoreDataProperties.swift in Sources */,
 				E64BFA272795616600BC17A1 /* WebSocketManager.swift in Sources */,
+				D4B40E1627A556D000EDA235 /* AssetStatusListViewModel.swift in Sources */,
 				D4B40E0827A404BA00EDA235 /* OrderTransactionCell.swift in Sources */,
 				E6C96497279A9A7F0007B55E /* RequestChartInterval.swift in Sources */,
 				D4B40E0A27A4110F00EDA235 /* RestAPITickerViewModel.swift in Sources */,
@@ -466,6 +487,7 @@
 				E64BFA2C27956FAC00BC17A1 /* WebSocketParameter.swift in Sources */,
 				D4D0D2AC27A000E200734C42 /* TransactionsViewModel.swift in Sources */,
 				E64BFA3927959D3100BC17A1 /* NotificationName+Extension.swift in Sources */,
+				D4B40E1E27A55BFC00EDA235 /* StatusCell.swift in Sources */,
 				D4B40E0427A3C4AC00EDA235 /* OrdersViewModel.swift in Sources */,
 				D47D009D2797A0C700E8E305 /* UILable+Extension.swift in Sources */,
 				D4B40E0627A3CBB100EDA235 /* OrderCell.swift in Sources */,
@@ -485,6 +507,7 @@
 				E644D50E27A40E320086972E /* CandleData1H+CoreDataClass.swift in Sources */,
 				D4B40DEC27A2065000EDA235 /* TransactionsCell.swift in Sources */,
 				D4AFEB2F27A03FB300011251 /* MainListCoinViewModel.swift in Sources */,
+				D4B40E2027A5646900EDA235 /* StatusHeader.swift in Sources */,
 				D4CC01FB27953FAF00F15957 /* CryptocurrencyTradingApp.xcdatamodeld in Sources */,
 				D4B40DF827A2FA6500EDA235 /* OrderViewController.swift in Sources */,
 			);
