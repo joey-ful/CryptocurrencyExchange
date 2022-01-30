@@ -34,6 +34,10 @@ class AssetStatusViewController: UIViewController {
         buildUI()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        makeSnapshot()
+    }
+    
     deinit {
         NotificationCenter.default.removeObserver(self, name: .assetStatusNotification, object: nil)
     }

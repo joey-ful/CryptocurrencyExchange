@@ -222,8 +222,9 @@ extension MainListViewController {
 // MARK: TableViewHeader
 extension MainListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let childVC = AssetStatusViewController(viewModel: AssetStatusListViewModel())
-        navigationController?.pushViewController(childVC, animated: true)
+        let coin = CoinType.coin(symbol: viewModel.filtered[indexPath.row].symbol.lowercased()) ?? .btc
+        let detailViewController = DetailCoinViewController(coin: coin)
+        navigationController?.pushViewController(detailViewController, animated: true)
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
