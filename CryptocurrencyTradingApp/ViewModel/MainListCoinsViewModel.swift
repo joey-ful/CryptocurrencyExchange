@@ -18,7 +18,7 @@ class MainListCoinsViewModel {
     var popularCoins: [Ticker] {
         return Array(
             mainListCoins
-                .sorted { $0.unitsTraded?.toDouble() ?? .zero > $1.unitsTraded?.toDouble() ?? .zero }
+                .sorted { $0.tradeValue.toDouble() > $1.tradeValue.toDouble() }
                 .prefix(10)
         )
     }
@@ -56,8 +56,6 @@ extension MainListCoinsViewModel {
                     .sorted { $0.tradeValue.toDouble() > $1.tradeValue.toDouble() }
                 self.filtered = data
                 self.mainListCoins = data
-                let popularData = data
-                    .sorted { $0.unitsTraded?.toDouble() ?? 0 > $1.unitsTraded?.toDouble() ?? 0}
                 NotificationCenter.default.post(name: .restAPITickerAllNotification, object: nil)
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
@@ -82,8 +80,7 @@ extension MainListCoinsViewModel {
                           currentPrice: coin.closingPrice,
                           fluctuationRate: coin.fluctateRate24H,
                           fluctuationAmount: coin.fluctate24H,
-                          tradeValue: coin.accTradeValue24H,
-                          unitsTraded: coin.unitsTraded)
+                          tradeValue: coin.accTradeValue24H)
         }
     }
 }
@@ -169,7 +166,6 @@ extension MainListCoinsViewModel {
             if mainListCoins[index].symbol == newSymbol {
                 mainListCoins[index].fluctuationRate = ticker.fluctuationRate
                 mainListCoins[index].fluctuationAmount = ticker.fluctuationAmount
-                mainListCoins[index].unitsTraded = ticker.volume
                 
                 NotificationCenter.default.post(name: .webSocketTickerNotification, object: nil)
             }

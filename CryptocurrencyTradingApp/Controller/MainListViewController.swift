@@ -206,7 +206,7 @@ extension MainListViewController {
         let cellRegistration = UICollectionView.CellRegistration
         <PopularCoinCell, Ticker> { cell, indexPath, popularCoin in
             
-            cell.configure(self.viewModel.popularCoinViewModel(at: indexPath.item), parentViewController: self)
+            cell.configure(self.viewModel.popularCoinViewModel(at: indexPath.item), parent: self)
         }
         
         collectionViewDataSource = PopularDataSource(collectionView: collectionView)

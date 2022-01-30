@@ -43,6 +43,7 @@
 		D4B40E2027A5646900EDA235 /* StatusHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E1F27A5646900EDA235 /* StatusHeader.swift */; };
 		D4B40E2A27A59EC300EDA235 /* PopularCoinCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E2927A59EC300EDA235 /* PopularCoinCell.swift */; };
 		D4B40E2C27A5A4B000EDA235 /* PopularCoinViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E2B27A5A4B000EDA235 /* PopularCoinViewModel.swift */; };
+		D4B40E3227A65AA000EDA235 /* MiniChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E3127A65AA000EDA235 /* MiniChartView.swift */; };
 		D4CC01F127953FAF00F15957 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F027953FAF00F15957 /* AppDelegate.swift */; };
 		D4CC01F327953FAF00F15957 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F227953FAF00F15957 /* SceneDelegate.swift */; };
 		D4CC01F527953FAF00F15957 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F427953FAF00F15957 /* ViewController.swift */; };
@@ -125,6 +126,7 @@
 		D4B40E1F27A5646900EDA235 /* StatusHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusHeader.swift; sourceTree = "<group>"; };
 		D4B40E2927A59EC300EDA235 /* PopularCoinCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularCoinCell.swift; sourceTree = "<group>"; };
 		D4B40E2B27A5A4B000EDA235 /* PopularCoinViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularCoinViewModel.swift; sourceTree = "<group>"; };
+		D4B40E3127A65AA000EDA235 /* MiniChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniChartView.swift; sourceTree = "<group>"; };
 		D4CC01ED27953FAE00F15957 /* CryptocurrencyTradingApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CryptocurrencyTradingApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4CC01F027953FAF00F15957 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D4CC01F227953FAF00F15957 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -208,6 +210,7 @@
 				D4B40E0727A404BA00EDA235 /* OrderTransactionCell.swift */,
 				D4B40E0F27A4F84A00EDA235 /* OrderInfoCell.swift */,
 				D4B40E2927A59EC300EDA235 /* PopularCoinCell.swift */,
+				D4B40E3127A65AA000EDA235 /* MiniChartView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -477,6 +480,7 @@
 				E6A8694527A29F1800D568B3 /* CandleStickCoreDataEntity.swift in Sources */,
 				D4B40E1827A5570200EDA235 /* RestAPIAssetStatus.swift in Sources */,
 				E6BDEFAF27A3E31A00018967 /* CandleData30M+CoreDataProperties.swift in Sources */,
+				D4B40E3227A65AA000EDA235 /* MiniChartView.swift in Sources */,
 				E64BFA272795616600BC17A1 /* WebSocketManager.swift in Sources */,
 				D4B40E1627A556D000EDA235 /* AssetStatusListViewModel.swift in Sources */,
 				D4B40E0827A404BA00EDA235 /* OrderTransactionCell.swift in Sources */,

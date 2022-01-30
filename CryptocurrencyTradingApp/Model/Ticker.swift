@@ -19,7 +19,6 @@ struct Ticker: Hashable {
     let lowPrice: String?
     let prevPrice: String?
     let quantity: String?
-    var unitsTraded: String?
     
     static func == (lhs: Ticker, rhs: Ticker) -> Bool {
         return lhs.name == rhs.name
@@ -28,7 +27,6 @@ struct Ticker: Hashable {
         && lhs.fluctuationRate == rhs.fluctuationRate
         && lhs.fluctuationAmount == rhs.fluctuationAmount
         && lhs.tradeValue == rhs.tradeValue
-        && lhs.unitsTraded == rhs.unitsTraded
     }
     
     func hash(into hasher: inout Hasher) {
@@ -38,19 +36,17 @@ struct Ticker: Hashable {
         hasher.combine(fluctuationRate)
         hasher.combine(fluctuationAmount)
         hasher.combine(tradeValue)
-        hasher.combine(unitsTraded)
     }
 }
 
 extension Ticker {
-    init(name: String, symbol: String, currentPrice: String, fluctuationRate: String, fluctuationAmount: String, tradeValue: String, unitsTraded: String) {
+    init(name: String, symbol: String, currentPrice: String, fluctuationRate: String, fluctuationAmount: String, tradeValue: String) {
         self.name = name
         self.symbol = symbol
         self.currentPrice = currentPrice
         self.fluctuationRate = fluctuationRate
         self.fluctuationAmount = fluctuationAmount
         self.tradeValue = tradeValue
-        self.unitsTraded = unitsTraded
         self.openPrice = nil
         self.highPrice = nil
         self.lowPrice = nil
@@ -84,5 +80,19 @@ extension Ticker {
         self.lowPrice = lowPrice
         self.prevPrice = prevPrice
         self.quantity = quantity
+    }
+    
+    init(highPrice: String, tradeValue: String, fluctuationRate: String) {
+        self.name = ""
+        self.symbol = ""
+        self.currentPrice = ""
+        self.fluctuationRate = fluctuationRate
+        self.fluctuationAmount = ""
+        self.tradeValue = tradeValue
+        self.openPrice = nil
+        self.highPrice = highPrice
+        self.lowPrice = nil
+        self.prevPrice = nil
+        self.quantity = nil
     }
 }
