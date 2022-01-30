@@ -23,7 +23,7 @@ struct ChartView: View {
         
         VStack {
             chartView
-                .frame(height: 200)
+//                .frame(height: 200)
                 .background(chartBackGround)
                 .overlay(chartYAxis.padding(.horizontal, 4), alignment: .leading)
             chartDateLabel

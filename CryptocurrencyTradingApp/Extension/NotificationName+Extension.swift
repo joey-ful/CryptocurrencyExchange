@@ -21,4 +21,8 @@ extension Notification.Name {
     static let assetStatusNotification = Notification.Name("assetStatusNotification")
     static let restAPIOrderNotification = Notification.Name("restAPIOrderNotification")
     static let webSocketOrderbookNotification = Notification.Name("webSocketOrderbookNotification")
+    static let coinDetailNotificaion = Notification.Name("coinDetailNotificaion")
+    static let coinChartDataReceiveNotificaion = Notification.Name("coinChartDataReceiveNotificaion")
+    static let coinChartWebSocketReceiveNotificaion = Notification.Name("coinChartWebSocketReceiveNotificaion")
+
 }
