@@ -10,7 +10,7 @@ import SnapKit
 import SwiftUI
 
 class DetailChartViewController: UIViewController {
-    let chartView = ChartView(coin: .btc, chartIntervals: .oneHour)
+    let chartView = ChartView(coin: .btc, chartIntervals: .oneMinute)
     
     lazy var hostingController: UIHostingController<ChartView> = {
         let controller = UIHostingController(rootView: chartView)
