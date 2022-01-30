@@ -16,9 +16,11 @@ struct WebSocketTicker: Decodable, WebSocketDataModel {
         let accumulatedTradeValue: String
         let fluctuationRate: String
         let fluctuationAmount: String
+        let volume: String
+        let volumePower: String
         
         enum CodingKeys: String, CodingKey {
-            case symbol, tickType
+            case symbol, tickType, volume, volumePower
             case accumulatedTradeValue = "value"
             case fluctuationRate = "chgRate"
             case fluctuationAmount = "chgAmt"

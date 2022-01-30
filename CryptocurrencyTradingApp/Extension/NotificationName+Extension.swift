@@ -9,16 +9,16 @@ import Foundation
 
 extension Notification.Name {
     static let restAPITickerAllNotification = Notification.Name("restAPITickerAllNotification")
-    static let tradeValueNotification = Notification.Name("tradeValueNotification")
-    static let fluctuationNotification = Notification.Name("fluctuationNotification")
-    static let currentPriceNotification = Notification.Name("currentPriceNotification")
-    static let updateSortIconsNotification = Notification.Name("updateSortIconsNotification")
-
     static let restAPITickerNotification = Notification.Name("restAPITickerNotification")
     static let candlestickNotification = Notification.Name("candlestickNotification")
     static let restAPITransactionsNotification = Notification.Name("transactionsNotification")
-    static let webSocketTransactionsNotification = Notification.Name("transactionsNotification")
     static let assetStatusNotification = Notification.Name("assetStatusNotification")
     static let restAPIOrderNotification = Notification.Name("restAPIOrderNotification")
+ 
+    static let webSocketTransactionsNotification = Notification.Name("transactionsNotification")
+    static let webSocketTicker24HNotification = Notification.Name("webSocketTicker24HNotification")
+    static let webSocketTickerNotification = Notification.Name("webSocketTickerNotification")
     static let webSocketOrderbookNotification = Notification.Name("webSocketOrderbookNotification")
+    
+    static let updateSortIconsNotification = Notification.Name("updateSortIconsNotification")
 }

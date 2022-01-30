@@ -9,11 +9,15 @@ import UIKit
 import SnapKit
 
 typealias MainListDataSource = UITableViewDiffableDataSource<Int, Ticker>
+typealias PopularDataSource = UICollectionViewDiffableDataSource<Int, Ticker>
 
 class MainListViewController: UIViewController {
     private let viewModel: MainListCoinsViewModel
     private let tableView = UITableView(frame: .zero, style: .grouped)
     private var dataSource: MainListDataSource?
+    private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    private var collectionViewDataSource: PopularDataSource?
+
     
     init(viewModel: MainListCoinsViewModel) {
         self.viewModel = viewModel
@@ -28,7 +32,7 @@ class MainListViewController: UIViewController {
         super.viewDidLoad()
 
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(makeSnapshot),
+                                               selector: #selector(makeAllSnapshots),
                                                name: .restAPITickerAllNotification,
                                                object: nil)
         buildUI()
@@ -37,23 +41,23 @@ class MainListViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         viewModel.initiateWebSocket()
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(makeSnapshot),
-                                               name: .tradeValueNotification,
+                                               selector: #selector(makeAllSnapshots),
+                                               name: .webSocketTicker24HNotification,
                                                object: nil)
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(updateDataSource),
-                                               name: .currentPriceNotification,
+                                               selector: #selector(makeAllSnapshots),
+                                               name: .webSocketTransactionsNotification,
                                                object: nil)
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(makeSnapshot),
-                                               name: .fluctuationNotification,
+                                               selector: #selector(makeAllSnapshots),
+                                               name: .webSocketTickerNotification,
                                                object: nil)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
-        NotificationCenter.default.removeObserver(self, name: .tradeValueNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .currentPriceNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .fluctuationNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .webSocketTicker24HNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .webSocketTransactionsNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .webSocketTickerNotification, object: nil)
     }
     
     deinit {
@@ -103,12 +107,19 @@ extension MainListViewController: UISearchResultsUpdating {
     }
 }
 
-// MARK: TableView UI
+// MARK: TableView CollectionView
 extension MainListViewController {
     private func buildTableView() {
         setUpTableView()
-        setTableViewAutoLayout()
+        setAutoLayout()
         registerCell()
+        registerCollectionViewCell()
+        setCollectionViweFlowLayout()
+    }
+    
+    @objc private func makeAllSnapshots() {
+        makeSnapshot()
+        makeCollectionViewSnapshot()
     }
 
     @objc private func makeSnapshot() {
@@ -117,21 +128,54 @@ extension MainListViewController {
         snapshot.appendItems(viewModel.filtered, toSection: 0)
         dataSource?.apply(snapshot, animatingDifferences: false)
     }
+    
+    @objc private func makeCollectionViewSnapshot() {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, Ticker>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(viewModel.popularCoins, toSection: 0)
+        collectionViewDataSource?.apply(snapshot, animatingDifferences: false)
+    }
 
     private func setUpTableView() {
         tableView.register(MainListTableViewCell.self, forCellReuseIdentifier: "mainListCell")
         tableView.register(MainListHeaderView.self, forHeaderFooterViewReuseIdentifier: "mainListHeader")
         tableView.delegate = self
     }
+    
+    private func setCollectionViweFlowLayout() {
+        (collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.scrollDirection = .horizontal
+        collectionView.delegate = self
+//        let layout = UICollectionViewFlowLayout()
+//        layout.scrollDirection = .horizontal
+//        layout.minimumLineSpacing = 20
+//        let inset: CGFloat = 20
+//        layout.sectionInset = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
+//        let height = view.bounds.height * 0.2 - inset * 2
+//        let width = height * 9 / 10
+//        layout.itemSize = CGSize(width: width, height: height)
+//        collectionView.collectionViewLayout = layout
+    }
 
-    private func setTableViewAutoLayout() {
+    // MARK: AutoLayout
+    private func setAutoLayout() {
+        view.addSubview(collectionView)
+        collectionView.backgroundColor = .systemGray6
         view.addSubview(tableView)
-        tableView.backgroundColor = .white
-        tableView.snp.makeConstraints { make in
+        
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.top.equalToSuperview()
+            make.height.equalToSuperview().multipliedBy(0.2)
+        }
+        
+        tableView.backgroundColor = .white
+        tableView.snp.makeConstraints { make in
+            make.top.equalTo(collectionView.snp.bottom)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
+//            make.height.equalToSuperview().multipliedBy(0.6)
         }
 
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
@@ -140,6 +184,7 @@ extension MainListViewController {
         + 30
     }
 
+    // MARK: CellRegistrations
     private func registerCell() {
         dataSource = MainListDataSource(tableView: tableView,
                                         cellProvider: { tableView, indexPath, mainListCoin in
@@ -155,6 +200,22 @@ extension MainListViewController {
             return cell
         })
         tableView.dataSource = dataSource
+    }
+    
+    private func registerCollectionViewCell() {
+        let cellRegistration = UICollectionView.CellRegistration
+        <PopularCoinCell, Ticker> { cell, indexPath, popularCoin in
+            
+            cell.configure(self.viewModel.popularCoinViewModel(at: indexPath.item), parent: self)
+        }
+        
+        collectionViewDataSource = PopularDataSource(collectionView: collectionView)
+        { collectionView, indexPath, popularCoin in
+            return collectionView.dequeueConfiguredReusableCell(using: cellRegistration,
+                                                                for: indexPath,
+                                                                item: popularCoin)
+        }
+        collectionView.dataSource = collectionViewDataSource
     }
 }
 
@@ -175,5 +236,21 @@ extension MainListViewController: UITableViewDelegate {
         header.configure(viewModel.headerViewModel)
 
         return header
+    }
+}
+
+extension MainListViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 20
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let height = collectionView.bounds.height - 20 * 2
+        let width = height * 9 / 10
+        return CGSize(width: width, height: height)
     }
 }
