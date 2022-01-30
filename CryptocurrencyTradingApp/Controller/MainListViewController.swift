@@ -41,7 +41,7 @@ class MainListViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         viewModel.initiateWebSocket()
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(makeSnapshot),
+                                               selector: #selector(makeAllSnapshots),
                                                name: .webSocketTicker24HNotification,
                                                object: nil)
         NotificationCenter.default.addObserver(self,
