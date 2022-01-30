@@ -62,6 +62,7 @@
 		D4D0D2AC27A000E200734C42 /* TransactionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0D2AB27A000E200734C42 /* TransactionsViewModel.swift */; };
 		D4D0D2B027A0011600734C42 /* TransactionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0D2AF27A0011600734C42 /* TransactionsViewController.swift */; };
 		D4D0D2B227A0024B00734C42 /* TransactionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0D2B127A0024B00734C42 /* TransactionViewModel.swift */; };
+		E6197F9727A6AD9800EF207B /* DetailCoinModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6197F9627A6AD9800EF207B /* DetailCoinModel.swift */; };
 		E61B2C032796BC4100E919B0 /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = E61B2C022796BC4100E919B0 /* Charts */; };
 		E61B2C082796BC5700E919B0 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = E61B2C072796BC5700E919B0 /* SnapKit */; };
 		E644D50C27A40E200086972E /* CandleData1H+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E644D50B27A40E200086972E /* CandleData1H+CoreDataProperties.swift */; };
@@ -145,6 +146,7 @@
 		D4D0D2AB27A000E200734C42 /* TransactionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsViewModel.swift; sourceTree = "<group>"; };
 		D4D0D2AF27A0011600734C42 /* TransactionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsViewController.swift; sourceTree = "<group>"; };
 		D4D0D2B127A0024B00734C42 /* TransactionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionViewModel.swift; sourceTree = "<group>"; };
+		E6197F9627A6AD9800EF207B /* DetailCoinModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCoinModel.swift; sourceTree = "<group>"; };
 		E644D50B27A40E200086972E /* CandleData1H+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CandleData1H+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E644D50D27A40E320086972E /* CandleData1H+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CandleData1H+CoreDataClass.swift"; sourceTree = "<group>"; };
 		E64BFA262795616600BC17A1 /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
@@ -276,6 +278,7 @@
 				D4B40DFF27A3C09400EDA235 /* RestAPIOrderbook.swift */,
 				D4B40E0127A3C33D00EDA235 /* Order.swift */,
 				D4B40E1127A5111200EDA235 /* WebSocketOrderbook.swift */,
+				E6197F9627A6AD9800EF207B /* DetailCoinModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -486,6 +489,7 @@
 				D47D00A32797A1A600E8E305 /* Ticker.swift in Sources */,
 				E64BFA2C27956FAC00BC17A1 /* WebSocketParameter.swift in Sources */,
 				D4D0D2AC27A000E200734C42 /* TransactionsViewModel.swift in Sources */,
+				E6197F9727A6AD9800EF207B /* DetailCoinModel.swift in Sources */,
 				E64BFA3927959D3100BC17A1 /* NotificationName+Extension.swift in Sources */,
 				D4B40E1E27A55BFC00EDA235 /* StatusCell.swift in Sources */,
 				D4B40E0427A3C4AC00EDA235 /* OrdersViewModel.swift in Sources */,
