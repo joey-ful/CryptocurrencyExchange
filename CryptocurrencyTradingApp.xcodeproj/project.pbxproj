@@ -41,6 +41,7 @@
 		D4B40E0C27A4EDD400EDA235 /* Double+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E0B27A4EDD400EDA235 /* Double+Extension.swift */; };
 		D4B40E1027A4F84A00EDA235 /* OrderInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E0F27A4F84A00EDA235 /* OrderInfoCell.swift */; };
 		D4B40E1227A5111200EDA235 /* WebSocketOrderbook.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E1127A5111200EDA235 /* WebSocketOrderbook.swift */; };
+		D4B40E2C27A5A4B000EDA235 /* PopularCoinViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E2B27A5A4B000EDA235 /* PopularCoinViewModel.swift */; };
 		D4CC01F127953FAF00F15957 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F027953FAF00F15957 /* AppDelegate.swift */; };
 		D4CC01F327953FAF00F15957 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F227953FAF00F15957 /* SceneDelegate.swift */; };
 		D4CC01F527953FAF00F15957 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F427953FAF00F15957 /* ViewController.swift */; };
@@ -317,6 +318,7 @@
 				D4B40DFD27A3C00200EDA235 /* OrderViewModel.swift */,
 				D4B40E0327A3C4AC00EDA235 /* OrdersViewModel.swift */,
 				D4B40E0927A4110F00EDA235 /* RestAPITickerViewModel.swift */,
+				D4B40E2B27A5A4B000EDA235 /* PopularCoinViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -457,7 +459,7 @@
 				D4CC01F127953FAF00F15957 /* AppDelegate.swift in Sources */,
 				D4CC020927953FD300F15957 /* RestAPITickerAll.swift in Sources */,
 				E6BDEFB127A3E32D00018967 /* CandleData24H+CoreDataProperties.swift in Sources */,
-				D4CC020927953FD300F15957 /* TickerAll.swift in Sources */,
+				D4B40E2C27A5A4B000EDA235 /* PopularCoinViewModel.swift in Sources */,
 				E64BFA2E27956FCF00BC17A1 /* RequestTik.swift in Sources */,
 				D4CC01F327953FAF00F15957 /* SceneDelegate.swift in Sources */,
 				D4D0D2B227A0024B00734C42 /* TransactionViewModel.swift in Sources */,
