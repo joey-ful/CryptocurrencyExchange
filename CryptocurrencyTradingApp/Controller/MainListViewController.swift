@@ -17,6 +17,10 @@ class MainListViewController: UIViewController {
     private var dataSource: MainListDataSource?
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     private var collectionViewDataSource: PopularDataSource?
+    private let collectionViewHeader = UILabel.makeLabel(font: .subheadline, text: "인기 코인")
+    private lazy var collectionViewHeaderStackView = UIStackView.makeStackView(alignment: .leading, subviews: [collectionViewHeader])
+    private let topInset: CGFloat = 10
+    private let bottomInset: CGFloat = 20
 
     
     init(viewModel: MainListCoinsViewModel) {
@@ -158,12 +162,26 @@ extension MainListViewController {
 
     // MARK: AutoLayout
     private func setAutoLayout() {
+        view.addSubview(collectionViewHeaderStackView)
         view.addSubview(collectionView)
         collectionView.backgroundColor = .systemGray6
         view.addSubview(tableView)
         
-        collectionView.snp.makeConstraints { make in
+        collectionViewHeaderStackView.backgroundColor = .systemGray6
+        collectionViewHeaderStackView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.height.equalToSuperview().multipliedBy(0.035)
+        }
+        
+        collectionViewHeader.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(15)
+            $0.leading.equalTo(collectionViewHeaderStackView.snp.leading).offset(20)
+        }
+        
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(collectionViewHeaderStackView.snp.bottom)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
             make.height.equalToSuperview().multipliedBy(0.2)
@@ -246,11 +264,11 @@ extension MainListViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+        return UIEdgeInsets(top: topInset, left: bottomInset, bottom: bottomInset, right: bottomInset)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let height = collectionView.bounds.height - 20 * 2
+        let height = collectionView.bounds.height - topInset - bottomInset
         let width = height * 9 / 10
         return CGSize(width: width, height: height)
     }
