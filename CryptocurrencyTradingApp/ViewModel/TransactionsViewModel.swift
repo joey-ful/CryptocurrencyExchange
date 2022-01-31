@@ -23,9 +23,10 @@ class TransactionsViewModel {
         transactions.count
     }
     
-    init(coinType: CoinType, isTime: Bool) {
+    init(coinType: CoinType) {
         self.coinType = coinType
-        isTime ? initiateTimeRestAPI() : initiateDayRestAPI()
+        initiateTimeRestAPI()
+        initiateDayRestAPI()
     }
     
     func transactionViewModel(at index: Int) -> TransactionViewModel {
@@ -51,13 +52,8 @@ class TransactionsViewModel {
     
 }
 
-// MARK: RestAPI
+// MARK: RestAPI Time
 extension TransactionsViewModel {
-    private func initiateDayRestAPI() {
-        initiateRestAPICandleStick()
-        initiateRestAPITicker()
-    }
-    
     private func initiateTimeRestAPI() {
         initiateRestAPITransactionHistory()
     }
@@ -78,6 +74,14 @@ extension TransactionsViewModel {
                             upDown: nil)
             }.sorted { $0.date > $1.date }
         }
+    }
+}
+
+// MARK: RestAPI Day
+extension TransactionsViewModel {
+    private func initiateDayRestAPI() {
+        initiateRestAPICandleStick()
+        initiateRestAPITicker()
     }
     
     private func initiateRestAPICandleStick() {

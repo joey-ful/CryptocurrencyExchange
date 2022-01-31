@@ -13,7 +13,7 @@ typealias PopularDataSource = UICollectionViewDiffableDataSource<Int, Ticker>
 
 class MainListViewController: UIViewController {
     private let viewModel: MainListCoinsViewModel
-    private let tableView = UITableView(frame: .zero, style: .grouped)
+    private let tableView = UITableView(frame: .zero, style: .plain)
     private var dataSource: MainListDataSource?
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     private var collectionViewDataSource: PopularDataSource?
@@ -174,8 +174,7 @@ extension MainListViewController {
             make.top.equalTo(collectionView.snp.bottom)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
-//            make.height.equalToSuperview().multipliedBy(0.6)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
 
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
