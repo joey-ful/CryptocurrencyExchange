@@ -43,8 +43,8 @@ class ChartViewModel: ObservableObject {
         let firstData = candleData.first,
               let lastData = candleData.last
         else { return }
-
-        highPriceList = candleData[candleData.count - 60..<candleData.count].map { $0.highPrice}
+        let result = candleData.sorted{$0.date < $1.date}
+        highPriceList = result[result.count - 60..<result.count].map { $0.highPrice}
         NotificationCenter.default.post(name: .coinChartDataReceiveNotificaion, object: nil)
         self.candleDate = [firstData, lastData]
     }

@@ -10,7 +10,9 @@ import Foundation
 class DetailCoinViewModel {
     private let restAPIManager = RestAPIManager()
     private let webSocketManager = WebSocketManager()
-    
+    var userDefaults: [String] {
+        UserDefaults.standard.object(forKey: "favorite") as? [String] ?? []
+    }
     var coin: CoinType?
     var coinInfomation: Ticker? = nil {
         didSet(newData) {
@@ -21,8 +23,8 @@ class DetailCoinViewModel {
     init(coin: CoinType) {
         self.coin = coin
         initiateViewModel()
-        repeatData(coin: coin)
-        repeatCurrentPrice(coin: coin)
+        updateFluctuation(coin: coin)
+        updateCurrentPrice(coin: coin)
     }
     
     func initiateViewModel () {
@@ -35,8 +37,8 @@ class DetailCoinViewModel {
             }
         }
     }
-    //
-    func repeatData(coin: CoinType) {
+    
+    func updateFluctuation(coin: CoinType) {
         webSocketManager.connectWebSocket(.ticker, [coin],[.yesterday]) { [weak self] (parsedResult: Result<WebSocketTicker?, Error>) in
             guard case .success(let data) = parsedResult, let dataContent = data?.content else {
                 return
@@ -47,7 +49,7 @@ class DetailCoinViewModel {
         }
     }
     
-    func repeatCurrentPrice(coin: CoinType) {
+    func updateCurrentPrice(coin: CoinType) {
         webSocketManager.connectWebSocket(.transaction, [coin],nil) { [weak self] (parsedResult: Result<WebSocketTransaction?, Error>) in
 
             guard case .success(let data) = parsedResult, let dataContent = data?.content.list else {
@@ -60,5 +62,22 @@ class DetailCoinViewModel {
             }
             
         }
+    }
+    
+    func addToUserDefaults(coin: String) {
+        var array = userDefaults
+        array.append(coin)
+        UserDefaults.standard.set(array, forKey: "favorite")
+    }
+    
+    func removeFromUserDefaults(coin: String) {
+        var array = userDefaults
+        array.enumerated().forEach{ (index,target) in
+            if target == coin {
+                array.remove(at: index)
+                return
+            }
+        }
+        UserDefaults.standard.set(array, forKey: "favorite")
     }
 }

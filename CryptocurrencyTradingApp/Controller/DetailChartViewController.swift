@@ -77,7 +77,7 @@ class DetailChartViewController: UIViewController {
                 make.top.equalTo(timeControl.snp.bottom)
                 make.bottom.equalToSuperview()
                 make.height.equalTo(view.safeAreaLayoutGuide.snp
-                                        .height).multipliedBy(0.65)
+                                        .height).multipliedBy(0.60)
                 
                 
             }

@@ -69,7 +69,6 @@
 		E6197F9327A6AC3100EF207B /* DetailCoinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6197F9227A6AC3100EF207B /* DetailCoinViewController.swift */; };
 		E6197F9527A6AD7000EF207B /* DetailCoinViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6197F9427A6AD7000EF207B /* DetailCoinViewModel.swift */; };
 		E6197F9727A6AD9800EF207B /* DetailCoinModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6197F9627A6AD9800EF207B /* DetailCoinModel.swift */; };
-		E61B2C032796BC4100E919B0 /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = E61B2C022796BC4100E919B0 /* Charts */; };
 		E61B2C082796BC5700E919B0 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = E61B2C072796BC5700E919B0 /* SnapKit */; };
 		E644D50C27A40E200086972E /* CandleData1H+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E644D50B27A40E200086972E /* CandleData1H+CoreDataProperties.swift */; };
 		E644D50E27A40E320086972E /* CandleData1H+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E644D50D27A40E320086972E /* CandleData1H+CoreDataClass.swift */; };
