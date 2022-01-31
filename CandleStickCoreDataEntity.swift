@@ -13,5 +13,4 @@ public class CandleStickCoreDataEntity: NSManagedObject {
     @NSManaged public var date: String
     @NSManaged public var coin: String
 
-
 }
