@@ -12,12 +12,15 @@ class PopularCoinViewModel: ObservableObject {
     private let popularCoin: Ticker
     private let coin: CoinType
     private let restAPIManager = RestAPIManager()
-    @Published var highPriceList: [Double] = []
-    @Published var lineColor: Color = .blue
+    @Published var highPriceList: [Double]
+    var lineColor: Color {
+        popularCoin.fluctuationRate.contains("-") ? .blue : .red
+    }
     
     init(popularCoin: Ticker) {
         self.popularCoin = popularCoin
         self.coin = CoinType.coin(symbol: popularCoin.symbol) ?? .btc
+        highPriceList = []
         initializeRestAPICandle(coin: coin)
     }
 
@@ -60,15 +63,14 @@ extension PopularCoinViewModel {
         restAPIManager.fetch(type: .candlestick,
                              paymentCurrency: .KRW,
                              coin: coin,
-                             chartIntervals: .twentyFourHour) { (parsedResult: Result<CandleStick, Error>) in
+                             chartIntervals: .oneHour) { (parsedResult: Result<CandleStick, Error>) in
             
             switch parsedResult {
             case .success(let parsedData):
                 
-                let data = Array(parsedData.data.suffix(50))
+                let data = Array(parsedData.data.suffix(24))
                 self.highPriceList = data
                     .map { self.convert($0[3])}
-                self.lineColor = self.sign == "+" ? .red : .blue
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
             }
