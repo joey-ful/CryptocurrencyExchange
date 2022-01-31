@@ -12,7 +12,7 @@ import SwiftUI
 class PopularCoinCell: UICollectionViewCell {
     private var viewModel: PopularCoinViewModel? = nil
     private var coin: CoinType? = nil
-    private var nameLabel = UILabel.makeLabel(font: .headline)
+    private var nameLabel = UILabel.makeLabel(font: .subheadline)
     private var priceLabel = UILabel.makeLabel(font: .caption1, color: .systemGray)
     private var directionIcon = UIImageView()
     private var fluctuationLabel = UILabel.makeLabel(font: .caption1)
@@ -84,7 +84,7 @@ class PopularCoinCell: UICollectionViewCell {
     }
     
     private func configureData(_ viewModel: PopularCoinViewModel) {
-        nameLabel.text = viewModel.symbol
+        nameLabel.text = viewModel.coinName
         priceLabel.text = viewModel.price
         fluctuationLabel.text = viewModel.sign + viewModel.fluctuationRate
         fluctuationLabel.textColor = viewModel.sign == "+" ? .systemRed : .systemBlue
