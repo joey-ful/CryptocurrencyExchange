@@ -19,6 +19,8 @@ class ChartViewModel: ObservableObject {
     init(coin: CoinType, chartIntervals: RequestChartInterval) {
         self.coin = coin
         initiateViewModel(coin: coin, chartIntervals: chartIntervals)
+        let fetchRequest = CandleData1M.fetchRequest()
+        print(fetchRequest)
     }
     
     func initiateViewModel(coin: CoinType, chartIntervals: RequestChartInterval) {
@@ -28,10 +30,13 @@ class ChartViewModel: ObservableObject {
                              chartIntervals: chartIntervals) { (parsedResult: Result<CandleStick, Error>) in
             switch parsedResult {
             case .success(let parsedData):
+                print("시작")
                 self.candleCoreDataManager.addToCoreData(coin: coin, parsedData.data, entityName: chartIntervals)
+                print("종료")
                 let candleData = self.candleCoreDataManager.read(entityName: chartIntervals, coin: coin)
+                print("다읽음")
                 self.calculateHighPriceList(candleData, chartIntervals: chartIntervals)
-                
+                print("가공완료")
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
             }
@@ -44,7 +49,9 @@ class ChartViewModel: ObservableObject {
               let lastData = candleData.last
         else { return }
         let result = candleData.sorted{$0.date < $1.date}
-        highPriceList = result[result.count - 60..<result.count].map { $0.highPrice}
+        print(candleData.count)
+//        highPriceList = result[result.count - 60..<result.count].map { $0.highPrice }
+        highPriceList = result.suffix(30).map{$0.highPrice}
         NotificationCenter.default.post(name: .coinChartDataReceiveNotificaion, object: nil)
         self.candleDate = [firstData, lastData]
     }

@@ -13,6 +13,7 @@ class DetailCoinViewController: UIViewController {
     var containerView = UIView()
     var viewModel: DetailCoinViewModel!
     let coin: CoinType?
+//    let chartViewController: DetailChartViewController?
     
     let priceLabel = UILabel.makeLabel(font: .title1)
     let incrementLabel = UILabel.makeLabel(font: .caption1)
@@ -24,12 +25,12 @@ class DetailCoinViewController: UIViewController {
     
     lazy var headerVerticalStackView = UIStackView.makeStackView(alignment: .leading, distribution: .fillEqually, axis: .vertical, spacing: 1, subviews: [priceLabel, headerHorizontalStackView])
     
-    var controller: UIHostingController<ChartView> = {
-        let chartView = ChartView(coin: .btc, chartIntervals: .oneMinute)
-        let controller = UIHostingController(rootView: chartView)
-        controller.view.translatesAutoresizingMaskIntoConstraints = false
-        return controller
-    }()
+//    var controller: UIHostingController<ChartView> = {
+//        let chartView = ChartView(coin: .btc, chartIntervals: .oneMinute)
+//        let controller = UIHostingController(rootView: chartView)
+//        controller.view.translatesAutoresizingMaskIntoConstraints = false
+//        return controller
+//    }()
     
     
     lazy var menuControl: UISegmentedControl = {
@@ -41,9 +42,10 @@ class DetailCoinViewController: UIViewController {
         return menuControl
     }()
     
-    var chartView = UIHostingController(rootView: ChartView(coin: .btc, chartIntervals: .oneMinute))
-    
-    let chartViewController = DetailChartViewController()
+//    var chartView = UIHostingController(rootView: ChartView(coin: .btc, chartIntervals: .oneMinute))
+//    lazy var chartViewController = DetailChartViewController(coin: .btc)
+    let chartViewController: DetailChartViewController
+
     lazy var transactionVC = TransactionsViewController(coin: coin ?? .btc)
     lazy var orderViewController = OrderViewController(coin: coin ?? .btc)
     
@@ -69,8 +71,9 @@ class DetailCoinViewController: UIViewController {
     init(coin: CoinType) {
         self.coin = coin
         viewModel = DetailCoinViewModel(coin: coin)
+        chartViewController = DetailChartViewController(coin: coin)
         super.init(nibName: nil, bundle: nil)
-        
+
     }
     
     required init?(coder: NSCoder) {

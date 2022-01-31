@@ -10,9 +10,10 @@ import SnapKit
 import SwiftUI
 
 class DetailChartViewController: UIViewController {
-    let chartView = ChartView(coin: .btc, chartIntervals: .oneMinute)
+    let coin: CoinType?
+    var chartView: ChartView?
     
-    lazy var hostingController: UIHostingController<ChartView> = {
+    lazy var hostingController: UIHostingController<ChartView?> = {
         let controller = UIHostingController(rootView: chartView)
         controller.view.translatesAutoresizingMaskIntoConstraints = false
         return controller
@@ -33,25 +34,35 @@ class DetailChartViewController: UIViewController {
         setLayout()
     }
     
+    init(coin: CoinType) {
+        self.coin = coin
+        chartView = ChartView(coin: coin, chartIntervals: .oneMinute)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     @objc func menuSelect(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 0:
-            chartView.viewModel.initiateViewModel(coin: .btc
+            chartView?.viewModel.initiateViewModel(coin: coin ?? .btc
                                                   , chartIntervals: .oneMinute)
         case 1:
-            chartView.viewModel.initiateViewModel(coin: .btc
+            chartView?.viewModel.initiateViewModel(coin: coin ?? .btc
                                                   , chartIntervals: .tenMinute)
         case 2:
-            chartView.viewModel.initiateViewModel(coin: .btc
+            chartView?.viewModel.initiateViewModel(coin: coin ?? .btc
                                                   , chartIntervals: .thirtyMinute)
         case 3:
-            chartView.viewModel.initiateViewModel(coin: .btc
+            chartView?.viewModel.initiateViewModel(coin: coin ?? .btc
                                                   , chartIntervals: .oneHour)
         case 4:
-            chartView.viewModel.initiateViewModel(coin: .btc
+            chartView?.viewModel.initiateViewModel(coin: coin ?? .btc
                                                   , chartIntervals: .twentyFourHour)
         default:
-            chartView.viewModel.initiateViewModel(coin: .btc
+            chartView?.viewModel.initiateViewModel(coin: coin ?? .btc
                                                   , chartIntervals: .twentyFourHour)
         }
     }
