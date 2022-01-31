@@ -49,12 +49,21 @@ class DetailCoinViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+//        UserDefaults.standard.removeObject(forKey: "favorite")
+
         setNavigationItem()
         setLayout()
         NotificationCenter.default.addObserver(self, selector: #selector(setDataForLabel), name: .coinDetailNotificaion, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateContainverView), name: .coinChartDataReceiveNotificaion, object: nil)
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        print("--------------", viewModel.userDefaults)
+        guard let coin = coin else { return }
+        if viewModel.userDefaults.contains(coin.rawValue) {
+            navigationItem.rightBarButtonItem?.isSelected = true
+        }
     }
 
     init(coin: CoinType) {
@@ -81,7 +90,15 @@ class DetailCoinViewController: UIViewController {
     
     @objc func addTapped(_ sender: Any) {
         navigationItem.rightBarButtonItem?.isSelected.toggle()
-        UserDefaults.standard.set(navigationItem.rightBarButtonItem?.isSelected, forKey: "coin")
+        guard let coin = coin, let isSelected = navigationItem.rightBarButtonItem?.isSelected else { return }
+        if isSelected {
+            viewModel.addToUserDefaults(coin: coin.rawValue)
+        } else {
+            viewModel.removeFromUserDefaults(coin: coin.rawValue)
+        }
+        print(viewModel.userDefaults)
+        print(UserDefaults.standard.object(forKey: "favorite") as? [String])
+
     }
     
     @objc func menuSelect(_ sender: UISegmentedControl) {
