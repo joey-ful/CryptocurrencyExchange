@@ -25,9 +25,11 @@ class PopularCoinCell: UICollectionViewCell {
                                                                 spacing: 3,
                                                                 subviews: [nameLabel,
                                                                            priceLabel,
-                                                                           fluctuationStackView,
-                                                                           host.view
-                                                                          ])
+                                                                           fluctuationStackView])
+    private lazy var cellStackView = UIStackView.makeStackView(alignment: .center,
+                                                               axis: .vertical,
+                                                               spacing: 10,
+                                                               subviews: [labelStackView, host.view])
     private lazy var host: UIHostingController = {
         return UIHostingController(rootView: MiniChart(viewModel: viewModel ?? PopularCoinViewModel(popularCoin: Ticker())))
     }()
@@ -37,6 +39,9 @@ class PopularCoinCell: UICollectionViewCell {
         self.coin = CoinType.coin(symbol: viewModel.symbol)
         self.viewModel = viewModel
         
+        if host.rootView.viewModel.symbol != viewModel.symbol {
+            host.rootView.viewModel = viewModel
+        }
         embed(in: parent)
         configureData(viewModel)
         layoutStackView(parent)
@@ -50,9 +55,9 @@ class PopularCoinCell: UICollectionViewCell {
     
     private func layoutStackView(_ parentViewController: UIViewController) {
         layer.cornerRadius = 10
-        addSubview(labelStackView)
+        addSubview(cellStackView)
 
-        labelStackView.snp.makeConstraints { make in
+        cellStackView.snp.makeConstraints { make in
             make.top.equalTo(contentView.snp.top).offset(10)
             make.leading.equalTo(contentView.snp.leading).offset(10)
             make.trailing.equalTo(contentView.snp.trailing).offset(-10)
@@ -61,7 +66,7 @@ class PopularCoinCell: UICollectionViewCell {
         
         host.view.snp.makeConstraints {
             $0.width.equalTo(contentView.snp.width).offset(-20)
-            $0.height.equalTo(labelStackView.snp.height).multipliedBy(0.5)
+            $0.height.equalTo(cellStackView.snp.height).multipliedBy(0.4)
         }
     }
     
