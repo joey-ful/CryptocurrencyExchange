@@ -21,8 +21,16 @@ class MainListViewController: UIViewController {
     private lazy var collectionViewHeaderStackView = UIStackView.makeStackView(alignment: .leading, subviews: [collectionViewHeader])
     private let topInset: CGFloat = 5
     private let bottomInset: CGFloat = 15
+    lazy var menuControl: UISegmentedControl = {
+        let menuControl = UISegmentedControl(items: ["전체", "관심"])
+        menuControl.selectedSegmentIndex = 0
+        menuControl.layer.borderColor = UIColor.gray.cgColor
+        menuControl.addTarget(self, action: #selector(menuSelect), for: .valueChanged)
+        menuControl.layer.masksToBounds = true
+        return menuControl
+    }()
+    private var showFavorites: Bool = false
 
-    
     init(viewModel: MainListCoinsViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -49,7 +57,7 @@ class MainListViewController: UIViewController {
                                                name: .webSocketTicker24HNotification,
                                                object: nil)
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(makeSnapshot),
+                                               selector: #selector(updateDataSource),
                                                name: .webSocketTransactionsNotification,
                                                object: nil)
         NotificationCenter.default.addObserver(self,
@@ -111,6 +119,21 @@ extension MainListViewController: UISearchResultsUpdating {
     }
 }
 
+// MARK: SegmentedControl
+extension MainListViewController {
+    @objc func menuSelect(_ sender: UISegmentedControl) {
+        switch sender.selectedSegmentIndex {
+        case 0:
+            showFavorites = false
+        case 1:
+            showFavorites = true
+        default:
+            break
+        }
+        makeSnapshot()
+    }
+}
+
 // MARK: TableView CollectionView
 extension MainListViewController {
     private func buildTableView() {
@@ -129,7 +152,8 @@ extension MainListViewController {
     @objc private func makeSnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<Int, Ticker>()
         snapshot.appendSections([0])
-        snapshot.appendItems(viewModel.filtered, toSection: 0)
+        let data = showFavorites ? viewModel.favorites : viewModel.filtered
+        snapshot.appendItems(data, toSection: 0)
         dataSource?.apply(snapshot, animatingDifferences: false)
     }
     
@@ -165,6 +189,7 @@ extension MainListViewController {
         view.addSubview(collectionViewHeaderStackView)
         view.addSubview(collectionView)
         collectionView.backgroundColor = .systemGray6
+        view.addSubview(menuControl)
         view.addSubview(tableView)
         
         collectionViewHeaderStackView.backgroundColor = .systemGray6
@@ -187,9 +212,16 @@ extension MainListViewController {
             make.height.equalToSuperview().multipliedBy(0.17)
         }
         
+        menuControl.snp.makeConstraints { make in
+            make.top.equalTo(collectionView.snp.bottom)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.height.equalToSuperview().multipliedBy(0.04)
+        }
+        
         tableView.backgroundColor = .white
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(collectionView.snp.bottom)
+            make.top.equalTo(menuControl.snp.bottom)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
