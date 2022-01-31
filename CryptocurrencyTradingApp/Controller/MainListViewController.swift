@@ -19,8 +19,8 @@ class MainListViewController: UIViewController {
     private var collectionViewDataSource: PopularDataSource?
     private let collectionViewHeader = UILabel.makeLabel(font: .subheadline, text: "인기 코인")
     private lazy var collectionViewHeaderStackView = UIStackView.makeStackView(alignment: .leading, subviews: [collectionViewHeader])
-    private let topInset: CGFloat = 10
-    private let bottomInset: CGFloat = 20
+    private let topInset: CGFloat = 5
+    private let bottomInset: CGFloat = 15
 
     
     init(viewModel: MainListCoinsViewModel) {
@@ -176,7 +176,7 @@ extension MainListViewController {
         }
         
         collectionViewHeader.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(15)
+            $0.top.equalToSuperview().offset(10)
             $0.leading.equalTo(collectionViewHeaderStackView.snp.leading).offset(20)
         }
         
@@ -184,7 +184,7 @@ extension MainListViewController {
             make.top.equalTo(collectionViewHeaderStackView.snp.bottom)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(0.2)
+            make.height.equalToSuperview().multipliedBy(0.17)
         }
         
         tableView.backgroundColor = .white
