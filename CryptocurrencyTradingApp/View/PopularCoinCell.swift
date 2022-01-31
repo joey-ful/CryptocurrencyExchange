@@ -66,7 +66,7 @@ class PopularCoinCell: UICollectionViewCell {
         
         host.view.snp.makeConstraints {
             $0.width.equalTo(contentView.snp.width).offset(-20)
-            $0.height.equalTo(cellStackView.snp.height).multipliedBy(0.4)
+            $0.height.equalTo(cellStackView.snp.height).multipliedBy(0.38)
         }
     }
     
