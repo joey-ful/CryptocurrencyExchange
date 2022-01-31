@@ -8,11 +8,18 @@
 import UIKit
 
 class MainListCoinsViewModel {
-    private(set) var mainListCoins: [Ticker] = [] {
+    private var mainListCoins: [Ticker] = [] {
         didSet {
             filtered = mainListCoins.filter { existsInFiltered($0) }
+            favorites = filtered.filter { favoriteSymbols.contains( $0.symbol.lowercased() ) }
         }
     }
+    
+    private var favoriteSymbols: [String] {
+        return UserDefaults.standard.array(forKey: "favorite") as? [String] ?? []
+    }
+    
+    private(set) var favorites: [Ticker] = []
     
     private(set) var filtered: [Ticker] = []
     var popularCoins: [Ticker] {

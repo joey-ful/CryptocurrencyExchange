@@ -44,7 +44,7 @@ class DetailCoinViewController: UIViewController {
     var chartView = UIHostingController(rootView: ChartView(coin: .btc, chartIntervals: .oneMinute))
     
     let chartViewController = DetailChartViewController()
-    lazy var transactionVC = TransactionsViewController(coin: coin ?? .btc, isTime: true)
+    lazy var transactionVC = TransactionsViewController(coin: coin ?? .btc)
     lazy var orderViewController = OrderViewController(coin: coin ?? .btc)
     
     override func viewDidLoad() {

@@ -50,14 +50,12 @@ class DetailCoinViewModel {
     }
     
     func updateCurrentPrice(coin: CoinType) {
-        print(#function)
         webSocketManager.connectWebSocket(.transaction, [coin],nil) { [weak self] (parsedResult: Result<WebSocketTransaction?, Error>) in
-            print(#function, "웹소켓받음")
+
             guard case .success(let data) = parsedResult, let dataContent = data?.content.list else {
                 return
             }
             dataContent.forEach {
-                print("---------------", $0.symbol)
                 if $0.symbol.lose(from: "_").lowercased() == self?.coinInfomation?.symbol {
                     self?.coinInfomation?.currentPrice = $0.price
                 }

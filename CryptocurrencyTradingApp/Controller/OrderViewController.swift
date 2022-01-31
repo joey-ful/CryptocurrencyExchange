@@ -24,7 +24,7 @@ class OrderViewController: UIViewController {
     
     init(coin: CoinType) {
         ordersViewModel = OrdersViewModel(coin: coin)
-        transactionsViewModel = TransactionsViewModel(coinType: coin, isTime: true)
+        transactionsViewModel = TransactionsViewModel(coinType: coin)
         orderInfoViewModel = RestAPITickerViewModel(coin: coin)
         super.init(nibName: nil, bundle: nil)
     }
