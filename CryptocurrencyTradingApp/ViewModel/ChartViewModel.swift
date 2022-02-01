@@ -31,7 +31,6 @@ class ChartViewModel: ObservableObject {
                 self.candleCoreDataManager.addToCoreData(coin: coin, parsedData.data, entityName: chartIntervals)
                 let candleData = self.candleCoreDataManager.read(entityName: chartIntervals, coin: coin)
                 self.calculateHighPriceList(candleData, chartIntervals: chartIntervals)
-                
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
             }
@@ -44,7 +43,7 @@ class ChartViewModel: ObservableObject {
               let lastData = candleData.last
         else { return }
         let result = candleData.sorted{$0.date < $1.date}
-        highPriceList = result[result.count - 60..<result.count].map { $0.highPrice}
+        highPriceList = result.suffix(1000).map{$0.highPrice}
         NotificationCenter.default.post(name: .coinChartDataReceiveNotificaion, object: nil)
         self.candleDate = [firstData, lastData]
     }

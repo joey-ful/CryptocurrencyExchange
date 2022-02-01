@@ -13,6 +13,7 @@ class DetailCoinViewController: UIViewController {
     var containerView = UIView()
     var viewModel: DetailCoinViewModel!
     let coin: CoinType?
+//    let chartViewController: DetailChartViewController?
     
     let priceLabel = UILabel.makeLabel(font: .title1)
     let incrementLabel = UILabel.makeLabel(font: .caption1)
@@ -24,14 +25,6 @@ class DetailCoinViewController: UIViewController {
     
     lazy var headerVerticalStackView = UIStackView.makeStackView(alignment: .leading, distribution: .fillEqually, axis: .vertical, spacing: 1, subviews: [priceLabel, headerHorizontalStackView])
     
-    var controller: UIHostingController<ChartView> = {
-        let chartView = ChartView(coin: .btc, chartIntervals: .oneMinute)
-        let controller = UIHostingController(rootView: chartView)
-        controller.view.translatesAutoresizingMaskIntoConstraints = false
-        return controller
-    }()
-    
-    
     lazy var menuControl: UISegmentedControl = {
         let menuControl = UISegmentedControl(items: items)
         menuControl.selectedSegmentIndex = 0
@@ -41,15 +34,14 @@ class DetailCoinViewController: UIViewController {
         return menuControl
     }()
     
-    var chartView = UIHostingController(rootView: ChartView(coin: .btc, chartIntervals: .oneMinute))
-    
-    let chartViewController = DetailChartViewController()
+
+    let chartViewController: DetailChartViewController
+
     lazy var transactionVC = TransactionsViewController(coin: coin ?? .btc)
     lazy var orderViewController = OrderViewController(coin: coin ?? .btc)
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        UserDefaults.standard.removeObject(forKey: "favorite")
 
         setNavigationItem()
         setLayout()
@@ -59,7 +51,6 @@ class DetailCoinViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        print("--------------", viewModel.userDefaults)
         guard let coin = coin else { return }
         if viewModel.userDefaults.contains(coin.rawValue) {
             navigationItem.rightBarButtonItem?.isSelected = true
@@ -69,8 +60,9 @@ class DetailCoinViewController: UIViewController {
     init(coin: CoinType) {
         self.coin = coin
         viewModel = DetailCoinViewModel(coin: coin)
+        chartViewController = DetailChartViewController(coin: coin)
         super.init(nibName: nil, bundle: nil)
-        
+
     }
     
     required init?(coder: NSCoder) {
@@ -96,9 +88,6 @@ class DetailCoinViewController: UIViewController {
         } else {
             viewModel.removeFromUserDefaults(coin: coin.rawValue)
         }
-        print(viewModel.userDefaults)
-        print(UserDefaults.standard.object(forKey: "favorite") as? [String])
-
     }
     
     @objc func menuSelect(_ sender: UISegmentedControl) {
@@ -109,8 +98,10 @@ class DetailCoinViewController: UIViewController {
             containerView.addSubview(chartViewController.view)
         case 1:
             transactionVC.view.removeFromSuperview()
+            orderViewController.view.removeFromSuperview()
             containerView.addSubview(orderViewController.view)
         case 2:
+            chartViewController.view.removeFromSuperview()
             orderViewController.view.removeFromSuperview()
             containerView.addSubview(transactionVC.view)
         default:
