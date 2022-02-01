@@ -173,15 +173,6 @@ extension MainListViewController {
     private func setCollectionViweFlowLayout() {
         (collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.scrollDirection = .horizontal
         collectionView.delegate = self
-//        let layout = UICollectionViewFlowLayout()
-//        layout.scrollDirection = .horizontal
-//        layout.minimumLineSpacing = 20
-//        let inset: CGFloat = 20
-//        layout.sectionInset = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
-//        let height = view.bounds.height * 0.2 - inset * 2
-//        let width = height * 9 / 10
-//        layout.itemSize = CGSize(width: width, height: height)
-//        collectionView.collectionViewLayout = layout
     }
 
     // MARK: AutoLayout
