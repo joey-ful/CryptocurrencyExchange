@@ -205,7 +205,7 @@ extension TransactionsViewController: UITableViewDelegate {
                 as? TransactionsHeader
         else { return UITableViewHeaderFooterView() }
         
-        header.configure(isTimeCell: isTime)
+        header.configure(isTimeCell: isTime, symbol: coinType.symbol)
         
         return header
     }
