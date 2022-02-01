@@ -9,23 +9,23 @@ import UIKit
 import SnapKit
 import SwiftUI
 
-class DetailCoinViewController: UIViewController {
-    var containerView = UIView()
-    var viewModel: DetailCoinViewModel!
-    let coin: CoinType?
-//    let chartViewController: DetailChartViewController?
+final class DetailCoinViewController: UIViewController {
+    private var containerView = UIView()
+    private var viewModel: DetailCoinViewModel!
+    private let coin: CoinType?
+
     
-    let priceLabel = UILabel.makeLabel(font: .title1)
-    let incrementLabel = UILabel.makeLabel(font: .caption1)
-    let percentLabel = UILabel.makeLabel(font: .caption1)
-    let items = ["차트","호가","시세"]
+    private let priceLabel = UILabel.makeLabel(font: .title1)
+    private let incrementLabel = UILabel.makeLabel(font: .caption1)
+    private let percentLabel = UILabel.makeLabel(font: .caption1)
+    private let items = ["차트","호가","시세"]
     
-    lazy var headerHorizontalStackView = UIStackView.makeStackView(alignment: .leading, distribution: .fillEqually, axis: .horizontal, spacing: 1, subviews: [incrementLabel, percentLabel])
+    private lazy var headerHorizontalStackView = UIStackView.makeStackView(alignment: .leading, distribution: .fillEqually, axis: .horizontal, spacing: 3, subviews: [incrementLabel, percentLabel])
     
     
-    lazy var headerVerticalStackView = UIStackView.makeStackView(alignment: .leading, distribution: .fillEqually, axis: .vertical, spacing: 1, subviews: [priceLabel, headerHorizontalStackView])
+    private lazy var headerVerticalStackView = UIStackView.makeStackView(alignment: .leading, distribution: .fillEqually, axis: .vertical, spacing: 1, subviews: [priceLabel, headerHorizontalStackView])
     
-    lazy var menuControl: UISegmentedControl = {
+    private lazy var menuControl: UISegmentedControl = {
         let menuControl = UISegmentedControl(items: items)
         menuControl.selectedSegmentIndex = 0
         menuControl.layer.borderColor = UIColor.gray.cgColor
@@ -35,10 +35,10 @@ class DetailCoinViewController: UIViewController {
     }()
     
 
-    let chartViewController: DetailChartViewController
+    private let chartViewController: DetailChartViewController
 
-    lazy var transactionVC = TransactionsViewController(coin: coin ?? .btc)
-    lazy var orderViewController = OrderViewController(coin: coin ?? .btc)
+    private lazy var transactionVC = TransactionsViewController(coin: coin ?? .btc)
+    private lazy var orderViewController = OrderViewController(coin: coin ?? .btc)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,18 +69,20 @@ class DetailCoinViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc func updateContainverView() {
+    @objc private func updateContainverView() {
         containerView.addSubview(chartViewController.view)
     }
 
-    @objc func setDataForLabel() {
+    @objc private func setDataForLabel() {
 
-        priceLabel.text = viewModel.coinInfomation?.currentPrice.toDecimal()
-        incrementLabel.text = viewModel.coinInfomation?.fluctuationAmount.toDecimal()
-        percentLabel.text = viewModel.coinInfomation?.fluctuationRate
+        priceLabel.text = viewModel.price
+        incrementLabel.text = viewModel.fluctuationAmount
+        percentLabel.text = viewModel.sign + viewModel.fluctuationRate
+        incrementLabel.textColor = viewModel.sign == "+" ? .systemRed : .systemBlue
+        percentLabel.textColor = viewModel.sign == "+" ? .systemRed : .systemBlue
     }
     
-    @objc func addTapped(_ sender: Any) {
+    @objc private func addTapped(_ sender: Any) {
         navigationItem.rightBarButtonItem?.isSelected.toggle()
         guard let coin = coin, let isSelected = navigationItem.rightBarButtonItem?.isSelected else { return }
         if isSelected {
@@ -90,7 +92,7 @@ class DetailCoinViewController: UIViewController {
         }
     }
     
-    @objc func menuSelect(_ sender: UISegmentedControl) {
+    @objc private func menuSelect(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 0:
             transactionVC.view.removeFromSuperview()
@@ -109,12 +111,12 @@ class DetailCoinViewController: UIViewController {
         }
     }
     
-    func setNavigationItem() {
-        self.title = coin?.rawValue.uppercased()
+    private func setNavigationItem() {
+        self.title = coin?.name
         self.navigationItem.rightBarButtonItem = .init(barButtonSystemItem: .save, target: self, action: #selector(addTapped))
     }
     
-    func setLayout() {
+    private func setLayout() {
         view.backgroundColor = .white
         view.addSubview(menuControl)
         view.addSubview(containerView)
