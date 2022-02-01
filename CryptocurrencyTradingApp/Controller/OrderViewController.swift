@@ -66,6 +66,10 @@ class OrderViewController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: .webSocketTransactionsNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: .restAPIOrderNotification, object: nil)
     }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: .restAPITransactionsNotification, object: nil)
+    }
 }
 
 // MARK: UI
@@ -145,30 +149,31 @@ extension OrderViewController {
     
     private func registerCell() {
         orderDataSource = OrderDataSource(tableView: orderTableView,
-                                        cellProvider: { tableView, indexPath, mainListCoin in
+                                        cellProvider: { [weak self] tableView, indexPath, mainListCoin in
 
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "orderCell",
-                                                           for: indexPath) as? OrderCell else {
+                                                           for: indexPath) as? OrderCell,
+                  let viewModel = self?.ordersViewModel.orderViewModel(at: indexPath.row) else {
                 return UITableViewCell()
             }
 
-            let orderViewModel = self.ordersViewModel.orderViewModel(at: indexPath.row)
-            cell.configure(orderViewModel)
+            cell.configure(viewModel)
 
             return cell
         })
         orderTableView.dataSource = orderDataSource
         
         transactionDataSource = TransactionDataSource(tableView: transactionTableView,
-                                        cellProvider: { tableView, indexPath, mainListCoin in
+                                        cellProvider: { [weak self] tableView, indexPath, mainListCoin in
 
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "transactionCell",
-                                                           for: indexPath) as? OrderTransactionCell else {
+                                                           for: indexPath) as? OrderTransactionCell,
+                  let viewModel = self?.transactionsViewModel.transactionViewModel(at: indexPath.row)
+            else {
                 return UITableViewCell()
             }
 
-            let transactionViewModel = self.transactionsViewModel.transactionViewModel(at: indexPath.row)
-            cell.configure(viewModel: transactionViewModel)
+            cell.configure(viewModel: viewModel)
 
             return cell
         })

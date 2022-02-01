@@ -169,16 +169,21 @@ extension TransactionsViewController {
     
     private func createDataSource(isTime: Bool) -> TransactionDataSource {
         return TransactionsDataSource(tableView: isTime ? self.timeTableView : self.dayTableView,
-                                                cellProvider: { tableView, indexPath, itemIdentifier in
+                                                cellProvider: { [weak self] tableView, indexPath, itemIdentifier in
             
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: isTime ? "timeTransactionsCell" : "dayTransactionsCell") as? TransactionsCell
             else { return UITableViewCell() }
             
-            cell.configure(isTimeCell: isTime,
-                           viewModel: isTime
-                           ? self.viewModel.transactionViewModel(at: indexPath.row)
-                           : self.viewModel.dayTransactionViewModel(at: indexPath.row))
+            if isTime {
+                guard let transactionViewModel = self?.viewModel.transactionViewModel(at: indexPath.row)
+                else { return UITableViewCell() }
+                cell.configure(isTimeCell: isTime, viewModel: transactionViewModel)
+            } else {
+                guard let dayTransactionViewModel = self?.viewModel.dayTransactionViewModel(at: indexPath.row)
+                else { return UITableViewCell() }
+                cell.configure(isTimeCell: isTime, viewModel: dayTransactionViewModel)
+            }
             
             return cell
         })
