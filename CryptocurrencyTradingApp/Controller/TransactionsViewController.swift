@@ -160,7 +160,7 @@ extension TransactionsViewController {
             make.top.equalTo(menuControl.snp.bottom).offset(10)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.height.equalTo(view.safeAreaLayoutGuide.snp.height).multipliedBy(0.60)
         }
         
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)

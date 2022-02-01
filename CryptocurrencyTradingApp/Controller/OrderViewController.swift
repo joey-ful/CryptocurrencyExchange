@@ -90,21 +90,22 @@ extension OrderViewController {
             make.top.equalToSuperview().offset(20)
             make.leading.equalToSuperview()
             make.bottom.equalToSuperview()
+            make.height.equalTo(view.safeAreaLayoutGuide.snp.height).multipliedBy(0.6)
         }
         orderTableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
-
-        transactionTableView.snp.makeConstraints { make in
-            make.width.equalToSuperview().multipliedBy(0.4).offset(-10)
-            make.height.equalToSuperview().multipliedBy(0.6)
-            make.trailing.equalToSuperview().offset(-10)
-            make.bottom.equalToSuperview()
-        }
         
         orderInfoTableView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(10)
             make.width.equalToSuperview().multipliedBy(0.4).offset(-10)
-            make.height.equalToSuperview().multipliedBy(0.2)
+            make.height.equalTo(view.safeAreaLayoutGuide.snp.height).multipliedBy(0.6 * 0.3)
             make.trailing.equalToSuperview().offset(-10)
-            make.bottom.equalTo(transactionTableView.snp.top)
+        }
+        
+        transactionTableView.snp.makeConstraints { make in
+            make.top.equalTo(orderInfoTableView.snp.bottom).offset(10)
+            make.width.equalToSuperview().multipliedBy(0.4).offset(-10)
+            make.trailing.equalToSuperview().offset(-10)
+            make.height.equalTo(view.safeAreaLayoutGuide.snp.height).multipliedBy(0.6 * 0.7)
         }
     }
 }
