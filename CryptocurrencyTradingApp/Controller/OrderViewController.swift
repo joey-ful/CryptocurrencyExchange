@@ -66,6 +66,10 @@ class OrderViewController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: .webSocketTransactionsNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: .restAPIOrderNotification, object: nil)
     }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: .restAPITransactionsNotification, object: nil)
+    }
 }
 
 // MARK: UI
@@ -86,21 +90,22 @@ extension OrderViewController {
             make.top.equalToSuperview().offset(20)
             make.leading.equalToSuperview()
             make.bottom.equalToSuperview()
+            make.height.equalTo(view.safeAreaLayoutGuide.snp.height).multipliedBy(0.6)
         }
         orderTableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
-
-        transactionTableView.snp.makeConstraints { make in
-            make.width.equalToSuperview().multipliedBy(0.4).offset(-10)
-            make.height.equalToSuperview().multipliedBy(0.6)
-            make.trailing.equalToSuperview().offset(-10)
-            make.bottom.equalToSuperview()
-        }
         
         orderInfoTableView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(10)
             make.width.equalToSuperview().multipliedBy(0.4).offset(-10)
-            make.height.equalToSuperview().multipliedBy(0.2)
+            make.height.equalTo(view.safeAreaLayoutGuide.snp.height).multipliedBy(0.6 * 0.3)
             make.trailing.equalToSuperview().offset(-10)
-            make.bottom.equalTo(transactionTableView.snp.top)
+        }
+        
+        transactionTableView.snp.makeConstraints { make in
+            make.top.equalTo(orderInfoTableView.snp.bottom).offset(10)
+            make.width.equalToSuperview().multipliedBy(0.4).offset(-10)
+            make.trailing.equalToSuperview().offset(-10)
+            make.height.equalTo(view.safeAreaLayoutGuide.snp.height).multipliedBy(0.6 * 0.7)
         }
     }
 }
@@ -145,30 +150,31 @@ extension OrderViewController {
     
     private func registerCell() {
         orderDataSource = OrderDataSource(tableView: orderTableView,
-                                        cellProvider: { tableView, indexPath, mainListCoin in
+                                        cellProvider: { [weak self] tableView, indexPath, mainListCoin in
 
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "orderCell",
-                                                           for: indexPath) as? OrderCell else {
+                                                           for: indexPath) as? OrderCell,
+                  let viewModel = self?.ordersViewModel.orderViewModel(at: indexPath.row) else {
                 return UITableViewCell()
             }
 
-            let orderViewModel = self.ordersViewModel.orderViewModel(at: indexPath.row)
-            cell.configure(orderViewModel)
+            cell.configure(viewModel)
 
             return cell
         })
         orderTableView.dataSource = orderDataSource
         
         transactionDataSource = TransactionDataSource(tableView: transactionTableView,
-                                        cellProvider: { tableView, indexPath, mainListCoin in
+                                        cellProvider: { [weak self] tableView, indexPath, mainListCoin in
 
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "transactionCell",
-                                                           for: indexPath) as? OrderTransactionCell else {
+                                                           for: indexPath) as? OrderTransactionCell,
+                  let viewModel = self?.transactionsViewModel.transactionViewModel(at: indexPath.row)
+            else {
                 return UITableViewCell()
             }
 
-            let transactionViewModel = self.transactionsViewModel.transactionViewModel(at: indexPath.row)
-            cell.configure(viewModel: transactionViewModel)
+            cell.configure(viewModel: viewModel)
 
             return cell
         })

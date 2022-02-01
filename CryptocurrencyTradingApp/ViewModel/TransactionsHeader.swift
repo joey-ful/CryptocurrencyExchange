@@ -22,8 +22,8 @@ class TransactionsHeader: UITableViewHeaderFooterView {
                                                                           fluctuationLabel,
                                                                           quantityLabel])
     
-    func configure(isTimeCell: Bool) {
-        isTimeCell ? configureTimeHeaderLabels() : configureDayHeaderLabels()
+    func configure(isTimeCell: Bool, symbol: String) {
+        isTimeCell ? configureTimeHeaderLabels(symbol) : configureDayHeaderLabels(symbol)
         layoutStackView()
         layoutLabels()
     }
@@ -56,18 +56,18 @@ class TransactionsHeader: UITableViewHeaderFooterView {
         }
     }
     
-    private func configureTimeHeaderLabels() {
+    private func configureTimeHeaderLabels(_ symbol: String) {
         fluctuationLabel.isHidden = true
         
         timeLabel.text = "시간"
         priceLabel.text = "가격(KRW)"
-        quantityLabel.text = "체결량(BTC)"
+        quantityLabel.text = "체결량(\(symbol))"
     }
     
-    private func configureDayHeaderLabels() {
+    private func configureDayHeaderLabels(_ symbol: String) {
         timeLabel.text = "일자"
         priceLabel.text = "종가(KRW)"
         fluctuationLabel.text = "전일대비"
-        quantityLabel.text = "거래량(BTC)"
+        quantityLabel.text = "거래량(\(symbol))"
     }
 }

@@ -13,18 +13,12 @@ final class DetailCoinViewController: UIViewController {
     private var containerView = UIView()
     private var viewModel: DetailCoinViewModel!
     private let coin: CoinType?
-
-    
     private let priceLabel = UILabel.makeLabel(font: .title1)
     private let incrementLabel = UILabel.makeLabel(font: .caption1)
     private let percentLabel = UILabel.makeLabel(font: .caption1)
     private let items = ["차트","호가","시세"]
-    
     private lazy var headerHorizontalStackView = UIStackView.makeStackView(alignment: .leading, distribution: .fillEqually, axis: .horizontal, spacing: 3, subviews: [incrementLabel, percentLabel])
-    
-    
     private lazy var headerVerticalStackView = UIStackView.makeStackView(alignment: .leading, distribution: .fillEqually, axis: .vertical, spacing: 1, subviews: [priceLabel, headerHorizontalStackView])
-    
     private lazy var menuControl: UISegmentedControl = {
         let menuControl = UISegmentedControl(items: items)
         menuControl.selectedSegmentIndex = 0
@@ -33,10 +27,7 @@ final class DetailCoinViewController: UIViewController {
         menuControl.layer.masksToBounds = true
         return menuControl
     }()
-    
-
     private let chartViewController: DetailChartViewController
-
     private lazy var transactionVC = TransactionsViewController(coin: coin ?? .btc)
     private lazy var orderViewController = OrderViewController(coin: coin ?? .btc)
     
@@ -53,7 +44,7 @@ final class DetailCoinViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         guard let coin = coin else { return }
         if viewModel.userDefaults.contains(coin.rawValue) {
-            navigationItem.rightBarButtonItem?.isSelected = true
+            navigationItem.rightBarButtonItem?.image = UIImage(systemName: "star.fill")
         }
     }
 
@@ -74,7 +65,6 @@ final class DetailCoinViewController: UIViewController {
     }
 
     @objc private func setDataForLabel() {
-
         priceLabel.text = viewModel.price
         incrementLabel.text = viewModel.fluctuationAmount
         percentLabel.text = viewModel.sign + viewModel.fluctuationRate
@@ -82,12 +72,13 @@ final class DetailCoinViewController: UIViewController {
         percentLabel.textColor = viewModel.sign == "+" ? .systemRed : .systemBlue
     }
     
-    @objc private func addTapped(_ sender: Any) {
-        navigationItem.rightBarButtonItem?.isSelected.toggle()
-        guard let coin = coin, let isSelected = navigationItem.rightBarButtonItem?.isSelected else { return }
-        if isSelected {
+    @objc func addTapped(_ sender: Any) {
+        guard let coin = coin else { return }
+        if navigationItem.rightBarButtonItem?.image == UIImage(systemName: "star") {
+            navigationItem.rightBarButtonItem?.image = UIImage(systemName: "star.fill")
             viewModel.addToUserDefaults(coin: coin.rawValue)
         } else {
+            navigationItem.rightBarButtonItem?.image = UIImage(systemName: "star")
             viewModel.removeFromUserDefaults(coin: coin.rawValue)
         }
     }
@@ -113,7 +104,7 @@ final class DetailCoinViewController: UIViewController {
     
     private func setNavigationItem() {
         self.title = coin?.name
-        self.navigationItem.rightBarButtonItem = .init(barButtonSystemItem: .save, target: self, action: #selector(addTapped))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "star"), style: .plain, target: self, action: #selector(addTapped))
     }
     
     private func setLayout() {

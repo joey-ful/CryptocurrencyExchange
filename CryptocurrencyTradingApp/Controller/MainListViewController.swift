@@ -18,7 +18,8 @@ class MainListViewController: UIViewController {
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     private var collectionViewDataSource: PopularDataSource?
     private let collectionViewHeader = UILabel.makeLabel(font: .subheadline, text: "인기 코인")
-    private lazy var collectionViewHeaderStackView = UIStackView.makeStackView(alignment: .leading, subviews: [collectionViewHeader])
+    private lazy var collectionViewHeaderStackView = UIStackView.makeStackView(alignment: .leading,
+                                                                               subviews: [collectionViewHeader])
     private let topInset: CGFloat = 5
     private let bottomInset: CGFloat = 15
     lazy var menuControl: UISegmentedControl = {
@@ -74,6 +75,7 @@ class MainListViewController: UIViewController {
     
     deinit {
         viewModel.closeWebSocket()
+        NotificationCenter.default.removeObserver(self, name: .restAPITickerAllNotification, object: nil)
     }
 }
 
@@ -227,15 +229,15 @@ extension MainListViewController {
     // MARK: CellRegistrations
     private func registerCell() {
         dataSource = MainListDataSource(tableView: tableView,
-                                        cellProvider: { tableView, indexPath, mainListCoin in
+                                        cellProvider: { [weak self ] tableView, indexPath, mainListCoin in
 
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "mainListCell",
-                                                           for: indexPath) as? MainListTableViewCell else {
-                return UITableViewCell()
-            }
+                                                           for: indexPath) as? MainListTableViewCell,
+                  let viewModel = self?.viewModel.coinViewModel(at: indexPath.row) else {
+                      return UITableViewCell()
+                  }
 
-            let mainListCoinViewModel = self.viewModel.coinViewModel(at: indexPath.row)
-            cell.configure(mainListCoinViewModel)
+            cell.configure(viewModel)
 
             return cell
         })
@@ -244,9 +246,12 @@ extension MainListViewController {
     
     private func registerCollectionViewCell() {
         let cellRegistration = UICollectionView.CellRegistration
-        <PopularCoinCell, Ticker> { cell, indexPath, popularCoin in
+        <PopularCoinCell, Ticker> { [weak self] cell, indexPath, popularCoin in
             
-            cell.configure(self.viewModel.popularCoinViewModel(at: indexPath.item), parent: self)
+            if let viewModel = self?.viewModel.popularCoinViewModel(at: indexPath.item),
+               let parent = self {
+                cell.configure(viewModel, parent: parent)
+            }
         }
         
         collectionViewDataSource = PopularDataSource(collectionView: collectionView)

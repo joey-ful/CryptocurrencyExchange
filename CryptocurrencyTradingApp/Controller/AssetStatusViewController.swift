@@ -125,15 +125,15 @@ extension AssetStatusViewController {
 
     private func registerCell() {
         dataSource = StatusDataSource(tableView: tableView,
-                                        cellProvider: { tableView, indexPath, mainListCoin in
+                                        cellProvider: { [weak self] tableView, indexPath, mainListCoin in
 
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "statusCell",
-                                                           for: indexPath) as? StatusCell else {
-                return UITableViewCell()
+                                                           for: indexPath) as? StatusCell,
+                  let viewModel = self?.viewModel.assetStatusViewModel(at: indexPath.row) else {
+                      return UITableViewCell()
             }
 
-            let assetStatusViewModel = self.viewModel.assetStatusViewModel(at: indexPath.row)
-            cell.configure(viewModel: assetStatusViewModel)
+            cell.configure(viewModel: viewModel)
 
             return cell
         })
