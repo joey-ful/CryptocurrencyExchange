@@ -62,7 +62,7 @@ class DetailCoinViewController: UIViewController {
         print("--------------", viewModel.userDefaults)
         guard let coin = coin else { return }
         if viewModel.userDefaults.contains(coin.rawValue) {
-            navigationItem.rightBarButtonItem?.isSelected = true
+            navigationItem.rightBarButtonItem?.image = UIImage(systemName: "star.fill")
         }
     }
 
@@ -89,11 +89,12 @@ class DetailCoinViewController: UIViewController {
     }
     
     @objc func addTapped(_ sender: Any) {
-        navigationItem.rightBarButtonItem?.isSelected.toggle()
-        guard let coin = coin, let isSelected = navigationItem.rightBarButtonItem?.isSelected else { return }
-        if isSelected {
+        guard let coin = coin else { return }
+        if navigationItem.rightBarButtonItem?.image == UIImage(systemName: "star") {
+            navigationItem.rightBarButtonItem?.image = UIImage(systemName: "star.fill")
             viewModel.addToUserDefaults(coin: coin.rawValue)
         } else {
+            navigationItem.rightBarButtonItem?.image = UIImage(systemName: "star")
             viewModel.removeFromUserDefaults(coin: coin.rawValue)
         }
         print(viewModel.userDefaults)
@@ -120,7 +121,7 @@ class DetailCoinViewController: UIViewController {
     
     func setNavigationItem() {
         self.title = coin?.rawValue.uppercased()
-        self.navigationItem.rightBarButtonItem = .init(barButtonSystemItem: .save, target: self, action: #selector(addTapped))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "star"), style: .plain, target: self, action: #selector(addTapped))
     }
     
     func setLayout() {
