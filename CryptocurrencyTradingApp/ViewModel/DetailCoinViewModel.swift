@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit.UIColor
 
 class DetailCoinViewModel {
     private let restAPIManager = RestAPIManager()
@@ -13,11 +14,31 @@ class DetailCoinViewModel {
     var userDefaults: [String] {
         UserDefaults.standard.object(forKey: "favorite") as? [String] ?? []
     }
-    var coin: CoinType?
-    var coinInfomation: Ticker? = nil {
+    private var coin: CoinType?
+    private var coinInfomation: Ticker = Ticker(highPrice: "", tradeValue: "", fluctuationRate: "") {
         didSet(newData) {
             NotificationCenter.default.post(name: .coinDetailNotificaion, object: ["detailCoin": newData])
         }
+    }
+    
+    var sign: String {
+        return coinInfomation.fluctuationRate.toDouble() < 0 ? "" : "+"
+    }
+    
+    var price: String {
+        return "KRW " +  coinInfomation.currentPrice.toDecimal()
+    }
+    
+    var lineColor: UIColor {
+        coinInfomation.fluctuationRate.contains("-") ? .blue : .red
+    }
+    
+    var fluctuationRate: String {
+        return coinInfomation.fluctuationRate.toDecimal().setFractionDigits(to: 2) + .percent
+    }
+    
+    var fluctuationAmount: String {
+        return sign + coinInfomation.fluctuationAmount.toDecimal()
     }
     
     init(coin: CoinType) {
@@ -38,26 +59,26 @@ class DetailCoinViewModel {
         }
     }
     
-    func updateFluctuation(coin: CoinType) {
+    private func updateFluctuation(coin: CoinType) {
         webSocketManager.connectWebSocket(.ticker, [coin],[.yesterday]) { [weak self] (parsedResult: Result<WebSocketTicker?, Error>) in
             guard case .success(let data) = parsedResult, let dataContent = data?.content else {
                 return
             }
-            self?.coinInfomation?.fluctuationRate = dataContent.fluctuationRate
-            self?.coinInfomation?.fluctuationAmount = dataContent.fluctuationAmount
+            self?.coinInfomation.fluctuationRate = dataContent.fluctuationRate
+            self?.coinInfomation.fluctuationAmount = dataContent.fluctuationAmount
             
         }
     }
     
-    func updateCurrentPrice(coin: CoinType) {
+    private func updateCurrentPrice(coin: CoinType) {
         webSocketManager.connectWebSocket(.transaction, [coin],nil) { [weak self] (parsedResult: Result<WebSocketTransaction?, Error>) in
 
             guard case .success(let data) = parsedResult, let dataContent = data?.content.list else {
                 return
             }
             dataContent.forEach {
-                if $0.symbol.lose(from: "_").lowercased() == self?.coinInfomation?.symbol {
-                    self?.coinInfomation?.currentPrice = $0.price
+                if $0.symbol.lose(from: "_").lowercased() == self?.coinInfomation.symbol {
+                    self?.coinInfomation.currentPrice = $0.price
                 }
             }
             

@@ -10,16 +10,16 @@ import SnapKit
 import SwiftUI
 
 class DetailChartViewController: UIViewController {
-    let coin: CoinType?
-    var chartView: ChartView?
+    private let coin: CoinType?
+    private var chartView: ChartView?
     
-    lazy var hostingController: UIHostingController<ChartView?> = {
+    private lazy var hostingController: UIHostingController<ChartView?> = {
         let controller = UIHostingController(rootView: chartView)
         controller.view.translatesAutoresizingMaskIntoConstraints = false
         return controller
     }()
     
-    lazy var timeControl: UISegmentedControl = {
+    private lazy var timeControl: UISegmentedControl = {
         let items = ["1분","10분","30분","1시간","일"]
         let timeControl = UISegmentedControl(items: items)
         timeControl.selectedSegmentIndex = 0
@@ -44,7 +44,7 @@ class DetailChartViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc func menuSelect(_ sender: UISegmentedControl) {
+    @objc private func menuSelect(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 0:
             chartView?.viewModel.initiateViewModel(coin: coin ?? .btc
@@ -67,7 +67,7 @@ class DetailChartViewController: UIViewController {
         }
     }
     
-    func setLayout() {
+    private func setLayout() {
         addChild(hostingController)
         view.addSubview(timeControl)
         view.addSubview(hostingController.view)

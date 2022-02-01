@@ -8,13 +8,14 @@
 import UIKit
 import SwiftUI
 
-class ChartViewModel: ObservableObject {
+final class ChartViewModel: ObservableObject {
     private let coin: CoinType
     private let restAPIManager = RestAPIManager()
     private var candleCoreDataManager = CandleCoreDataManager()
 
     @Published var highPriceList: [Double] = []
-    @Published var candleDate = Array<CandleStickCoreDataEntity>()
+    @Published var startDate: String = ""
+    @Published var endDate: String = ""
 
     init(coin: CoinType, chartIntervals: RequestChartInterval) {
         self.coin = coin
@@ -38,14 +39,14 @@ class ChartViewModel: ObservableObject {
     }
     
     private func calculateHighPriceList(_ candleData: [CandleStickCoreDataEntity]?, chartIntervals: RequestChartInterval) {
-        guard let candleData = candleData,
-        let firstData = candleData.first,
-              let lastData = candleData.last
+        guard let candleData = candleData
         else { return }
-        let result = candleData.sorted{$0.date < $1.date}
-        highPriceList = result.suffix(1000).map{$0.highPrice}
+        let result = candleData.sorted{$0.date < $1.date}.suffix(100)
+        
+        highPriceList = result.map{$0.highPrice}
+        startDate = result.first?.date.toDate() ?? "-"
+        endDate = result.last?.date.toDate() ?? "-"
         NotificationCenter.default.post(name: .coinChartDataReceiveNotificaion, object: nil)
-        self.candleDate = [firstData, lastData]
     }
 
     var maxY: Double {
@@ -60,28 +61,12 @@ class ChartViewModel: ObservableObject {
         highPriceList.min() ?? 0
     }
     
-    var startDate: String {
-        if candleDate.count > 0 {
-            return candleDate[.zero].date.toDate()
-        } else {
-            return "0"
-        }
-    }
-    
-    var endDate: String {
-        if candleDate.count > 0 {
-            return candleDate[candleDate.count - 1].date.toDate()
-        } else {
-            return "0"
-        }
-    }
-    
     var priceChange: Double {
         (highPriceList.last ?? 0) - (highPriceList.first ?? 0)
     }
     
     var lineColor: Color {
-        priceChange > 0 ? Color.green : Color.red
+        priceChange > 0 ? Color.red : Color.blue
     }
     
     var yAxis: Double {
