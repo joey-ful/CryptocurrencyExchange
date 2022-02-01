@@ -19,16 +19,9 @@ final class CandleCoreDataManager {
         return container
     }()
     
-//    lazy var context = persistentContainer.viewContext
-    private lazy var context: NSManagedObjectContext = {
-        var managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
-//        managedObjectContext.parent = persistentContainer.viewContext
-        managedObjectContext.parent = persistentContainer.viewContext
-        return managedObjectContext
-    }()
-        
+    lazy var context = persistentContainer.viewContext
+
     private func saveContext() {
-            guard context.hasChanges else { return }
             do {
                 try context.save()
             } catch {
@@ -37,7 +30,6 @@ final class CandleCoreDataManager {
     }
     
     func read(entityName: RequestChartInterval, coin: CoinType) -> [CandleStickCoreDataEntity]? {
-//        context.performAndWait {
             let candlePredicate = NSPredicate(format: "coin == %@", coin.rawValue)
                 if entityName.rawValue.contains("1m") {
                     let fetchRequest = CandleData1M.fetchRequest()
@@ -67,8 +59,6 @@ final class CandleCoreDataManager {
                 } else {
                     return nil
                 }
-//         }
-
         }
 
     
@@ -103,14 +93,19 @@ final class CandleCoreDataManager {
         entity.setValue(highPrice, forKey: "highPrice")
         entity.setValue(lowPrice, forKey: "lowPrice")
         entity.setValue(tradeVolume, forKey: "tradeVolume")
-//        print(entity)
         saveContext()
     }
 
     func addToCoreData(coin: CoinType, _ candleStick: [[CandleStick.CandleStickData]], entityName: RequestChartInterval) {
-        guard let entity = filter(entityName) else { return }
+        guard let fetched = read(entityName: entityName, coin: coin) else { return }
+        
         candleStick.forEach { index in
-            create(entity: entity, coin: coin, entityName: entityName, date: convertToInt(index[0]), openPrice: convert(index[1]), closePrice: convert(index[2]), highPrice: convert(index[3]), lowPrice: convert(index[4]), tradeVolume: convert(index[5]))
+            if fetched.filter{ $0.date == convertToInt(index[0])}.count > 0{
+               return
+            } else {
+                guard let entity = filter(entityName) else { return }
+                create(entity: entity, coin: coin, entityName: entityName, date: convertToInt(index[0]), openPrice: convert(index[1]), closePrice: convert(index[2]), highPrice: convert(index[3]), lowPrice: convert(index[4]), tradeVolume: convert(index[5]))
+            }
         }
     }
     

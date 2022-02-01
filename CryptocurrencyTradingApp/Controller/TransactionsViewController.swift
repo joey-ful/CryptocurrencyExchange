@@ -26,6 +26,7 @@ class TransactionsViewController: UIViewController {
         return menuControl
     }()
     
+
     init(coin: CoinType) {
         self.viewModel = TransactionsViewModel(coinType: coin)
         coinType = coin
