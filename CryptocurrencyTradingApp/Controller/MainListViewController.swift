@@ -82,11 +82,11 @@ class MainListViewController: UIViewController {
 // MARK: Handle Notification
 extension MainListViewController {
     @objc private func updateDataSource(notification: Notification) {
-        guard let userInfo = notification.userInfo,
-              let index = userInfo["index"] as? Int else { return }
+        guard let userInfo = notification.userInfo as? [String: Any] else { return }
+        guard let targetIndex = (showFavorites ? userInfo["favorites"] : userInfo["filtered"]) as? Int else { return }
         
-        let cell = (tableView.cellForRow(at: IndexPath(row: index, section: 0)) as? MainListTableViewCell)
-        cell?.blink(viewModel.coinViewModel(at: index))
+        let cell = (tableView.cellForRow(at: IndexPath(row: targetIndex, section: 0)) as? MainListCell)
+        cell?.blink(viewModel.coinViewModel(at: targetIndex))
         makeSnapshot()
     }
 }
@@ -167,8 +167,8 @@ extension MainListViewController {
     }
 
     private func setUpTableView() {
-        tableView.register(MainListTableViewCell.self, forCellReuseIdentifier: "mainListCell")
-        tableView.register(MainListHeaderView.self, forHeaderFooterViewReuseIdentifier: "mainListHeader")
+        tableView.register(MainListCell.self, forCellReuseIdentifier: "mainListCell")
+        tableView.register(MainListHeader.self, forHeaderFooterViewReuseIdentifier: "mainListHeader")
         tableView.delegate = self
     }
     
@@ -231,12 +231,16 @@ extension MainListViewController {
         dataSource = MainListDataSource(tableView: tableView,
                                         cellProvider: { [weak self ] tableView, indexPath, mainListCoin in
 
+            guard let weakSelf = self else { return UITableViewCell() }
+            
+            let viewModel = weakSelf.showFavorites ? weakSelf.viewModel.favoriteCoinViewModel(at: indexPath.row) : weakSelf.viewModel.coinViewModel(at: indexPath.row)
+            
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "mainListCell",
-                                                           for: indexPath) as? MainListTableViewCell,
-                  let viewModel = self?.viewModel.coinViewModel(at: indexPath.row) else {
-                      return UITableViewCell()
-                  }
-
+                                                           for: indexPath) as? MainListCell
+            else {
+                return UITableViewCell()
+            }
+            
             cell.configure(viewModel)
 
             return cell
@@ -267,14 +271,15 @@ extension MainListViewController {
 // MARK: TableViewHeader
 extension MainListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let coin = CoinType.coin(symbol: viewModel.filtered[indexPath.row].symbol.lowercased()) ?? .btc
+        let list = showFavorites ? viewModel.favorites : viewModel.filtered
+        let coin = CoinType.coin(symbol: list[indexPath.row].symbol.lowercased()) ?? .btc
         let detailViewController = DetailCoinViewController(coin: coin)
         navigationController?.pushViewController(detailViewController, animated: true)
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "mainListHeader")
-                as? MainListHeaderView
+                as? MainListHeader
         else {
             return UIView()
         }

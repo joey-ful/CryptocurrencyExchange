@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MainListHeaderView: UITableViewHeaderFooterView {
+class MainListHeader: UITableViewHeaderFooterView {
     private var viewModel: MainListHeaderViewModel?
     private let nameLabel = UILabel.makeLabel(font: .caption1, text: "가상자산명", color: .systemGray)
     private let priceLabel = UILabel.makeLabel(font: .caption1, text: "현재가", color: .systemGray)
@@ -73,7 +73,7 @@ class MainListHeaderView: UITableViewHeaderFooterView {
     }
 }
 
-extension MainListHeaderView {
+extension MainListHeader {
     
     private func layoutStackViews() {
         

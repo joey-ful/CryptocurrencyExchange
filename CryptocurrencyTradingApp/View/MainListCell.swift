@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class MainListTableViewCell: UITableViewCell {
+class MainListCell: UITableViewCell {
     private var nameLabel = UILabel.makeLabel(font: .subheadline)
     private var symbolLabel = UILabel.makeLabel(font: .caption1, color: .systemGray)
     private var currentPriceLabel = UILabel.makeLabel(font: .subheadline)
@@ -37,7 +37,7 @@ class MainListTableViewCell: UITableViewCell {
                                                                           numbersView])
 }
 
-extension MainListTableViewCell {
+extension MainListCell {
     
     func configure(_ viewModel: MainListCoinViewModel) {
         configureLabel(viewModel)
