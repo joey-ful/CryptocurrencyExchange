@@ -167,8 +167,8 @@ extension MainListViewController {
     }
 
     private func setUpTableView() {
-        tableView.register(MainListTableViewCell.self, forCellReuseIdentifier: "mainListCell")
-        tableView.register(MainListHeaderView.self, forHeaderFooterViewReuseIdentifier: "mainListHeader")
+        tableView.register(MainListCell.self, forCellReuseIdentifier: "mainListCell")
+        tableView.register(MainListHeader.self, forHeaderFooterViewReuseIdentifier: "mainListHeader")
         tableView.delegate = self
     }
     
@@ -274,7 +274,7 @@ extension MainListViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "mainListHeader")
-                as? MainListHeaderView
+                as? MainListHeader
         else {
             return UIView()
         }
