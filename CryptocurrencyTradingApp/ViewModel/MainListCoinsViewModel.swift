@@ -40,6 +40,10 @@ class MainListCoinsViewModel {
         return MainListCoinViewModel(coin: filtered[index])
     }
     
+    func favoriteCoinViewModel(at index: Int) -> MainListCoinViewModel {
+        return MainListCoinViewModel(coin: favorites[index])
+    }
+    
     func popularCoinViewModel(at index: Int) -> PopularCoinViewModel {
         return PopularCoinViewModel(popularCoin: popularCoins[index])
     }

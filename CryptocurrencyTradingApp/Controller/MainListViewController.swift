@@ -231,12 +231,16 @@ extension MainListViewController {
         dataSource = MainListDataSource(tableView: tableView,
                                         cellProvider: { [weak self ] tableView, indexPath, mainListCoin in
 
+            guard let weakSelf = self else { return UITableViewCell() }
+            
+            let viewModel = weakSelf.showFavorites ? weakSelf.viewModel.favoriteCoinViewModel(at: indexPath.row) : weakSelf.viewModel.coinViewModel(at: indexPath.row)
+            
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "mainListCell",
-                                                           for: indexPath) as? MainListTableViewCell,
-                  let viewModel = self?.viewModel.coinViewModel(at: indexPath.row) else {
-                      return UITableViewCell()
-                  }
-
+                                                           for: indexPath) as? MainListCell
+            else {
+                return UITableViewCell()
+            }
+            
             cell.configure(viewModel)
 
             return cell
