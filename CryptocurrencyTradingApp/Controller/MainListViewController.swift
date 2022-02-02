@@ -267,7 +267,8 @@ extension MainListViewController {
 // MARK: TableViewHeader
 extension MainListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let coin = CoinType.coin(symbol: viewModel.filtered[indexPath.row].symbol.lowercased()) ?? .btc
+        let list = showFavorites ? viewModel.favorites : viewModel.filtered
+        let coin = CoinType.coin(symbol: list[indexPath.row].symbol.lowercased()) ?? .btc
         let detailViewController = DetailCoinViewController(coin: coin)
         navigationController?.pushViewController(detailViewController, animated: true)
     }
