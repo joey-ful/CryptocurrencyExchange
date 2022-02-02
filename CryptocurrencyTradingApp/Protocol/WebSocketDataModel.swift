@@ -7,4 +7,4 @@
 
 import Foundation
 
-protocol WebSocketDataModel { }
+protocol WebSocketDataModel: Decodable { }
