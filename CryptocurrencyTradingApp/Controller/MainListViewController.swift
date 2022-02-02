@@ -82,11 +82,11 @@ class MainListViewController: UIViewController {
 // MARK: Handle Notification
 extension MainListViewController {
     @objc private func updateDataSource(notification: Notification) {
-        guard let userInfo = notification.userInfo,
-              let index = userInfo["index"] as? Int else { return }
+        guard let userInfo = notification.userInfo as? [String: Any] else { return }
+        guard let targetIndex = (showFavorites ? userInfo["favorites"] : userInfo["filtered"]) as? Int else { return }
         
-        let cell = (tableView.cellForRow(at: IndexPath(row: index, section: 0)) as? MainListTableViewCell)
-        cell?.blink(viewModel.coinViewModel(at: index))
+        let cell = (tableView.cellForRow(at: IndexPath(row: targetIndex, section: 0)) as? MainListCell)
+        cell?.blink(viewModel.coinViewModel(at: targetIndex))
         makeSnapshot()
     }
 }

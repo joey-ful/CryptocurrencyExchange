@@ -151,10 +151,27 @@ extension MainListCoinsViewModel {
             if mainListCoins[index].symbol == newSymbol
             {
                 mainListCoins[index].currentPrice = transaction.price
+                filtered = mainListCoins.filter { existsInFiltered($0) }
+                favorites = filtered.filter { favoriteSymbols.contains( $0.symbol.lowercased() ) }
                 
+                var filteredIndex: Int? = nil
+                filtered.enumerated().forEach { currentIndex, coin in
+                    if mainListCoins[index] == coin {
+                        filteredIndex = currentIndex
+                        return
+                    }
+                }
+                var favoritesIndex: Int? = nil
+                favorites.enumerated().forEach { currentIndex, coin in
+                    if mainListCoins[index] == coin {
+                        favoritesIndex = currentIndex
+                        return
+                    }
+                }
                 NotificationCenter.default.post(name: .webSocketTransactionsNotification,
                                                 object: nil,
-                                                userInfo: ["index": index])
+                                                userInfo: ["filtered": filteredIndex,
+                                                           "favorites": favoritesIndex])
             }
         }
     }
@@ -177,7 +194,6 @@ extension MainListCoinsViewModel {
             if mainListCoins[index].symbol == newSymbol {
                 mainListCoins[index].fluctuationRate = ticker.fluctuationRate
                 mainListCoins[index].fluctuationAmount = ticker.fluctuationAmount
-                
                 NotificationCenter.default.post(name: .webSocketTickerNotification, object: nil)
             }
         }
