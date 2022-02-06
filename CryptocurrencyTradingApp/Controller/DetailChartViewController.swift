@@ -18,6 +18,7 @@ class DetailChartViewController: UIViewController {
         chartView.legend.enabled = false
         chartView.leftAxis.enabled = false
         chartView.xAxis.labelPosition = .bottom
+        chartView.xAxis.setLabelCount(4, force: true)
         return chartView
     }()
     
@@ -32,7 +33,7 @@ class DetailChartViewController: UIViewController {
     }()
     
     init(coin: CoinType) {
-        self.viewModel = ChartViewModel(coin: coin, chartIntervals: .oneMinute)
+        self.viewModel = ChartViewModel(coin: coin, chartIntervals: .oneHour)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -95,9 +96,23 @@ class DetailChartViewController: UIViewController {
     }
 
     @objc private func setData() {
-        chartView.data = CandleChartData(dataSet: viewModel.candleDataSet)
+        let candleDataSet = viewModel.candleDataSet
+        candleDataSet.axisDependency = .right
+        candleDataSet.setColor(.systemGray)
+        candleDataSet.shadowColor = .systemGray
+        candleDataSet.shadowWidth = 1
+        candleDataSet.shadowColorSameAsCandle = true
+        candleDataSet.decreasingColor = .blue
+        candleDataSet.decreasingFilled = true
+        candleDataSet.increasingColor = .red
+        candleDataSet.increasingFilled = true
+        chartView.data = CandleChartData(dataSet: candleDataSet)
+        
         chartView.xAxis.axisMaximum = viewModel.maximumDate
         chartView.xAxis.axisMinimum = viewModel.minimumDate
         chartView.xAxis.valueFormatter = ChartXAxisFormatter(referenceTimeInterval: viewModel.minimumTimeInterval)
+        
+        guard let lastData = candleDataSet.last else { return }
+        chartView.zoom(scaleX: 192, scaleY: 30, xValue: lastData.x, yValue: lastData.y, axis: .right)
     }
 }
