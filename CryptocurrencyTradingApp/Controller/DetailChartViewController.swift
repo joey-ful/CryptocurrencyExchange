@@ -33,7 +33,7 @@ class DetailChartViewController: UIViewController {
     
     init(coin: CoinType) {
         self.viewModel = ChartViewModel(coin: coin, chartIntervals: .oneMinute)
-        super.init()
+        super.init(nibName: nil, bundle: nil)
     }
     
     override func viewDidLoad() {
@@ -95,6 +95,9 @@ class DetailChartViewController: UIViewController {
     }
 
     @objc private func setData() {
-        
+        chartView.data = CandleChartData(dataSet: viewModel.candleDataSet)
+        chartView.xAxis.axisMaximum = viewModel.maximumDate
+        chartView.xAxis.axisMinimum = viewModel.minimumDate
+        chartView.xAxis.valueFormatter = ChartXAxisFormatter(referenceTimeInterval: viewModel.minimumTimeInterval)
     }
 }

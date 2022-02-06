@@ -82,6 +82,7 @@
 		E68713602798422B0036CA0D /* CandleStick.swift in Sources */ = {isa = PBXBuildFile; fileRef = E687135F2798422B0036CA0D /* CandleStick.swift */; };
 		E6899C73279546320006C980 /* ParsingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6899C72279546320006C980 /* ParsingError.swift */; };
 		E6A126B427AFAD470080EC4D /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = E6A126B327AFAD470080EC4D /* Charts */; };
+		E6A126B627AFFF560080EC4D /* ChartDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A126B527AFFF560080EC4D /* ChartDateFormatter.swift */; };
 		E6A8694327A29BBD00D568B3 /* CandleData24H+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A8694227A29BBD00D568B3 /* CandleData24H+CoreDataClass.swift */; };
 		E6A8694527A29F1800D568B3 /* CandleStickCoreDataEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A8694427A29F1800D568B3 /* CandleStickCoreDataEntity.swift */; };
 		E6BDEFA927A3E1F700018967 /* CandleData10M+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BDEFA827A3E1F700018967 /* CandleData10M+CoreDataClass.swift */; };
@@ -90,7 +91,6 @@
 		E6BDEFAF27A3E31A00018967 /* CandleData30M+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BDEFAE27A3E31A00018967 /* CandleData30M+CoreDataProperties.swift */; };
 		E6BDEFB127A3E32D00018967 /* CandleData24H+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BDEFB027A3E32D00018967 /* CandleData24H+CoreDataProperties.swift */; };
 		E6C96497279A9A7F0007B55E /* RequestChartInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C96496279A9A7F0007B55E /* RequestChartInterval.swift */; };
-		E6FA20B5279EFAAF00CCB1CC /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FA20B4279EFAAF00CCB1CC /* ChartView.swift */; };
 		E6FA20B8279F04F700CCB1CC /* ChartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FA20B7279F04F700CCB1CC /* ChartViewModel.swift */; };
 /* End PBXBuildFile section */
 
@@ -170,6 +170,7 @@
 		E64BFA3827959D3100BC17A1 /* NotificationName+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationName+Extension.swift"; sourceTree = "<group>"; };
 		E687135F2798422B0036CA0D /* CandleStick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleStick.swift; sourceTree = "<group>"; };
 		E6899C72279546320006C980 /* ParsingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsingError.swift; sourceTree = "<group>"; };
+		E6A126B527AFFF560080EC4D /* ChartDateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartDateFormatter.swift; sourceTree = "<group>"; };
 		E6A8694227A29BBD00D568B3 /* CandleData24H+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CandleData24H+CoreDataClass.swift"; sourceTree = "<group>"; };
 		E6A8694427A29F1800D568B3 /* CandleStickCoreDataEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleStickCoreDataEntity.swift; sourceTree = "<group>"; };
 		E6BDEFA827A3E1F700018967 /* CandleData10M+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CandleData10M+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -178,7 +179,6 @@
 		E6BDEFAE27A3E31A00018967 /* CandleData30M+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CandleData30M+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E6BDEFB027A3E32D00018967 /* CandleData24H+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CandleData24H+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E6C96496279A9A7F0007B55E /* RequestChartInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestChartInterval.swift; sourceTree = "<group>"; };
-		E6FA20B4279EFAAF00CCB1CC /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
 		E6FA20B7279F04F700CCB1CC /* ChartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -216,7 +216,6 @@
 				D4B40E3127A65AA000EDA235 /* MiniChartView.swift */,
 				D47D009A2797A09400E8E305 /* MainListCell.swift */,
 				D4D0D29B279B083200734C42 /* MainListHeader.swift */,
-				E6FA20B4279EFAAF00CCB1CC /* ChartView.swift */,
 				D4B40E0527A3CBB100EDA235 /* OrderCell.swift */,
 				D4B40E0F27A4F84A00EDA235 /* OrderInfoCell.swift */,
 				D4B40E0727A404BA00EDA235 /* OrderTransactionCell.swift */,
@@ -361,6 +360,7 @@
 				E64BFA262795616600BC17A1 /* WebSocketManager.swift */,
 				D4CC02262795B3C700F15957 /* RestAPIManager.swift */,
 				D4D0D297279AE7A000734C42 /* CandleCoreDataManager.swift */,
+				E6A126B527AFFF560080EC4D /* ChartDateFormatter.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -476,6 +476,7 @@
 				D4D0D294279AE73000734C42 /* CandleData1M+CoreDataClass.swift in Sources */,
 				D4B40E1A27A55A3000EDA235 /* AssetStatus.swift in Sources */,
 				D4B40E1227A5111200EDA235 /* WebSocketOrderbook.swift in Sources */,
+				E6A126B627AFFF560080EC4D /* ChartDateFormatter.swift in Sources */,
 				D4CC01F127953FAF00F15957 /* AppDelegate.swift in Sources */,
 				D4CC020927953FD300F15957 /* RestAPITickerAll.swift in Sources */,
 				E6BDEFB127A3E32D00018967 /* CandleData24H+CoreDataProperties.swift in Sources */,
@@ -493,7 +494,6 @@
 				E6FA20B8279F04F700CCB1CC /* ChartViewModel.swift in Sources */,
 				E64BFA3627959B7100BC17A1 /* WebSocketDataModel.swift in Sources */,
 				E6BDEFA927A3E1F700018967 /* CandleData10M+CoreDataClass.swift in Sources */,
-				E6FA20B5279EFAAF00CCB1CC /* ChartView.swift in Sources */,
 				E6A8694527A29F1800D568B3 /* CandleStickCoreDataEntity.swift in Sources */,
 				D4B40E1827A5570200EDA235 /* RestAPIAssetStatus.swift in Sources */,
 				E6BDEFAF27A3E31A00018967 /* CandleData30M+CoreDataProperties.swift in Sources */,

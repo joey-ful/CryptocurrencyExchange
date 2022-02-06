@@ -18,6 +18,7 @@ final class ChartViewModel: ObservableObject {
     var minimumDate: Double = .zero
     
     var maximumDate: Double = .zero
+    var minimumTimeInterval: Double = .zero
 
     init(coin: CoinType, chartIntervals: RequestChartInterval) {
         self.coin = coin
@@ -41,18 +42,16 @@ final class ChartViewModel: ObservableObject {
     private func prepareCandleData(_ candleData: [[CandleStick.CandleStickData]]) {
         
         let min = candleData.map { convert($0[0]) }.min() ?? .zero
-        let minDate = String(min.description.lose(from: ".").dropLast().dropLast().dropLast()).toDouble()
-        minimumDate = (minDate - minDate) / 3600
+        minimumTimeInterval = String(min.description.lose(from: ".").dropLast().dropLast().dropLast()).toDouble()
+        minimumDate = (minimumTimeInterval - minimumTimeInterval) / 3600
         let max = candleData.map { convert($0[0]) }.max() ?? .zero
         let maxDate = String(max.description.lose(from: ".").dropLast().dropLast().dropLast()).toDouble()
-        maximumDate = (maxDate - minDate) / 3600
-//        chartView.xAxis.axisMinimum = minDateDivided
-//        chartView.xAxis.axisMaximum = maxDateDivided
+        maximumDate = (maxDate - minimumTimeInterval) / 3600
+
         
         let chartData: [CandleChartDataEntry] = candleData.enumerated().map { index, data in
             let converted = String(convert(data[0]).description.lose(from: ".").dropLast().dropLast().dropLast()).toDouble()
-            
-//            chartView.xAxis.valueFormatter = ChartXAxisFormatter(referenceTimeInterval: minDate)
+
             
             let date = convert(data[0])
             let open = convert(data[1])
@@ -60,7 +59,7 @@ final class ChartViewModel: ObservableObject {
             let high = convert(data[3])
             let low = convert(data[4])
             
-            let divided = (converted - minDate) / (3600)
+            let divided = (converted - minimumTimeInterval) / (3600)
             return CandleChartDataEntry(x: divided,
                                         shadowH: high,
                                         shadowL: low,
