@@ -81,6 +81,7 @@
 		E64BFA3927959D3100BC17A1 /* NotificationName+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFA3827959D3100BC17A1 /* NotificationName+Extension.swift */; };
 		E68713602798422B0036CA0D /* CandleStick.swift in Sources */ = {isa = PBXBuildFile; fileRef = E687135F2798422B0036CA0D /* CandleStick.swift */; };
 		E6899C73279546320006C980 /* ParsingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6899C72279546320006C980 /* ParsingError.swift */; };
+		E6A126B427AFAD470080EC4D /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = E6A126B327AFAD470080EC4D /* Charts */; };
 		E6A8694327A29BBD00D568B3 /* CandleData24H+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A8694227A29BBD00D568B3 /* CandleData24H+CoreDataClass.swift */; };
 		E6A8694527A29F1800D568B3 /* CandleStickCoreDataEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A8694427A29F1800D568B3 /* CandleStickCoreDataEntity.swift */; };
 		E6BDEFA927A3E1F700018967 /* CandleData10M+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BDEFA827A3E1F700018967 /* CandleData10M+CoreDataClass.swift */; };
@@ -187,6 +188,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E61B2C082796BC5700E919B0 /* SnapKit in Frameworks */,
+				E6A126B427AFAD470080EC4D /* Charts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -390,6 +392,7 @@
 			name = CryptocurrencyTradingApp;
 			packageProductDependencies = (
 				E61B2C072796BC5700E919B0 /* SnapKit */,
+				E6A126B327AFAD470080EC4D /* Charts */,
 			);
 			productName = CryptocurrencyTradingApp;
 			productReference = D4CC01ED27953FAE00F15957 /* CryptocurrencyTradingApp.app */;
@@ -421,6 +424,7 @@
 			mainGroup = D4CC01E427953FAE00F15957;
 			packageReferences = (
 				E61B2C062796BC5700E919B0 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				E6A126B227AFAD470080EC4D /* XCRemoteSwiftPackageReference "Charts" */,
 			);
 			productRefGroup = D4CC01EE27953FAE00F15957 /* Products */;
 			projectDirPath = "";
@@ -753,6 +757,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		E6A126B227AFAD470080EC4D /* XCRemoteSwiftPackageReference "Charts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/danielgindi/Charts.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -760,6 +772,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E61B2C062796BC5700E919B0 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		E6A126B327AFAD470080EC4D /* Charts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E6A126B227AFAD470080EC4D /* XCRemoteSwiftPackageReference "Charts" */;
+			productName = Charts;
 		};
 /* End XCSwiftPackageProductDependency section */
 
