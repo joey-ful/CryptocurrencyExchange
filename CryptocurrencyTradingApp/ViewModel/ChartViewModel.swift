@@ -7,15 +7,17 @@
 
 import UIKit
 import SwiftUI
+import Charts
 
 final class ChartViewModel: ObservableObject {
     private let coin: CoinType
     private let restAPIManager = RestAPIManager()
-    private var candleCoreDataManager = CandleCoreDataManager()
-
-    @Published var highPriceList: [Double] = []
-    @Published var startDate: String = ""
-    @Published var endDate: String = ""
+    
+    var candleDataSet = CandleChartDataSet()
+    
+    var minimumDate: Double = .zero
+    
+    var maximumDate: Double = .zero
 
     init(coin: CoinType, chartIntervals: RequestChartInterval) {
         self.coin = coin
@@ -29,47 +31,54 @@ final class ChartViewModel: ObservableObject {
                              chartIntervals: chartIntervals) { (parsedResult: Result<CandleStick, Error>) in
             switch parsedResult {
             case .success(let parsedData):
-                self.candleCoreDataManager.addToCoreData(coin: coin, parsedData.data, entityName: chartIntervals)
-                let candleData = self.candleCoreDataManager.read(entityName: chartIntervals, coin: coin)
-                self.calculateHighPriceList(candleData, chartIntervals: chartIntervals)
+                self.prepareCandleData(parsedData.data)
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
             }
         }
     }
     
-    private func calculateHighPriceList(_ candleData: [CandleStickCoreDataEntity]?, chartIntervals: RequestChartInterval) {
-        guard let candleData = candleData
-        else { return }
-        let result = candleData.sorted{$0.date < $1.date}.suffix(100)
+    private func prepareCandleData(_ candleData: [[CandleStick.CandleStickData]]) {
         
-        highPriceList = result.map{$0.highPrice}
-        startDate = result.first?.date.toDate() ?? "-"
-        endDate = result.last?.date.toDate() ?? "-"
-        NotificationCenter.default.post(name: .coinChartDataReceiveNotificaion, object: nil)
-    }
-
-    var maxY: Double {
-        highPriceList.max() ?? 0
+        let min = candleData.map { convert($0[0]) }.min() ?? .zero
+        let minDate = String(min.description.lose(from: ".").dropLast().dropLast().dropLast()).toDouble()
+        minimumDate = (minDate - minDate) / 3600
+        let max = candleData.map { convert($0[0]) }.max() ?? .zero
+        let maxDate = String(max.description.lose(from: ".").dropLast().dropLast().dropLast()).toDouble()
+        maximumDate = (maxDate - minDate) / 3600
+//        chartView.xAxis.axisMinimum = minDateDivided
+//        chartView.xAxis.axisMaximum = maxDateDivided
+        
+        let chartData: [CandleChartDataEntry] = candleData.enumerated().map { index, data in
+            let converted = String(convert(data[0]).description.lose(from: ".").dropLast().dropLast().dropLast()).toDouble()
+            
+//            chartView.xAxis.valueFormatter = ChartXAxisFormatter(referenceTimeInterval: minDate)
+            
+            let date = convert(data[0])
+            let open = convert(data[1])
+            let close = convert(data[2])
+            let high = convert(data[3])
+            let low = convert(data[4])
+            
+            let divided = (converted - minDate) / (3600)
+            return CandleChartDataEntry(x: divided,
+                                        shadowH: high,
+                                        shadowL: low,
+                                        open: open,
+                                        close: close)
+        }
+        
+        candleDataSet = CandleChartDataSet(entries: chartData)
+        
+        NotificationCenter.default.post(name: .candleChartDataNotification, object: nil)
     }
     
-    var averageY: Double {
-        (maxY + minY) / 2
-    }
-    
-    var minY: Double {
-        highPriceList.min() ?? 0
-    }
-    
-    var priceChange: Double {
-        (highPriceList.last ?? 0) - (highPriceList.first ?? 0)
-    }
-    
-    var lineColor: Color {
-        priceChange > 0 ? Color.red : Color.blue
-    }
-    
-    var yAxis: Double {
-        maxY - minY
+    private func convert(_ candleData: CandleStick.CandleStickData) -> Double {
+        switch candleData {
+        case .string(let result):
+            return Double(result) ?? .zero
+        case .integer(let date):
+            return Double(date)
+        }
     }
 }
