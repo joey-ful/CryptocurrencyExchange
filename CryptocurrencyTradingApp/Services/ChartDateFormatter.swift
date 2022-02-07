@@ -25,7 +25,7 @@ extension ChartXAxisFormatter: AxisValueFormatter {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ko_kr")
         formatter.timeZone = TimeZone(abbreviation: "KST")
-        formatter.dateFormat = "yy-MM-dd"
+        formatter.dateFormat = "yy-MM-dd HH:mm"
         
         let date = Date(timeIntervalSince1970: value * 3600 + reference)
         return formatter.string(from: date)

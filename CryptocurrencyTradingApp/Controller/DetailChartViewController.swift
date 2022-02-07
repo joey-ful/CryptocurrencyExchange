@@ -11,8 +11,8 @@ import Charts
 
 class DetailChartViewController: UIViewController {
     private let viewModel: ChartViewModel
-    private lazy var chartView: CandleStickChartView = {
-        var chartView = CandleStickChartView()
+    private lazy var chartView: CombinedChartView = {
+        var chartView = CombinedChartView()
         chartView.rightAxis.setLabelCount(5, force: true)
         chartView.leftAxis.enabled = false
         chartView.legend.enabled = false
@@ -44,7 +44,7 @@ class DetailChartViewController: UIViewController {
         setLayoutForChartView()
         setData()
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(setData),
+                                               selector: #selector(initChart),
                                                name: .candleChartDataNotification,
                                                object: nil)
     }
@@ -95,24 +95,39 @@ class DetailChartViewController: UIViewController {
         }
     }
 
-    @objc private func setData() {
-        let candleDataSet = viewModel.candleDataSet
-        candleDataSet.axisDependency = .right
-        candleDataSet.setColor(.systemGray)
-        candleDataSet.shadowColor = .systemGray
-        candleDataSet.shadowWidth = 1
-        candleDataSet.shadowColorSameAsCandle = true
-        candleDataSet.decreasingColor = .blue
-        candleDataSet.decreasingFilled = true
-        candleDataSet.increasingColor = .red
-        candleDataSet.increasingFilled = true
-        chartView.data = CandleChartData(dataSet: candleDataSet)
+    @objc private func initChart() {
+        setData()
+        setChart()
+    }
+    
+    private func setData() {
+        let candleStickData = viewModel.candleDataSet
+        candleStickData.increasingColor = .red
+        candleStickData.decreasingColor = .blue
+        candleStickData.shadowColorSameAsCandle = true
+        candleStickData.decreasingFilled = true
+        candleStickData.increasingFilled = true
+        candleStickData.valueTextColor = .clear
         
+        let lineData = viewModel.lineDataSet
+        lineData.valueTextColor = .clear
+        lineData.circleColors = [.orange]
+        lineData.colors = [.orange]
+        lineData.mode = .cubicBezier
+        lineData.circleRadius = .zero
+        
+        let chartViewData = CombinedChartData()
+        chartViewData.candleData = CandleChartData(dataSet: candleStickData)
+        chartViewData.lineData = LineChartData(dataSet: lineData)
+        chartView.data = chartViewData
+    }
+
+    private func setChart() {
+        chartView.xAxis.setLabelCount(4, force: true)
         chartView.xAxis.axisMaximum = viewModel.maximumDate
         chartView.xAxis.axisMinimum = viewModel.minimumDate
         chartView.xAxis.valueFormatter = ChartXAxisFormatter(referenceTimeInterval: viewModel.minimumTimeInterval)
-        
-        guard let lastData = candleDataSet.last else { return }
-        chartView.zoom(scaleX: 192, scaleY: 30, xValue: lastData.x, yValue: lastData.y, axis: .right)
+        guard let lastData = viewModel.candleDataSet.last else { return }
+        chartView.zoom(scaleX: 192, scaleY: 20, xValue: lastData.x, yValue: lastData.y, axis: .right)
     }
 }
