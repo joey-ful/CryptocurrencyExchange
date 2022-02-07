@@ -90,7 +90,6 @@ extension OrderViewController {
             make.top.equalToSuperview().offset(20)
             make.leading.equalToSuperview()
             make.bottom.equalToSuperview()
-            make.height.equalTo(view.safeAreaLayoutGuide.snp.height)
         }
         orderTableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         

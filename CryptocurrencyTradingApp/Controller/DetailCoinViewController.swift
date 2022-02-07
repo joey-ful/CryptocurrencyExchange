@@ -125,10 +125,8 @@ final class DetailCoinViewController: UIViewController {
         containerView.snp.makeConstraints { make in
             make.top.equalTo(menuControl.snp.bottom)
             make.width.equalToSuperview()
-            make.right.equalToSuperview()
-            make.left.equalToSuperview()
-            make.centerY.equalToSuperview()
-            make.centerX.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
             make.bottom.equalToSuperview().offset(-tabBarHeight)
         }
         

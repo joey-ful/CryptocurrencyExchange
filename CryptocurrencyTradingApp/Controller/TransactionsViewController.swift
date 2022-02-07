@@ -157,11 +157,12 @@ extension TransactionsViewController {
         view.addSubview(tableView)
         tableView.backgroundColor = .white
         tableView.delegate = self
+        tableView.sectionHeaderHeight = UIFont.preferredFont(forTextStyle: .callout).pointSize + 20
         tableView.snp.makeConstraints { make in
             make.top.equalTo(menuControl.snp.bottom).offset(10)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.height.equalTo(view.safeAreaLayoutGuide.snp.height)
+            make.bottom.equalToSuperview()
         }
         
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)

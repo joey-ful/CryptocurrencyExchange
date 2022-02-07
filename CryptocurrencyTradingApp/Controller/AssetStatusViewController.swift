@@ -110,6 +110,7 @@ extension AssetStatusViewController {
     private func setTableViewAutoLayout() {
         view.addSubview(tableView)
         tableView.backgroundColor = .white
+        tableView.sectionHeaderHeight = UIFont.preferredFont(forTextStyle: .caption1).pointSize + 20
         tableView.snp.makeConstraints { make in
             make.top.equalTo(searchBar.snp.bottom)
             make.leading.equalToSuperview()
