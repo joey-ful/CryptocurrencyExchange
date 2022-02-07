@@ -59,6 +59,7 @@ class TransactionsViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         viewModel.initiateTimeWebSocket()
         getWebSocketNotification()
+        removeWebSocketNotification()
     }
     
     private func getWebSocketNotification() {
@@ -77,9 +78,6 @@ class TransactionsViewController: UIViewController {
     deinit {
         NotificationCenter.default.removeObserver(self,
                                                   name: .restAPITransactionsNotification,
-                                                  object: nil)
-        NotificationCenter.default.removeObserver(self,
-                                                  name: .webSocketTransactionsNotification,
                                                   object: nil)
         NotificationCenter.default.removeObserver(self,
                                                   name: .candlestickNotification,

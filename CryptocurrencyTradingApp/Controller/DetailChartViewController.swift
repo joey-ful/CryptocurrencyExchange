@@ -43,11 +43,14 @@ class DetailChartViewController: UIViewController {
         
         view.backgroundColor = .white
         setLayoutForChartView()
-        setData()
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(initChart),
                                                name: .candleChartDataNotification,
                                                object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: .candleChartDataNotification, object: nil)
     }
     
     @objc private func menuSelect(_ sender: UISegmentedControl) {

@@ -36,7 +36,6 @@ final class DetailCoinViewController: UIViewController {
 
         setNavigationItem()
         setLayout()
-        NotificationCenter.default.addObserver(self, selector: #selector(setDataForLabel), name: .coinDetailNotificaion, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -44,6 +43,11 @@ final class DetailCoinViewController: UIViewController {
         if viewModel.userDefaults.contains(coin.rawValue) {
             navigationItem.rightBarButtonItem?.image = UIImage(systemName: "star.fill")
         }
+        NotificationCenter.default.addObserver(self, selector: #selector(setDataForLabel), name: .coinDetailNotificaion, object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self, name: .coinDetailNotificaion, object: nil)
     }
 
     init(coin: CoinType) {

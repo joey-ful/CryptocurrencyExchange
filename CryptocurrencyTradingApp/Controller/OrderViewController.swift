@@ -69,6 +69,7 @@ class OrderViewController: UIViewController {
     
     deinit {
         NotificationCenter.default.removeObserver(self, name: .restAPITransactionsNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .restAPITickerNotification, object: nil)
     }
 }
 

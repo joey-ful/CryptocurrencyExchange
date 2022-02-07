@@ -215,7 +215,7 @@ extension MainListViewController {
             make.top.equalTo(collectionViewHeaderStackView.snp.bottom)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(0.17)
+            make.height.equalToSuperview().multipliedBy(0.19)
         }
         
         menuControl.snp.makeConstraints { make in
