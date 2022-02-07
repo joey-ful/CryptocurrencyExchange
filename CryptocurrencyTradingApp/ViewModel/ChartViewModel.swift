@@ -33,18 +33,18 @@ final class ChartViewModel: ObservableObject {
     
     init(coin: CoinType, chartIntervals: RequestChartInterval) {
         self.coin = coin
-        initiateViewModel(coin: coin, chartIntervals: chartIntervals)
-        multiplier = chartIntervals.multiplier
+        initiateViewModel(chartIntervals: chartIntervals)
     }
     
-    func initiateViewModel(coin: CoinType, chartIntervals: RequestChartInterval) {
+    func initiateViewModel(chartIntervals: RequestChartInterval) {
         restAPIManager.fetch(type: .candlestick,
                              paymentCurrency: .KRW,
                              coin: coin,
-                             chartIntervals: chartIntervals) { (parsedResult: Result<CandleStick, Error>) in
+                             chartIntervals: chartIntervals) { [weak self] (parsedResult: Result<CandleStick, Error>) in
             switch parsedResult {
             case .success(let parsedData):
-                self.prepareCandleData(parsedData.data)
+                self?.multiplier = chartIntervals.multiplier
+                self?.prepareCandleData(parsedData.data)
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
             }

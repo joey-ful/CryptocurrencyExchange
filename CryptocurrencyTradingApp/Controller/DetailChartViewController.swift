@@ -50,26 +50,20 @@ class DetailChartViewController: UIViewController {
     }
     
     @objc private func menuSelect(_ sender: UISegmentedControl) {
-//            switch sender.selectedSegmentIndex {
-//            case 0:
-//                chartView?.viewModel.initiateViewModel(coin: coin ?? .btc
-//                                                      , chartIntervals: .oneMinute)
-//            case 1:
-//                chartView?.viewModel.initiateViewModel(coin: coin ?? .btc
-//                                                      , chartIntervals: .tenMinute)
-//            case 2:
-//                chartView?.viewModel.initiateViewModel(coin: coin ?? .btc
-//                                                      , chartIntervals: .thirtyMinute)
-//            case 3:
-//                chartView?.viewModel.initiateViewModel(coin: coin ?? .btc
-//                                                      , chartIntervals: .oneHour)
-//            case 4:
-//                chartView?.viewModel.initiateViewModel(coin: coin ?? .btc
-//                                                      , chartIntervals: .twentyFourHour)
-//            default:
-//                chartView?.viewModel.initiateViewModel(coin: coin ?? .btc
-//                                                      , chartIntervals: .twentyFourHour)
-//            }
+            switch sender.selectedSegmentIndex {
+            case 0:
+                viewModel.initiateViewModel(chartIntervals: .oneMinute)
+            case 1:
+                viewModel.initiateViewModel(chartIntervals: .tenMinute)
+            case 2:
+                viewModel.initiateViewModel(chartIntervals: .thirtyMinute)
+            case 3:
+                viewModel.initiateViewModel(chartIntervals: .oneHour)
+            case 4:
+                viewModel.initiateViewModel(chartIntervals: .twentyFourHour)
+            default:
+                viewModel.initiateViewModel(chartIntervals: .oneMinute)
+            }
     }
     
     required init?(coder: NSCoder) {
@@ -126,8 +120,10 @@ class DetailChartViewController: UIViewController {
         chartView.xAxis.setLabelCount(4, force: true)
         chartView.xAxis.axisMaximum = viewModel.maximumDate
         chartView.xAxis.axisMinimum = viewModel.minimumDate
+        chartView.rightAxis.valueFormatter = ChartYAxisFormatter()
         chartView.xAxis.valueFormatter = ChartXAxisFormatter(referenceTimeInterval: viewModel.minimumTimeInterval, multiplier: viewModel.multiplier)
         guard let lastData = viewModel.candleDataSet.last else { return }
+        chartView.zoomOut()
         chartView.zoom(scaleX: viewModel.scaleX, scaleY: viewModel.scaleY, xValue: lastData.x, yValue: viewModel.medianY, axis: .right)
     }
 }

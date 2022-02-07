@@ -91,6 +91,7 @@
 		E6BDEFAF27A3E31A00018967 /* CandleData30M+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BDEFAE27A3E31A00018967 /* CandleData30M+CoreDataProperties.swift */; };
 		E6BDEFB127A3E32D00018967 /* CandleData24H+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BDEFB027A3E32D00018967 /* CandleData24H+CoreDataProperties.swift */; };
 		E6C96497279A9A7F0007B55E /* RequestChartInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C96496279A9A7F0007B55E /* RequestChartInterval.swift */; };
+		E6E1E86D27B1115E00467E24 /* ChartYAxisFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E1E86C27B1115E00467E24 /* ChartYAxisFormatter.swift */; };
 		E6FA20B8279F04F700CCB1CC /* ChartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FA20B7279F04F700CCB1CC /* ChartViewModel.swift */; };
 /* End PBXBuildFile section */
 
@@ -179,6 +180,7 @@
 		E6BDEFAE27A3E31A00018967 /* CandleData30M+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CandleData30M+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E6BDEFB027A3E32D00018967 /* CandleData24H+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CandleData24H+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E6C96496279A9A7F0007B55E /* RequestChartInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestChartInterval.swift; sourceTree = "<group>"; };
+		E6E1E86C27B1115E00467E24 /* ChartYAxisFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartYAxisFormatter.swift; sourceTree = "<group>"; };
 		E6FA20B7279F04F700CCB1CC /* ChartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -361,6 +363,7 @@
 				D4CC02262795B3C700F15957 /* RestAPIManager.swift */,
 				D4D0D297279AE7A000734C42 /* CandleCoreDataManager.swift */,
 				E6A126B527AFFF560080EC4D /* ChartDateFormatter.swift */,
+				E6E1E86C27B1115E00467E24 /* ChartYAxisFormatter.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -506,6 +509,7 @@
 				D4B40E0A27A4110F00EDA235 /* RestAPITickerViewModel.swift in Sources */,
 				D4CC02272795B3C700F15957 /* RestAPIManager.swift in Sources */,
 				D47D009B2797A09400E8E305 /* MainListCell.swift in Sources */,
+				E6E1E86D27B1115E00467E24 /* ChartYAxisFormatter.swift in Sources */,
 				E6899C73279546320006C980 /* ParsingError.swift in Sources */,
 				D4B40DF427A25BBA00EDA235 /* TransactionViewModelType.swift in Sources */,
 				D4CC021427954B7000F15957 /* NetworkError.swift in Sources */,
