@@ -17,9 +17,12 @@ class MainListViewController: UIViewController {
     private var dataSource: MainListDataSource?
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     private var collectionViewDataSource: PopularDataSource?
+    private let collectionViewHeaderTop = UIView()
+    private let collectionViewHeaderLeading = UIView()
     private let collectionViewHeader = UILabel.makeLabel(font: .subheadline, text: "인기 코인")
     private lazy var collectionViewHeaderStackView = UIStackView.makeStackView(alignment: .leading,
-                                                                               subviews: [collectionViewHeader])
+                                                                               subviews: [collectionViewHeaderLeading,
+                                                                                          collectionViewHeader])
     private let topInset: CGFloat = 5
     private let bottomInset: CGFloat = 15
     lazy var menuControl: UISegmentedControl = {
@@ -179,30 +182,40 @@ extension MainListViewController {
 
     // MARK: AutoLayout
     private func setAutoLayout() {
+        view.addSubview(collectionViewHeaderTop)
         view.addSubview(collectionViewHeaderStackView)
         view.addSubview(collectionView)
         collectionView.backgroundColor = .systemGray6
         view.addSubview(menuControl)
         view.addSubview(tableView)
         
-        collectionViewHeaderStackView.backgroundColor = .systemGray6
-        collectionViewHeaderStackView.snp.makeConstraints { make in
+        collectionViewHeaderTop.backgroundColor = .systemGray6
+        collectionViewHeaderTop.snp.makeConstraints { make in
+            make.width.equalTo(collectionViewHeaderStackView)
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(0.035)
+            make.height.equalTo(10)
         }
         
-        collectionViewHeader.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(10)
-            $0.leading.equalTo(collectionViewHeaderStackView.snp.leading).offset(20)
+        collectionViewHeaderStackView.backgroundColor = .systemGray6
+        collectionViewHeaderStackView.snp.makeConstraints { make in
+            make.top.equalTo(collectionViewHeaderTop.snp.bottom)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+        }
+        
+        collectionViewHeaderLeading.backgroundColor = .systemGray6
+        collectionViewHeaderLeading.snp.makeConstraints {
+            $0.width.equalTo(20)
+            $0.height.equalTo(collectionViewHeader).multipliedBy(1.1)
         }
         
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(collectionViewHeaderStackView.snp.bottom)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(0.17)
+            make.height.equalToSuperview().multipliedBy(0.19)
         }
         
         menuControl.snp.makeConstraints { make in
