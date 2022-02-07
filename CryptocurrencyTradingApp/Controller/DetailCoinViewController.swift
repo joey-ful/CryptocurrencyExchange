@@ -37,8 +37,6 @@ final class DetailCoinViewController: UIViewController {
         setNavigationItem()
         setLayout()
         NotificationCenter.default.addObserver(self, selector: #selector(setDataForLabel), name: .coinDetailNotificaion, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(updateContainverView), name: .coinChartDataReceiveNotificaion, object: nil)
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -53,15 +51,10 @@ final class DetailCoinViewController: UIViewController {
         viewModel = DetailCoinViewModel(coin: coin)
         chartViewController = DetailChartViewController(coin: coin)
         super.init(nibName: nil, bundle: nil)
-
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    @objc private func updateContainverView() {
-        containerView.addSubview(chartViewController.view)
     }
 
     @objc private func setDataForLabel() {
@@ -88,15 +81,15 @@ final class DetailCoinViewController: UIViewController {
         case 0:
             transactionVC.view.removeFromSuperview()
             orderViewController.view.removeFromSuperview()
-            containerView.addSubview(chartViewController.view)
+            addAndLayoutChartView()
         case 1:
             transactionVC.view.removeFromSuperview()
             orderViewController.view.removeFromSuperview()
-            containerView.addSubview(orderViewController.view)
+            addAndLayoutOrderView()
         case 2:
             chartViewController.view.removeFromSuperview()
             orderViewController.view.removeFromSuperview()
-            containerView.addSubview(transactionVC.view)
+            addAndLayoutTransactionView()
         default:
             containerView.removeFromSuperview()
         }
@@ -112,8 +105,9 @@ final class DetailCoinViewController: UIViewController {
         view.addSubview(menuControl)
         view.addSubview(containerView)
         view.addSubview(headerVerticalStackView)
+        
         headerVerticalStackView.snp.makeConstraints { make in
-            make.leading.equalToSuperview()
+            make.leading.equalToSuperview().offset(10)
             make.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing)
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.bottom.equalTo(menuControl.snp.top)
@@ -126,16 +120,48 @@ final class DetailCoinViewController: UIViewController {
             make.height.equalToSuperview().multipliedBy(0.05)
         }
         
+        let tabBarHeight = tabBarController?.tabBar.bounds.height ?? .zero
+        
         containerView.snp.makeConstraints { make in
             make.top.equalTo(menuControl.snp.bottom)
             make.width.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(0.85)
             make.right.equalToSuperview()
             make.left.equalToSuperview()
             make.centerY.equalToSuperview()
             make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-tabBarHeight)
         }
         
+        addAndLayoutChartView()
+    }
+    
+    private func addAndLayoutChartView() {
+        containerView.addSubview(chartViewController.view)
+        chartViewController.view.snp.makeConstraints { make in
+            make.top.equalTo(containerView.snp.top)
+            make.leading.equalTo(containerView.snp.leading)
+            make.trailing.equalTo(containerView.snp.trailing)
+            make.bottom.equalTo(containerView.snp.bottom)
+        }
+    }
+    
+    private func addAndLayoutTransactionView() {
+        containerView.addSubview(transactionVC.view)
+        transactionVC.view.snp.makeConstraints { make in
+            make.top.equalTo(containerView.snp.top)
+            make.leading.equalTo(containerView.snp.leading)
+            make.trailing.equalTo(containerView.snp.trailing)
+            make.bottom.equalTo(containerView.snp.bottom)
+        }
+    }
+    
+    private func addAndLayoutOrderView() {
+        containerView.addSubview(orderViewController.view)
+        orderViewController.view.snp.makeConstraints { make in
+            make.top.equalTo(containerView.snp.top)
+            make.leading.equalTo(containerView.snp.leading)
+            make.trailing.equalTo(containerView.snp.trailing)
+            make.bottom.equalTo(containerView.snp.bottom)
+        }
     }
 }

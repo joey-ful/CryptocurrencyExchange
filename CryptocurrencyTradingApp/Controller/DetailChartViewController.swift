@@ -19,6 +19,7 @@ class DetailChartViewController: UIViewController {
         chartView.leftAxis.enabled = false
         chartView.xAxis.labelPosition = .bottom
         chartView.xAxis.setLabelCount(4, force: true)
+        chartView.setExtraOffsets(left: 50, top: 0, right: 0, bottom: 0)
         return chartView
     }()
     
