@@ -17,13 +17,24 @@ final class ChartViewModel: ObservableObject {
     var lineDataSet = LineChartDataSet()
     
     var minimumDate: Double = .zero
-    
     var maximumDate: Double = .zero
     var minimumTimeInterval: Double = .zero
+    
+    var multiplier: Double = .one
+    var visibleXValue = 30
+    var scaleX: Double {
+        return Double(candleDataSet.count / visibleXValue)
+    }
+    var visibleYValue: Double = .one
+    var scaleY: Double {
+        return (candleDataSet.yMax - candleDataSet.yMin) / visibleYValue
+    }
+    var medianY: Double = .one
     
     init(coin: CoinType, chartIntervals: RequestChartInterval) {
         self.coin = coin
         initiateViewModel(coin: coin, chartIntervals: chartIntervals)
+        multiplier = chartIntervals.multiplier
     }
     
     func initiateViewModel(coin: CoinType, chartIntervals: RequestChartInterval) {
@@ -46,10 +57,15 @@ final class ChartViewModel: ObservableObject {
         let group = DispatchGroup()
         let min = candleData.map { convert($0[0]) }.min() ?? .zero
         minimumTimeInterval = String(min.description.lose(from: ".").dropLast().dropLast().dropLast()).toDouble()
-        minimumDate = (minimumTimeInterval - minimumTimeInterval) / 3600
+        minimumDate = (minimumTimeInterval - minimumTimeInterval) / multiplier
         let max = candleData.map { convert($0[0]) }.max() ?? .zero
         let maxDate = String(max.description.lose(from: ".").dropLast().dropLast().dropLast()).toDouble()
-        maximumDate = (maxDate - minimumTimeInterval) / 3600
+        maximumDate = (maxDate - minimumTimeInterval) / multiplier
+
+        let maxOpenPrice = (candleData.suffix(30).map{ convert($0[1]) }.max() ?? 1)
+        let minClosePrice = (candleData.suffix(30).map{ convert($0[2]) }.min() ?? 0)
+        visibleYValue =  maxOpenPrice - minClosePrice
+        medianY = (maxOpenPrice + minClosePrice) / 2
         
         candleQueue.async(group: group) { [weak self] in
             let chartData: [CandleChartDataEntry] = candleData.enumerated().map { index, data in
@@ -60,7 +76,7 @@ final class ChartViewModel: ObservableObject {
                 let high = self?.convert(data[3]) ?? 0
                 let low = self?.convert(data[4]) ?? 0
                 
-                let divided = (date - (self?.minimumTimeInterval ?? 0)) / (3600)
+                let divided = (date - (self?.minimumTimeInterval ?? 0)) / (self?.multiplier ?? 1)
                 return CandleChartDataEntry(x: divided,
                                             shadowH: high,
                                             shadowL: low,
@@ -78,7 +94,7 @@ final class ChartViewModel: ObservableObject {
                 let high = self?.convert(data[3]) ?? 0
                 let low = self?.convert(data[4]) ?? 0
                 
-                let divided = (date - (self?.minimumTimeInterval ?? 0)) / (3600)
+                let divided = (date - (self?.minimumTimeInterval ?? 0)) / (self?.multiplier ?? 1)
                 return ChartDataEntry(x: divided, y: (high + low) / 2)
             }
             self?.lineDataSet = LineChartDataSet(entries: lineData)

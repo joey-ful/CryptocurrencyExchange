@@ -10,10 +10,12 @@ import Charts
 
 class ChartXAxisFormatter: NSObject {
     private var referenceTimeInterval: TimeInterval?
+    private var multiplier: Double = 1
 
-    convenience init(referenceTimeInterval: TimeInterval) {
+    convenience init(referenceTimeInterval: TimeInterval, multiplier: Double) {
         self.init()
         self.referenceTimeInterval = referenceTimeInterval
+        self.multiplier = multiplier
     }
 }
 
@@ -27,7 +29,7 @@ extension ChartXAxisFormatter: AxisValueFormatter {
         formatter.timeZone = TimeZone(abbreviation: "KST")
         formatter.dateFormat = "yy-MM-dd HH:mm"
         
-        let date = Date(timeIntervalSince1970: value * 3600 + reference)
+        let date = Date(timeIntervalSince1970: value * multiplier + reference)
         return formatter.string(from: date)
     }
 

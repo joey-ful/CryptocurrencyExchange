@@ -33,7 +33,7 @@ class DetailChartViewController: UIViewController {
     }()
     
     init(coin: CoinType) {
-        self.viewModel = ChartViewModel(coin: coin, chartIntervals: .oneHour)
+        self.viewModel = ChartViewModel(coin: coin, chartIntervals: .oneMinute)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -126,8 +126,8 @@ class DetailChartViewController: UIViewController {
         chartView.xAxis.setLabelCount(4, force: true)
         chartView.xAxis.axisMaximum = viewModel.maximumDate
         chartView.xAxis.axisMinimum = viewModel.minimumDate
-        chartView.xAxis.valueFormatter = ChartXAxisFormatter(referenceTimeInterval: viewModel.minimumTimeInterval)
+        chartView.xAxis.valueFormatter = ChartXAxisFormatter(referenceTimeInterval: viewModel.minimumTimeInterval, multiplier: viewModel.multiplier)
         guard let lastData = viewModel.candleDataSet.last else { return }
-        chartView.zoom(scaleX: 192, scaleY: 20, xValue: lastData.x, yValue: lastData.y, axis: .right)
+        chartView.zoom(scaleX: viewModel.scaleX, scaleY: viewModel.scaleY, xValue: lastData.x, yValue: viewModel.medianY, axis: .right)
     }
 }
