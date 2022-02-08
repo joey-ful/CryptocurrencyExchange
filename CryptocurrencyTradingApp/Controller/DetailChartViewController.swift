@@ -100,6 +100,7 @@ class DetailChartViewController: UIViewController {
     
     private func setData() {
         let candleStickData = viewModel.candleDataSet
+
         candleStickData.increasingColor = .red
         candleStickData.decreasingColor = .blue
         candleStickData.shadowColorSameAsCandle = true
@@ -110,13 +111,20 @@ class DetailChartViewController: UIViewController {
         let lineData = viewModel.lineDataSet
         lineData.valueTextColor = .clear
         lineData.circleColors = [.orange]
-        lineData.colors = [.orange]
+        lineData.lineWidth = 1.5
+        lineData.colors = [.systemOrange]
         lineData.mode = .cubicBezier
         lineData.circleRadius = .zero
         
+        let barData = viewModel.barDataSet
+        barData.colors = viewModel.hasRisenList.map { $0 ? .systemRed : .systemBlue}
+        barData.valueTextColor = .clear
+        
         let chartViewData = CombinedChartData()
+        chartViewData.barData = BarChartData(dataSet: barData)
         chartViewData.candleData = CandleChartData(dataSet: candleStickData)
         chartViewData.lineData = LineChartData(dataSet: lineData)
+        chartView.drawOrder = [3,2,0]
         chartView.data = chartViewData
     }
 
@@ -126,6 +134,7 @@ class DetailChartViewController: UIViewController {
         chartView.xAxis.axisMinimum = viewModel.minimumDate
         chartView.rightAxis.valueFormatter = ChartYAxisFormatter()
         chartView.xAxis.valueFormatter = ChartXAxisFormatter(referenceTimeInterval: viewModel.minimumTimeInterval, multiplier: viewModel.multiplier)
+
         guard let lastData = viewModel.candleDataSet.last else { return }
         chartView.zoomOut()
         chartView.zoom(scaleX: viewModel.scaleX, scaleY: viewModel.scaleY, xValue: lastData.x, yValue: viewModel.medianY, axis: .right)
