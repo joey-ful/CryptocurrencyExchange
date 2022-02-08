@@ -48,11 +48,11 @@ class OrderInfoCell: UITableViewCell {
         valueLabel.textAlignment = .right
         
         titleLabel.snp.makeConstraints {
-            $0.width.equalToSuperview().multipliedBy(0.35)
+            $0.leading.equalToSuperview()
             $0.top.equalToSuperview().offset(3)
             $0.bottom.equalToSuperview().offset(-3)
         }
-        valueLabel.snp.makeConstraints { $0.width.equalToSuperview().multipliedBy(0.65) }
+        valueLabel.snp.makeConstraints { $0.trailing.equalToSuperview() }
         
         if value == "separator" {
             cellStackView.isHidden = true

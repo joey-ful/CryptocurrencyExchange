@@ -42,9 +42,9 @@ class TransactionsHeader: UITableViewHeaderFooterView {
         NSLayoutConstraint.activate([
             
             timeLabel.heightAnchor.constraint(equalToConstant: UIFont.preferredFont(forTextStyle: font).pointSize + 20),
-            timeLabel.widthAnchor.constraint(equalTo: safeAreaLayoutGuide.widthAnchor, multiplier: 0.3),
+            timeLabel.widthAnchor.constraint(equalTo: safeAreaLayoutGuide.widthAnchor, multiplier: 0.34),
             priceLabel.heightAnchor.constraint(equalToConstant: UIFont.preferredFont(forTextStyle: font).pointSize + 20),
-            priceLabel.widthAnchor.constraint(equalTo: safeAreaLayoutGuide.widthAnchor, multiplier: fluctuationLabel.isHidden ? 0.43 : 0.23),
+            priceLabel.widthAnchor.constraint(equalTo: safeAreaLayoutGuide.widthAnchor, multiplier: fluctuationLabel.isHidden ? 0.39 : 0.23),
             fluctuationLabel.heightAnchor.constraint(equalToConstant: UIFont.preferredFont(forTextStyle: font).pointSize + 20),
             quantityLabel.heightAnchor.constraint(equalToConstant: UIFont.preferredFont(forTextStyle: font).pointSize + 20),
             quantityLabel.widthAnchor.constraint(equalTo: safeAreaLayoutGuide.widthAnchor, multiplier: 0.27)
