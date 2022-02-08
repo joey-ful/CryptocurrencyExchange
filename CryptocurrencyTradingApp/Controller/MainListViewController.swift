@@ -78,7 +78,11 @@ extension MainListViewController {
         guard let userInfo = notification.userInfo as? [String: Any] else { return }
         guard let targetIndex = (showFavorites ? userInfo["favorites"] : userInfo["filtered"]) as? Int else { return }
         
-        makeSnapshot()
+        guard let item = dataSource?.itemIdentifier(for: IndexPath(row: targetIndex, section: 0)) else { return }
+        guard var snapshot = dataSource?.snapshot() else { return }
+        
+        snapshot.reconfigureItems([item])
+        dataSource?.apply(snapshot, animatingDifferences: true)
         
         let cell = (tableView.cellForRow(at: IndexPath(row: targetIndex, section: 0)) as? MainListCell)
         cell?.blink(viewModel.coinViewModel(at: targetIndex))
