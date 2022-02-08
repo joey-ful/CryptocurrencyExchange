@@ -37,9 +37,10 @@ class OrderCell: UITableViewCell {
     }
     
     private func layoutViews(_ viewModel: OrderViewModel) {
-        priceLabel.snp.makeConstraints { $0.width.equalTo(cellStackView.snp.width).multipliedBy(0.5) }
+        priceLabel.snp.makeConstraints { $0.width.equalTo(contentView.snp.width).multipliedBy(0.5) }
         priceLabel.textAlignment = .center
         
+        ratioBar.snp.removeConstraints()
         ratioBar.snp.makeConstraints { make in
             make.height.equalTo(quantityLabel)
             make.width.equalTo(priceLabel.snp.width).multipliedBy(viewModel.ratio).priority(1000)
@@ -57,9 +58,5 @@ class OrderCell: UITableViewCell {
     private func configureData(_ viewModel: OrderViewModel) {
         priceLabel.text = viewModel.price
         quantityLabel.text = viewModel.quantity
-    }
-    
-    override func prepareForReuse() {
-        ratioBar.snp.removeConstraints()
     }
 }

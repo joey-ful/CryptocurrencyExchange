@@ -9,14 +9,18 @@ import Foundation
 
 struct Order: Decodable, Hashable {
     let id = UUID()
-    let price: String
-    let quantity: String
+    var price: String
+    var quantity: String
     
     static func == (lhs: Order, rhs: Order) -> Bool {
         return lhs.id == rhs.id
+        && lhs.price == rhs.price
+        && lhs.quantity == rhs.quantity
     }
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
+        hasher.combine(price)
+        hasher.combine(quantity)
     }
 }
