@@ -82,7 +82,7 @@ class DetailChartViewController: UIViewController {
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            make.height.equalToSuperview().multipliedBy(0.03)
+            make.height.equalToSuperview().multipliedBy(0.06)
         }
         
         chartView.snp.makeConstraints { make in

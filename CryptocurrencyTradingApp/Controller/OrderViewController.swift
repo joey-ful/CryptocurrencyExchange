@@ -97,7 +97,7 @@ extension OrderViewController {
         orderInfoTableView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(10)
             make.width.equalToSuperview().multipliedBy(0.4).offset(-10)
-            make.height.equalTo(view.safeAreaLayoutGuide.snp.height).multipliedBy(0.3)
+            make.height.equalTo(view.safeAreaLayoutGuide.snp.height).multipliedBy(0.31)
             make.trailing.equalToSuperview().offset(-10)
         }
         
