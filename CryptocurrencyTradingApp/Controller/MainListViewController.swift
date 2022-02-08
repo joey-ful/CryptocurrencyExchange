@@ -60,10 +60,15 @@ class MainListViewController: UIViewController {
                                                selector: #selector(updateDataSource),
                                                name: .webSocketTransactionsNotification,
                                                object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(makeSnapshot),
+                                               name: .updateSortNotification,
+                                               object: nil)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         NotificationCenter.default.removeObserver(self, name: .webSocketTransactionsNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .updateSortNotification, object: nil)
     }
     
     deinit {
@@ -80,7 +85,6 @@ extension MainListViewController {
         
         guard let item = dataSource?.itemIdentifier(for: IndexPath(row: targetIndex, section: 0)) else { return }
         guard var snapshot = dataSource?.snapshot() else { return }
-        
         snapshot.reconfigureItems([item])
         dataSource?.apply(snapshot, animatingDifferences: true)
         

@@ -49,7 +49,7 @@ class MainListHeader: UITableViewHeaderFooterView {
         super.init(reuseIdentifier: reuseIdentifier)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(updateSortIcons),
-                                               name: .updateSortIconsNotification,
+                                               name: .updateSortNotification,
                                                object: nil)
     }
     
