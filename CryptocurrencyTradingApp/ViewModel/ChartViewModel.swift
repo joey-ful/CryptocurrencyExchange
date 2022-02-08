@@ -15,21 +15,24 @@ final class ChartViewModel: ObservableObject {
     
     var candleDataSet = CandleChartDataSet()
     var lineDataSet = LineChartDataSet()
-    
+    var barDataSet = BarChartDataSet()
+
     var minimumDate: Double = .zero
     var maximumDate: Double = .zero
     var minimumTimeInterval: Double = .zero
     
     var multiplier: Double = .one
+    var divider: Double = .one
     var visibleXValue = 30
     var scaleX: Double {
         return Double(candleDataSet.count / visibleXValue)
     }
     var visibleYValue: Double = .one
     var scaleY: Double {
-        return (candleDataSet.yMax - candleDataSet.yMin) / visibleYValue
+        return (candleDataSet.yMax - 0) / (visibleYValue * 1.5)
     }
     var medianY: Double = .one
+    var hasRisenList: [Bool] = []
     
     init(coin: CoinType, chartIntervals: RequestChartInterval) {
         self.coin = coin
@@ -54,6 +57,8 @@ final class ChartViewModel: ObservableObject {
     private func prepareCandleData(_ candleData: [[CandleStick.CandleStickData]]) {
         let candleQueue = DispatchQueue(label: "queue", attributes: .concurrent)
         let lineQueue = DispatchQueue(label: "queue", attributes: .concurrent)
+        let barQueue = DispatchQueue(label: "queue", attributes: .concurrent)
+
         let group = DispatchGroup()
         let min = candleData.map { convert($0[0]) }.min() ?? .zero
         minimumTimeInterval = String(min.description.lose(from: ".").dropLast().dropLast().dropLast()).toDouble()
@@ -75,6 +80,7 @@ final class ChartViewModel: ObservableObject {
                 let close = self?.convert(data[2]) ?? 0
                 let high = self?.convert(data[3]) ?? 0
                 let low = self?.convert(data[4]) ?? 0
+                self?.hasRisenList.append(open < close)
                 
                 let divided = (date - (self?.minimumTimeInterval ?? 0)) / (self?.multiplier ?? 1)
                 return CandleChartDataEntry(x: divided,
@@ -98,6 +104,21 @@ final class ChartViewModel: ObservableObject {
                 return ChartDataEntry(x: divided, y: (high + low) / 2)
             }
             self?.lineDataSet = LineChartDataSet(entries: lineData)
+        }
+        
+        barQueue.async(group: group) { [weak self] in
+            guard let maximumTradeVolume = candleData.compactMap { self?.convert($0[5])}.max() else { return }
+            guard let minimumPrice = candleData.compactMap { self?.convert($0[4])}.min() else { return }
+            self?.divider = maximumTradeVolume / minimumPrice
+            let barData: [BarChartDataEntry] = candleData.enumerated().map { index, data in
+                let rawDate = self?.convert(data[0]) ?? 0
+                let date = String(rawDate.description.lose(from: ".").dropLast().dropLast().dropLast()).toDouble()
+                let tradeVolume = round(self?.convert(data[5]) ?? 0) / (self?.divider ?? 1)
+                
+                let divided = (date - (self?.minimumTimeInterval ?? 0)) / (self?.multiplier ?? 1)
+                return BarChartDataEntry(x: divided, y: tradeVolume)
+            }
+            self?.barDataSet = BarChartDataSet(entries: barData)
         }
         
         group.notify(queue: DispatchQueue.main) {

@@ -100,6 +100,7 @@ class DetailChartViewController: UIViewController {
     
     private func setData() {
         let candleStickData = viewModel.candleDataSet
+
         candleStickData.increasingColor = .red
         candleStickData.decreasingColor = .blue
         candleStickData.shadowColorSameAsCandle = true
@@ -114,7 +115,12 @@ class DetailChartViewController: UIViewController {
         lineData.mode = .cubicBezier
         lineData.circleRadius = .zero
         
+        let barData = viewModel.barDataSet
+        barData.colors = viewModel.hasRisenList.map { $0 ? .systemRed : .systemBlue}
+        barData.valueTextColor = .clear
+        
         let chartViewData = CombinedChartData()
+        chartViewData.barData = BarChartData(dataSet: barData)
         chartViewData.candleData = CandleChartData(dataSet: candleStickData)
         chartViewData.lineData = LineChartData(dataSet: lineData)
         chartView.data = chartViewData
