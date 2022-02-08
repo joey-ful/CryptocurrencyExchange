@@ -134,14 +134,17 @@ extension MainListCoinsViewModel {
     }
     
     private func updateTransaction(_ transaction: WebSocketTransaction.Transaction) {
+        var prevSymbol = ""
         mainListCoins.enumerated().forEach { index, oldCoin in
             let newSymbol = transaction.symbol.lose(from: "_").lowercased()
 
             if mainListCoins[index].symbol == newSymbol
             {
-                mainListCoins[index].currentPrice = transaction.price
-                filtered = mainListCoins.filter { existsInFiltered($0) }
-                favorites = filtered.filter { favoriteSymbols.contains( $0.symbol.lowercased() ) }
+                let oldPrice = mainListCoins[index].currentPrice
+                let newPrice = transaction.price
+                mainListCoins[index].currentPrice = newPrice
+                
+                if newPrice == oldPrice { return }
                 
                 var filteredIndex: Int? = nil
                 filtered.enumerated().forEach { currentIndex, coin in
@@ -171,7 +174,6 @@ extension MainListCoinsViewModel {
             
             if mainListCoins[index].symbol == newSymbol {
                 mainListCoins[index].tradeValue = ticker.accumulatedTradeValue
-                NotificationCenter.default.post(name: .webSocketTicker24HNotification, object: nil)
             }
         }
     }
@@ -183,7 +185,6 @@ extension MainListCoinsViewModel {
             if mainListCoins[index].symbol == newSymbol {
                 mainListCoins[index].fluctuationRate = ticker.fluctuationRate
                 mainListCoins[index].fluctuationAmount = ticker.fluctuationAmount
-                NotificationCenter.default.post(name: .webSocketTickerNotification, object: nil)
             }
         }
     }
