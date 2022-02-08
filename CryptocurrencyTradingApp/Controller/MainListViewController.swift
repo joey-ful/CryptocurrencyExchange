@@ -98,9 +98,11 @@ extension MainListViewController {
         snapshot.reconfigureItems([item])
         dataSource?.apply(snapshot, animatingDifferences: true)
         
-        guard notification.object as? String == "currentPrice" else { return }
+        guard notification.object as? String == "currentPrice",
+              let hasRisen = userInfo["hasRisen"] as? Bool
+        else { return }
         let cell = (tableView.cellForRow(at: IndexPath(row: targetIndex, section: 0)) as? MainListCell)
-        cell?.blink(viewModel.coinViewModel(at: targetIndex))
+        cell?.blink(viewModel.coinViewModel(at: targetIndex, hasRisen: hasRisen))
     }
 }
 

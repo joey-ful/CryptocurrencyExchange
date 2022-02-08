@@ -9,9 +9,11 @@ import UIKit
 
 class MainListCoinViewModel {
     private let coin: Ticker
+    let hasRisen: Bool
     
-    init(coin: Ticker) {
+    init(coin: Ticker, hasRisen: Bool = true) {
         self.coin = coin
+        self.hasRisen = hasRisen
     }
     
     var name: String {

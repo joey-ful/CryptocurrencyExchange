@@ -36,8 +36,8 @@ class MainListCoinsViewModel {
         return MainListHeaderViewModel(mainListCoinsViewModel: self)
     }
     
-    func coinViewModel(at index: Int) -> MainListCoinViewModel {
-        return MainListCoinViewModel(coin: filtered[index])
+    func coinViewModel(at index: Int, hasRisen: Bool = true) -> MainListCoinViewModel {
+        return MainListCoinViewModel(coin: filtered[index], hasRisen: hasRisen)
     }
     
     func favoriteCoinViewModel(at index: Int) -> MainListCoinViewModel {
@@ -144,7 +144,7 @@ extension MainListCoinsViewModel {
                 if newPrice == oldPrice { return }
                 
                 mainListCoins[index].currentPrice = newPrice
-                let userInfo = userInfo(at: index)
+                let userInfo = userInfo(at: index, hasRisen: newPrice > oldPrice)
                 NotificationCenter.default.post(name: .webSocketTransactionsNotification,
                                                 object: "currentPrice",
                                                 userInfo: userInfo)
@@ -182,7 +182,7 @@ extension MainListCoinsViewModel {
         }
     }
     
-    private func userInfo(at index: Int) -> [String: Int?] {
+    private func userInfo(at index: Int, hasRisen: Bool = true) -> [String: Any] {
         var filteredIndex: Int? = nil
         filtered.enumerated().forEach { currentIndex, coin in
             if mainListCoins[index] == coin {
@@ -197,7 +197,7 @@ extension MainListCoinsViewModel {
                 return
             }
         }
-        return ["filtered": filteredIndex, "favorites": favoritesIndex]
+        return ["filtered": filteredIndex, "favorites": favoritesIndex, "hasRisen": hasRisen]
     }
 }
 

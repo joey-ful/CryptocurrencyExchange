@@ -109,7 +109,7 @@ extension MainListCell {
     }
     
     func blink(_ viewModel: MainListCoinViewModel) {
-        let color: UIColor = viewModel.sign == "+" ? .systemRed : .systemBlue
+        let color: UIColor = viewModel.hasRisen ? .systemRed : .systemBlue
         
         UIView.animate(withDuration: 0.2, delay: 0, options: []) {
             self.backgroundColor = color.withAlphaComponent(0.1)
