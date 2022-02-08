@@ -88,6 +88,7 @@ extension String {
         guard let number = Double(self) as NSNumber? else { return .zero }
         
         let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
         numberFormatter.maximumFractionDigits = count
         numberFormatter.minimumFractionDigits = count
         

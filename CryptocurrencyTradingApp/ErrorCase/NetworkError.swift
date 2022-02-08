@@ -11,6 +11,7 @@ enum NetworkError: LocalizedError {
     case badResponse
     case invalidData
     case invalidURL
+    case unverifiedCoin
     
     var errorDescription: String? {
         switch self {
@@ -20,6 +21,8 @@ enum NetworkError: LocalizedError {
             return "유효한 데이터가 아닙니다"
         case .invalidURL:
             return "유효한 URL이 아닙니다"
+        case .unverifiedCoin:
+            return "확인되지 않은 코인입니다"
         }
     }
 }

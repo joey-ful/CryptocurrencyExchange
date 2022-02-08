@@ -29,6 +29,6 @@ class DayTransactionViewModel:TransactionViewModelType {
     }
     
     var quantity: String {
-        return (dayTransaction.quantity ?? .zero).setFractionDigits(to: 3)
+        return (dayTransaction.quantity ?? .zero).lose(from: ".")
     }
 }

@@ -38,7 +38,7 @@ class RestAPITickerViewModel {
     }
     
     private var quantity: String {
-        return (mainListCoin.quantity?.setFractionDigits(to: 3) ?? .zero) + .whiteSpace + coin.symbol
+        return (mainListCoin.quantity?.toDecimal().lose(from: ".") ?? .zero) + .whiteSpace + coin.symbol
     }
     
     private var tradeValue: String {
@@ -82,6 +82,8 @@ class RestAPITickerViewModel {
                                                  quantity: ticker.unitsTradedWithin24H,
                                                  tradeValue: ticker.tradeValueWithin24H)
                 NotificationCenter.default.post(name: .restAPITickerNotification, object: nil)
+            case .failure(NetworkError.unverifiedCoin):
+                print(NetworkError.unverifiedCoin.localizedDescription)
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
             }

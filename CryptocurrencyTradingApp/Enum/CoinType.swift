@@ -79,6 +79,7 @@ enum CoinType: String, CaseIterable {
     case rdn, aoa, atd, mith, inx
     case black, pivx, anc, beth
     case xmr, nsbt, arn, ins
+    case unverified
     
     var symbol: String {
         return self.rawValue.uppercased()

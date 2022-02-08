@@ -10,4 +10,5 @@ import Foundation
 extension Double {
     static let million = Double(1000000)
     static let tenMillion = Double(100000000)
+    static let one = Double(1)
 }

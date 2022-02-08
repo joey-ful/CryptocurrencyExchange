@@ -16,6 +16,10 @@ class RestAPIManager {
                   chartIntervals: RequestChartInterval? = .twentyFourHour,
                   completion: @escaping (Result<T, Error>) -> Void)
     {
+        guard coin != .unverified else {
+            return completion(.failure(NetworkError.unverifiedCoin))
+        }
+        
         guard let urlString = type.urlString(paymentCurrency: paymentCurrency,
                                              coin: coin,
                                              chartIntervals: chartIntervals),

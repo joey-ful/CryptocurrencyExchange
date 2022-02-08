@@ -20,7 +20,7 @@ class OrderViewController: UIViewController {
     private let orderTableView = UITableView(frame: .zero, style: .plain)
     private var transactionTableView = UITableView(frame: .zero, style: .plain)
     private let orderInfoTableView = UITableView(frame: .zero, style: .plain)
-    private var orderInitialized: Bool = false
+    private var isInitialization: Bool = true
     
     init(coin: CoinType) {
         ordersViewModel = OrdersViewModel(coin: coin)
@@ -69,6 +69,7 @@ class OrderViewController: UIViewController {
     
     deinit {
         NotificationCenter.default.removeObserver(self, name: .restAPITransactionsNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .restAPITickerNotification, object: nil)
     }
 }
 
@@ -90,14 +91,13 @@ extension OrderViewController {
             make.top.equalToSuperview().offset(20)
             make.leading.equalToSuperview()
             make.bottom.equalToSuperview()
-            make.height.equalTo(view.safeAreaLayoutGuide.snp.height).multipliedBy(0.6)
         }
         orderTableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         
         orderInfoTableView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(10)
             make.width.equalToSuperview().multipliedBy(0.4).offset(-10)
-            make.height.equalTo(view.safeAreaLayoutGuide.snp.height).multipliedBy(0.6 * 0.3)
+            make.height.equalTo(view.safeAreaLayoutGuide.snp.height).multipliedBy(0.31)
             make.trailing.equalToSuperview().offset(-10)
         }
         
@@ -105,7 +105,7 @@ extension OrderViewController {
             make.top.equalTo(orderInfoTableView.snp.bottom).offset(10)
             make.width.equalToSuperview().multipliedBy(0.4).offset(-10)
             make.trailing.equalToSuperview().offset(-10)
-            make.height.equalTo(view.safeAreaLayoutGuide.snp.height).multipliedBy(0.6 * 0.7)
+            make.bottom.equalToSuperview()
         }
     }
 }
@@ -119,15 +119,19 @@ extension OrderViewController {
     }
     
     @objc private func makeOrderSnapshot() {
-        var snapshot = NSDiffableDataSourceSnapshot<Int, Order>()
-        snapshot.appendSections([0])
-        snapshot.appendItems(ordersViewModel.orders, toSection: 0)
-        orderDataSource?.apply(snapshot, animatingDifferences: false)
-        
-        if orderInitialized == false {
+        if isInitialization {
+            var snapshot = NSDiffableDataSourceSnapshot<Int, Order>()
+            snapshot.appendSections([0])
+            snapshot.appendItems(ordersViewModel.orders, toSection: 0)
+            orderDataSource?.apply(snapshot, animatingDifferences: false)
+            
             let middleIndexPath = IndexPath(row: ordersViewModel.middleIndex, section: 0)
             orderTableView.scrollToRow(at: middleIndexPath, at: .middle, animated: false)
-            orderInitialized = true
+            isInitialization = false
+        } else {
+            guard var snapshot = orderDataSource?.snapshot() else { return }
+            snapshot.reconfigureItems(snapshot.itemIdentifiers)
+            orderDataSource?.apply(snapshot, animatingDifferences: true)
         }
     }
     

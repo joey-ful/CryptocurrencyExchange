@@ -7,16 +7,20 @@
 
 import UIKit
 import SnapKit
-import SwiftUI
+import Charts
 
 class DetailChartViewController: UIViewController {
-    private let coin: CoinType?
-    private var chartView: ChartView?
-    
-    private lazy var hostingController: UIHostingController<ChartView?> = {
-        let controller = UIHostingController(rootView: chartView)
-        controller.view.translatesAutoresizingMaskIntoConstraints = false
-        return controller
+    private let viewModel: ChartViewModel
+    private lazy var chartView: CombinedChartView = {
+        var chartView = CombinedChartView()
+        chartView.rightAxis.setLabelCount(5, force: true)
+        chartView.leftAxis.enabled = false
+        chartView.legend.enabled = false
+        chartView.leftAxis.enabled = false
+        chartView.xAxis.labelPosition = .bottom
+        chartView.xAxis.setLabelCount(4, force: true)
+        chartView.setExtraOffsets(left: 50, top: 0, right: 0, bottom: 0)
+        return chartView
     }()
     
     private lazy var timeControl: UISegmentedControl = {
@@ -29,71 +33,110 @@ class DetailChartViewController: UIViewController {
         return timeControl
     }()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setLayout()
+    init(coin: CoinType) {
+        self.viewModel = ChartViewModel(coin: coin, chartIntervals: .oneMinute)
+        super.init(nibName: nil, bundle: nil)
     }
     
-    init(coin: CoinType) {
-        self.coin = coin
-        chartView = ChartView(coin: coin, chartIntervals: .oneMinute)
-        super.init(nibName: nil, bundle: nil)
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        view.backgroundColor = .white
+        setLayoutForChartView()
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(initChart),
+                                               name: .candleChartDataNotification,
+                                               object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: .candleChartDataNotification, object: nil)
+    }
+    
+    @objc private func menuSelect(_ sender: UISegmentedControl) {
+            switch sender.selectedSegmentIndex {
+            case 0:
+                viewModel.initiateViewModel(chartIntervals: .oneMinute)
+            case 1:
+                viewModel.initiateViewModel(chartIntervals: .tenMinute)
+            case 2:
+                viewModel.initiateViewModel(chartIntervals: .thirtyMinute)
+            case 3:
+                viewModel.initiateViewModel(chartIntervals: .oneHour)
+            case 4:
+                viewModel.initiateViewModel(chartIntervals: .twentyFourHour)
+            default:
+                viewModel.initiateViewModel(chartIntervals: .oneMinute)
+            }
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc private func menuSelect(_ sender: UISegmentedControl) {
-        switch sender.selectedSegmentIndex {
-        case 0:
-            chartView?.viewModel.initiateViewModel(coin: coin ?? .btc
-                                                  , chartIntervals: .oneMinute)
-        case 1:
-            chartView?.viewModel.initiateViewModel(coin: coin ?? .btc
-                                                  , chartIntervals: .tenMinute)
-        case 2:
-            chartView?.viewModel.initiateViewModel(coin: coin ?? .btc
-                                                  , chartIntervals: .thirtyMinute)
-        case 3:
-            chartView?.viewModel.initiateViewModel(coin: coin ?? .btc
-                                                  , chartIntervals: .oneHour)
-        case 4:
-            chartView?.viewModel.initiateViewModel(coin: coin ?? .btc
-                                                  , chartIntervals: .twentyFourHour)
-        default:
-            chartView?.viewModel.initiateViewModel(coin: coin ?? .btc
-                                                  , chartIntervals: .twentyFourHour)
-        }
-    }
-    
-    private func setLayout() {
-        addChild(hostingController)
+    private func setLayoutForChartView() {
         view.addSubview(timeControl)
-        view.addSubview(hostingController.view)
+        view.addSubview(chartView)
         
         timeControl.snp.makeConstraints { make in
-                make.leading.equalToSuperview()
-                make.trailing.equalToSuperview()
-                make.top.equalToSuperview()
-                make.bottom.equalTo(hostingController.view.snp.top)
-                make.width.equalToSuperview()
-                make.height.equalToSuperview().multipliedBy(0.03)
-            }
-            
-            hostingController.didMove(toParent: self)
-            hostingController.view.snp.makeConstraints { make in
-                make.leading.equalToSuperview()
-                make.trailing.equalToSuperview()
-                make.top.equalTo(timeControl.snp.bottom)
-                make.bottom.equalToSuperview()
-                make.height.equalTo(view.safeAreaLayoutGuide.snp
-                                        .height).multipliedBy(0.60)
-                
-                
-            }
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.height.equalToSuperview().multipliedBy(0.06)
         }
         
-        
-        
+        chartView.snp.makeConstraints { make in
+            make.leading.equalTo(view.safeAreaLayoutGuide)
+            make.trailing.equalTo(view.safeAreaLayoutGuide)
+            make.top.equalTo(timeControl.snp.bottom)
+            make.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
     }
+
+    @objc private func initChart() {
+        setData()
+        setChart()
+    }
+    
+    private func setData() {
+        let candleStickData = viewModel.candleDataSet
+
+        candleStickData.increasingColor = .red
+        candleStickData.decreasingColor = .blue
+        candleStickData.shadowColorSameAsCandle = true
+        candleStickData.decreasingFilled = true
+        candleStickData.increasingFilled = true
+        candleStickData.valueTextColor = .clear
+        
+        let lineData = viewModel.lineDataSet
+        lineData.valueTextColor = .clear
+        lineData.circleColors = [.orange]
+        lineData.lineWidth = 1.5
+        lineData.colors = [.systemOrange]
+        lineData.mode = .cubicBezier
+        lineData.circleRadius = .zero
+        
+        let barData = viewModel.barDataSet
+        barData.colors = viewModel.hasRisenList.map { $0 ? .systemRed : .systemBlue}
+        barData.valueTextColor = .clear
+        
+        let chartViewData = CombinedChartData()
+        chartViewData.barData = BarChartData(dataSet: barData)
+        chartViewData.candleData = CandleChartData(dataSet: candleStickData)
+        chartViewData.lineData = LineChartData(dataSet: lineData)
+        chartView.drawOrder = [3,2,0]
+        chartView.data = chartViewData
+    }
+
+    private func setChart() {
+        chartView.xAxis.setLabelCount(4, force: true)
+        chartView.xAxis.axisMaximum = viewModel.maximumDate
+        chartView.xAxis.axisMinimum = viewModel.minimumDate
+        chartView.rightAxis.valueFormatter = ChartYAxisFormatter()
+        chartView.xAxis.valueFormatter = ChartXAxisFormatter(referenceTimeInterval: viewModel.minimumTimeInterval, multiplier: viewModel.multiplier)
+
+        guard let lastData = viewModel.candleDataSet.last else { return }
+        chartView.zoomOut()
+        chartView.zoom(scaleX: viewModel.scaleX, scaleY: viewModel.scaleY, xValue: lastData.x, yValue: viewModel.medianY, axis: .right)
+    }
+}

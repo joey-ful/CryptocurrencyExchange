@@ -19,7 +19,7 @@ class PopularCoinViewModel: ObservableObject {
     
     init(popularCoin: Ticker) {
         self.popularCoin = popularCoin
-        self.coin = CoinType.coin(symbol: popularCoin.symbol) ?? .btc
+        self.coin = CoinType.coin(symbol: popularCoin.symbol) ?? .unverified
         highPriceList = []
         initializeRestAPICandle(coin: coin)
     }
@@ -71,6 +71,8 @@ extension PopularCoinViewModel {
                 let data = Array(parsedData.data.suffix(24))
                 self.highPriceList = data
                     .map { self.convert($0[3])}
+            case .failure(NetworkError.unverifiedCoin):
+                print(NetworkError.unverifiedCoin.localizedDescription)
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
             }

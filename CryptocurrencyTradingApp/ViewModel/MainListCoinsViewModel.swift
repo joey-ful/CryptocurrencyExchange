@@ -36,8 +36,8 @@ class MainListCoinsViewModel {
         return MainListHeaderViewModel(mainListCoinsViewModel: self)
     }
     
-    func coinViewModel(at index: Int) -> MainListCoinViewModel {
-        return MainListCoinViewModel(coin: filtered[index])
+    func coinViewModel(at index: Int, hasRisen: Bool = true) -> MainListCoinViewModel {
+        return MainListCoinViewModel(coin: filtered[index], hasRisen: hasRisen)
     }
     
     func favoriteCoinViewModel(at index: Int) -> MainListCoinViewModel {
@@ -63,35 +63,24 @@ extension MainListCoinsViewModel {
             
             switch parsedResult {
             case .success(let parsedData):
-                let data = self.mirror(parsedData.data)
-                    .sorted { $0.tradeValue.toDouble() > $1.tradeValue.toDouble() }
+                let data = parsedData.data.compactMap { key, value -> Ticker? in
+                    if case let .coin(coin) = value {
+                        return Ticker(name: CoinType.coin(symbol: key)?.name ?? "-",
+                                      symbol: key.lowercased(),
+                                      currentPrice: coin.closingPrice,
+                                      fluctuationRate: coin.fluctateRate24H,
+                                      fluctuationAmount: coin.fluctate24H,
+                                      tradeValue: coin.accTradeValue24H)
+                    } else {
+                        return nil
+                    }
+                }.sorted { $0.tradeValue.toDouble() > $1.tradeValue.toDouble() }    
                 self.filtered = data
                 self.mainListCoins = data
                 NotificationCenter.default.post(name: .restAPITickerAllNotification, object: nil)
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
             }
-        }
-    }
-    
-    private func mirror(_ data: RestAPITickerAll.Data) -> [Ticker] {
-        let mirror = Mirror(reflecting: data)
-        
-        return Array(mirror.children).compactMap {
-            
-            guard let symbol = $0.label,
-                  let coinName = CoinType.coin(symbol: symbol)?.name,
-                  let coin = ($0.value as? RestAPITickerAll.Data.Coin)
-            else {
-                return nil
-            }
-            
-            return Ticker(name: coinName,
-                          symbol: symbol,
-                          currentPrice: coin.closingPrice,
-                          fluctuationRate: coin.fluctateRate24H,
-                          fluctuationAmount: coin.fluctate24H,
-                          tradeValue: coin.accTradeValue24H)
         }
     }
 }
@@ -150,28 +139,15 @@ extension MainListCoinsViewModel {
 
             if mainListCoins[index].symbol == newSymbol
             {
-                mainListCoins[index].currentPrice = transaction.price
-                filtered = mainListCoins.filter { existsInFiltered($0) }
-                favorites = filtered.filter { favoriteSymbols.contains( $0.symbol.lowercased() ) }
+                let oldPrice = mainListCoins[index].currentPrice
+                let newPrice = transaction.price
+                if newPrice == oldPrice { return }
                 
-                var filteredIndex: Int? = nil
-                filtered.enumerated().forEach { currentIndex, coin in
-                    if mainListCoins[index] == coin {
-                        filteredIndex = currentIndex
-                        return
-                    }
-                }
-                var favoritesIndex: Int? = nil
-                favorites.enumerated().forEach { currentIndex, coin in
-                    if mainListCoins[index] == coin {
-                        favoritesIndex = currentIndex
-                        return
-                    }
-                }
+                mainListCoins[index].currentPrice = newPrice
+                let userInfo = userInfo(at: index, hasRisen: newPrice > oldPrice)
                 NotificationCenter.default.post(name: .webSocketTransactionsNotification,
-                                                object: nil,
-                                                userInfo: ["filtered": filteredIndex,
-                                                           "favorites": favoritesIndex])
+                                                object: "currentPrice",
+                                                userInfo: userInfo)
             }
         }
     }
@@ -182,7 +158,10 @@ extension MainListCoinsViewModel {
             
             if mainListCoins[index].symbol == newSymbol {
                 mainListCoins[index].tradeValue = ticker.accumulatedTradeValue
-                NotificationCenter.default.post(name: .webSocketTicker24HNotification, object: nil)
+                let userInfo = userInfo(at: index)
+                NotificationCenter.default.post(name: .webSocketTicker24HNotification,
+                                                object: "tradeValue",
+                                                userInfo: userInfo)
             }
         }
     }
@@ -194,11 +173,34 @@ extension MainListCoinsViewModel {
             if mainListCoins[index].symbol == newSymbol {
                 mainListCoins[index].fluctuationRate = ticker.fluctuationRate
                 mainListCoins[index].fluctuationAmount = ticker.fluctuationAmount
-                NotificationCenter.default.post(name: .webSocketTickerNotification, object: nil)
+                
+                let userInfo = userInfo(at: index)
+                NotificationCenter.default.post(name: .webSocketTickerNotification,
+                                                object: "fluctuation",
+                                                userInfo: userInfo)
             }
         }
     }
+    
+    private func userInfo(at index: Int, hasRisen: Bool = true) -> [String: Any] {
+        var filteredIndex: Int? = nil
+        filtered.enumerated().forEach { currentIndex, coin in
+            if mainListCoins[index] == coin {
+                filteredIndex = currentIndex
+                return
+            }
+        }
+        var favoritesIndex: Int? = nil
+        favorites.enumerated().forEach { currentIndex, coin in
+            if mainListCoins[index] == coin {
+                favoritesIndex = currentIndex
+                return
+            }
+        }
+        return ["filtered": filteredIndex, "favorites": favoritesIndex, "hasRisen": hasRisen]
+    }
 }
+
 
 // MARK: SearchBar
 extension MainListCoinsViewModel {

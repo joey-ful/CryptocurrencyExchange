@@ -26,7 +26,7 @@ class PopularCoinCell: UICollectionViewCell {
                                                                 subviews: [nameLabel,
                                                                            priceLabel,
                                                                            fluctuationStackView])
-    private lazy var cellStackView = UIStackView.makeStackView(alignment: .center,
+    private lazy var cellStackView = UIStackView.makeStackView(alignment: .leading,
                                                                axis: .vertical,
                                                                spacing: 10,
                                                                subviews: [labelStackView, host.view])
@@ -66,7 +66,7 @@ class PopularCoinCell: UICollectionViewCell {
         
         host.view.snp.makeConstraints {
             $0.width.equalTo(contentView.snp.width).offset(-20)
-            $0.height.equalTo(cellStackView.snp.height).multipliedBy(0.38)
+            $0.height.equalTo(contentView.safeAreaLayoutGuide.snp.height).multipliedBy(0.38)
         }
     }
     
