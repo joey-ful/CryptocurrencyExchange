@@ -8,6 +8,7 @@
 import UIKit
 
 struct Ticker: Hashable {
+    let id = UUID()
     let name: String
     let symbol: String
     var currentPrice: String
@@ -21,8 +22,7 @@ struct Ticker: Hashable {
     let quantity: String?
     
     static func == (lhs: Ticker, rhs: Ticker) -> Bool {
-        return lhs.name == rhs.name
-        && lhs.symbol == rhs.symbol
+        return lhs.id == rhs.id
         && lhs.currentPrice == rhs.currentPrice
         && lhs.fluctuationRate == rhs.fluctuationRate
         && lhs.fluctuationAmount == rhs.fluctuationAmount
@@ -30,8 +30,7 @@ struct Ticker: Hashable {
     }
     
     func hash(into hasher: inout Hasher) {
-        hasher.combine(name)
-        hasher.combine(symbol)
+        hasher.combine(id)
         hasher.combine(currentPrice)
         hasher.combine(fluctuationRate)
         hasher.combine(fluctuationAmount)

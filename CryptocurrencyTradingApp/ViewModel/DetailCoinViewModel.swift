@@ -52,7 +52,9 @@ class DetailCoinViewModel {
         restAPIManager.fetch(type: .ticker, paymentCurrency: .KRW, coin: coin) { [weak self]  (parsedResult: Result<RestAPITicker, Error>) in
             switch parsedResult {
             case .success(let parsedData):
-                self?.coinInfomation = Ticker(symbol: self?.coin?.rawValue ?? "btc", currentPrice: parsedData.data.closingPrice, fluctuationAmount: parsedData.data.fluctuation24H, fluctuationRate: parsedData.data.fluctuationRate24H)
+                self?.coinInfomation = Ticker(symbol: self?.coin?.rawValue ?? "-", currentPrice: parsedData.data.closingPrice, fluctuationAmount: parsedData.data.fluctuation24H, fluctuationRate: parsedData.data.fluctuationRate24H)
+            case .failure(NetworkError.unverifiedCoin):
+                print(NetworkError.unverifiedCoin.localizedDescription)
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
             }

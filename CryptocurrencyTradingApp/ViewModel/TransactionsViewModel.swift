@@ -90,6 +90,8 @@ extension TransactionsViewModel {
             case .success(let parsedData):
                 self.convertCandleToTransaction(parsedData.data)
                 NotificationCenter.default.post(name: .candlestickNotification, object: nil)
+            case .failure(NetworkError.unverifiedCoin):
+                print(NetworkError.unverifiedCoin.localizedDescription)
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
             }
