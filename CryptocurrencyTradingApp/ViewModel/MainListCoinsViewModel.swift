@@ -63,35 +63,24 @@ extension MainListCoinsViewModel {
             
             switch parsedResult {
             case .success(let parsedData):
-                let data = self.mirror(parsedData.data)
-                    .sorted { $0.tradeValue.toDouble() > $1.tradeValue.toDouble() }
+                let data = parsedData.data.compactMap { key, value -> Ticker? in
+                    if case let .coin(coin) = value {
+                        return Ticker(name: CoinType.coin(symbol: key)?.name ?? "-",
+                                      symbol: key.lowercased(),
+                                      currentPrice: coin.closingPrice,
+                                      fluctuationRate: coin.fluctateRate24H,
+                                      fluctuationAmount: coin.fluctate24H,
+                                      tradeValue: coin.accTradeValue24H)
+                    } else {
+                        return nil
+                    }
+                }.sorted { $0.tradeValue.toDouble() > $1.tradeValue.toDouble() }    
                 self.filtered = data
                 self.mainListCoins = data
                 NotificationCenter.default.post(name: .restAPITickerAllNotification, object: nil)
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
             }
-        }
-    }
-    
-    private func mirror(_ data: RestAPITickerAll.Data) -> [Ticker] {
-        let mirror = Mirror(reflecting: data)
-        
-        return Array(mirror.children).compactMap {
-            
-            guard let symbol = $0.label,
-                  let coinName = CoinType.coin(symbol: symbol)?.name,
-                  let coin = ($0.value as? RestAPITickerAll.Data.Coin)
-            else {
-                return nil
-            }
-            
-            return Ticker(name: coinName,
-                          symbol: symbol,
-                          currentPrice: coin.closingPrice,
-                          fluctuationRate: coin.fluctateRate24H,
-                          fluctuationAmount: coin.fluctate24H,
-                          tradeValue: coin.accTradeValue24H)
         }
     }
 }
