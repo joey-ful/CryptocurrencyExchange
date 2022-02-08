@@ -45,6 +45,8 @@ final class ChartViewModel: ObservableObject {
             case .success(let parsedData):
                 self?.multiplier = chartIntervals.multiplier
                 self?.prepareCandleData(parsedData.data)
+            case .failure(NetworkError.unverifiedCoin):
+                print(NetworkError.unverifiedCoin.localizedDescription)
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
             }

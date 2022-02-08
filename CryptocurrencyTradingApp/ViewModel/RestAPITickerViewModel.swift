@@ -82,6 +82,8 @@ class RestAPITickerViewModel {
                                                  quantity: ticker.unitsTradedWithin24H,
                                                  tradeValue: ticker.tradeValueWithin24H)
                 NotificationCenter.default.post(name: .restAPITickerNotification, object: nil)
+            case .failure(NetworkError.unverifiedCoin):
+                print(NetworkError.unverifiedCoin.localizedDescription)
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
             }

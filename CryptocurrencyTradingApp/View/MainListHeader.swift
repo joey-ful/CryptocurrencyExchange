@@ -49,7 +49,7 @@ class MainListHeader: UITableViewHeaderFooterView {
         super.init(reuseIdentifier: reuseIdentifier)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(updateSortIcons),
-                                               name: .updateSortIconsNotification,
+                                               name: .updateSortNotification,
                                                object: nil)
     }
     
@@ -85,10 +85,15 @@ extension MainListHeader {
             make.bottom.equalToSuperview().offset(-10)
         }
         
-        NSLayoutConstraint.activate([
-            fluctuationStackView.widthAnchor.constraint(equalToConstant: 75),
-            tradeValueStackView.widthAnchor.constraint(equalToConstant: 85)
-        ])
+        nameStackView.snp.makeConstraints {
+            $0.width.equalTo(headerStackView.snp.width).multipliedBy(0.25)
+        }
+        fluctuationStackView.snp.makeConstraints {
+            $0.width.equalTo(headerStackView.snp.width).multipliedBy(0.2)
+        }
+        tradeValueStackView.snp.makeConstraints {
+            $0.width.equalTo(headerStackView.snp.width).multipliedBy(0.25)
+        }
         
         nameStackView.alignment = .center
         priceStackView.alignment = .center

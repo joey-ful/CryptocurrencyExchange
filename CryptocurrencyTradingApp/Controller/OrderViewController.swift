@@ -20,7 +20,7 @@ class OrderViewController: UIViewController {
     private let orderTableView = UITableView(frame: .zero, style: .plain)
     private var transactionTableView = UITableView(frame: .zero, style: .plain)
     private let orderInfoTableView = UITableView(frame: .zero, style: .plain)
-    private var orderInitialized: Bool = false
+    private var isInitialization: Bool = true
     
     init(coin: CoinType) {
         ordersViewModel = OrdersViewModel(coin: coin)
@@ -119,15 +119,19 @@ extension OrderViewController {
     }
     
     @objc private func makeOrderSnapshot() {
-        var snapshot = NSDiffableDataSourceSnapshot<Int, Order>()
-        snapshot.appendSections([0])
-        snapshot.appendItems(ordersViewModel.orders, toSection: 0)
-        orderDataSource?.apply(snapshot, animatingDifferences: false)
-        
-        if orderInitialized == false {
+        if isInitialization {
+            var snapshot = NSDiffableDataSourceSnapshot<Int, Order>()
+            snapshot.appendSections([0])
+            snapshot.appendItems(ordersViewModel.orders, toSection: 0)
+            orderDataSource?.apply(snapshot, animatingDifferences: false)
+            
             let middleIndexPath = IndexPath(row: ordersViewModel.middleIndex, section: 0)
             orderTableView.scrollToRow(at: middleIndexPath, at: .middle, animated: false)
-            orderInitialized = true
+            isInitialization = false
+        } else {
+            guard var snapshot = orderDataSource?.snapshot() else { return }
+            snapshot.reconfigureItems(snapshot.itemIdentifiers)
+            orderDataSource?.apply(snapshot, animatingDifferences: true)
         }
     }
     

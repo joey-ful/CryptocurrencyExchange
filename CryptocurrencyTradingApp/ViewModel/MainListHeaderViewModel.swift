@@ -67,6 +67,6 @@ class MainListHeaderViewModel {
             mainListCoinsViewModel?.sortTradeValue(type: sorts[3])
         }
         
-        NotificationCenter.default.post(name: .updateSortIconsNotification, object: nil)
+        NotificationCenter.default.post(name: .updateSortNotification, object: nil)
     }
 }

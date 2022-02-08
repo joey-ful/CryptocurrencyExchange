@@ -8,20 +8,17 @@
 import Foundation
 
 struct AssetStatus: Hashable {
+    let id = UUID()
     let coinName: String
     let symbol: String
     let withdraw: Int
     let deposit: Int
     
     static func == (lhs: AssetStatus, rhs: AssetStatus) -> Bool {
-        return lhs.symbol == rhs.symbol
-        && lhs.withdraw == rhs.withdraw
-        && lhs.deposit == rhs.deposit
+        return lhs.id == rhs.id
     }
     
     func hash(into hasher: inout Hasher) {
-        hasher.combine(symbol)
-        hasher.combine(withdraw)
-        hasher.combine(deposit)
+        hasher.combine(id)
     }
 }

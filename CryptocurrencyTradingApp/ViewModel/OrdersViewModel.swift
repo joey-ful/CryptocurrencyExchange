@@ -58,6 +58,8 @@ extension OrdersViewModel {
                 self.asks = parsedData.data.asks.sorted { $0.price > $1.price }
                 self.bids = parsedData.data.bids
                 NotificationCenter.default.post(name: .restAPIOrderNotification, object: nil)
+            case .failure(NetworkError.unverifiedCoin):
+                print(NetworkError.unverifiedCoin.localizedDescription)
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
             }

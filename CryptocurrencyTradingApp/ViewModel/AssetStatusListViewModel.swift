@@ -32,7 +32,7 @@ extension AssetStatusListViewModel {
             switch parsedResult {
             case .success(let parsedData):
                 let data: [AssetStatus] = parsedData.data.map { symbol, assetStatus in
-                    let coin = CoinType.coin(symbol: symbol) ?? .btc
+                    let coin = CoinType.coin(symbol: symbol) ?? .unverified
                     return AssetStatus(coinName: coin.name,
                                        symbol: coin.symbol,
                                        withdraw: assetStatus.withdrawStatus,

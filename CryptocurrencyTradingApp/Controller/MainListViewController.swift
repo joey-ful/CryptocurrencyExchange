@@ -57,23 +57,28 @@ class MainListViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         viewModel.initiateWebSocket()
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(makeSnapshot),
-                                               name: .webSocketTicker24HNotification,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
                                                selector: #selector(updateDataSource),
                                                name: .webSocketTransactionsNotification,
                                                object: nil)
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(makeSnapshot),
+                                               selector: #selector(updateDataSource),
+                                               name: .webSocketTicker24HNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(updateDataSource),
                                                name: .webSocketTickerNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(makeSnapshot),
+                                               name: .updateSortNotification,
                                                object: nil)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
-        NotificationCenter.default.removeObserver(self, name: .webSocketTicker24HNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: .webSocketTransactionsNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .webSocketTicker24HNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: .webSocketTickerNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .updateSortNotification, object: nil)
     }
     
     deinit {
@@ -88,9 +93,16 @@ extension MainListViewController {
         guard let userInfo = notification.userInfo as? [String: Any] else { return }
         guard let targetIndex = (showFavorites ? userInfo["favorites"] : userInfo["filtered"]) as? Int else { return }
         
+        guard let item = dataSource?.itemIdentifier(for: IndexPath(row: targetIndex, section: 0)) else { return }
+        guard var snapshot = dataSource?.snapshot() else { return }
+        snapshot.reconfigureItems([item])
+        dataSource?.apply(snapshot, animatingDifferences: true)
+        
+        guard notification.object as? String == "currentPrice",
+              let hasRisen = userInfo["hasRisen"] as? Bool
+        else { return }
         let cell = (tableView.cellForRow(at: IndexPath(row: targetIndex, section: 0)) as? MainListCell)
-        cell?.blink(viewModel.coinViewModel(at: targetIndex))
-        makeSnapshot()
+        cell?.blink(viewModel.coinViewModel(at: targetIndex, hasRisen: hasRisen))
     }
 }
 
@@ -285,7 +297,7 @@ extension MainListViewController {
 extension MainListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let list = showFavorites ? viewModel.favorites : viewModel.filtered
-        let coin = CoinType.coin(symbol: list[indexPath.row].symbol.lowercased()) ?? .btc
+        let coin = CoinType.coin(symbol: list[indexPath.row].symbol.lowercased()) ?? .unverified
         let detailViewController = DetailCoinViewController(coin: coin)
         navigationController?.pushViewController(detailViewController, animated: true)
     }

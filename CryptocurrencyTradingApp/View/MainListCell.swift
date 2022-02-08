@@ -29,12 +29,12 @@ class MainListCell: UITableViewCell {
                                                                       axis: .vertical,
                                                                       subviews: [fluctuationRateLabel,
                                                                                  fluctuationAmountLabel])
-    private lazy var numbersView = UIStackView.makeStackView(subviews: [priceStackView,
+    private lazy var numbersView = UIStackView.makeStackView(spacing: 5,
+                                                             subviews: [priceStackView,
                                                                         fluctuationStackView,
                                                                         tradeValueLabel])
     
-    private lazy var cellStackView = UIStackView.makeStackView(subviews: [nameStackView,
-                                                                          numbersView])
+    private lazy var cellStackView = UIStackView.makeStackView(subviews: [nameStackView, numbersView])
 }
 
 extension MainListCell {
@@ -97,14 +97,19 @@ extension MainListCell {
         fluctuationAmountLabel.textAlignment = .right
         tradeValueLabel.textAlignment = .right
         
-        NSLayoutConstraint.activate([
-            fluctuationStackView.widthAnchor.constraint(equalToConstant: 75),
-            tradeValueLabel.widthAnchor.constraint(equalToConstant: 85)
-        ])
+        nameStackView.snp.makeConstraints {
+            $0.width.equalTo(cellStackView.snp.width).multipliedBy(0.25)
+        }
+        fluctuationStackView.snp.makeConstraints {
+            $0.width.equalTo(cellStackView.snp.width).multipliedBy(0.2)
+        }
+        tradeValueLabel.snp.makeConstraints {
+            $0.width.equalTo(cellStackView.snp.width).multipliedBy(0.25)
+        }
     }
     
     func blink(_ viewModel: MainListCoinViewModel) {
-        let color: UIColor = viewModel.sign == "+" ? .systemRed : .systemBlue
+        let color: UIColor = viewModel.hasRisen ? .systemRed : .systemBlue
         
         UIView.animate(withDuration: 0.2, delay: 0, options: []) {
             self.backgroundColor = color.withAlphaComponent(0.1)
