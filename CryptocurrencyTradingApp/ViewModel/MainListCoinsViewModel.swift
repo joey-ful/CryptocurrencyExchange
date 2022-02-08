@@ -134,7 +134,6 @@ extension MainListCoinsViewModel {
     }
     
     private func updateTransaction(_ transaction: WebSocketTransaction.Transaction) {
-        var prevSymbol = ""
         mainListCoins.enumerated().forEach { index, oldCoin in
             let newSymbol = transaction.symbol.lose(from: "_").lowercased()
 
@@ -142,28 +141,13 @@ extension MainListCoinsViewModel {
             {
                 let oldPrice = mainListCoins[index].currentPrice
                 let newPrice = transaction.price
-                mainListCoins[index].currentPrice = newPrice
-                
                 if newPrice == oldPrice { return }
                 
-                var filteredIndex: Int? = nil
-                filtered.enumerated().forEach { currentIndex, coin in
-                    if mainListCoins[index] == coin {
-                        filteredIndex = currentIndex
-                        return
-                    }
-                }
-                var favoritesIndex: Int? = nil
-                favorites.enumerated().forEach { currentIndex, coin in
-                    if mainListCoins[index] == coin {
-                        favoritesIndex = currentIndex
-                        return
-                    }
-                }
+                mainListCoins[index].currentPrice = newPrice
+                let userInfo = userInfo(at: index)
                 NotificationCenter.default.post(name: .webSocketTransactionsNotification,
-                                                object: nil,
-                                                userInfo: ["filtered": filteredIndex,
-                                                           "favorites": favoritesIndex])
+                                                object: "currentPrice",
+                                                userInfo: userInfo)
             }
         }
     }
@@ -174,6 +158,10 @@ extension MainListCoinsViewModel {
             
             if mainListCoins[index].symbol == newSymbol {
                 mainListCoins[index].tradeValue = ticker.accumulatedTradeValue
+                let userInfo = userInfo(at: index)
+                NotificationCenter.default.post(name: .webSocketTicker24HNotification,
+                                                object: "tradeValue",
+                                                userInfo: userInfo)
             }
         }
     }
@@ -185,10 +173,34 @@ extension MainListCoinsViewModel {
             if mainListCoins[index].symbol == newSymbol {
                 mainListCoins[index].fluctuationRate = ticker.fluctuationRate
                 mainListCoins[index].fluctuationAmount = ticker.fluctuationAmount
+                
+                let userInfo = userInfo(at: index)
+                NotificationCenter.default.post(name: .webSocketTickerNotification,
+                                                object: "fluctuation",
+                                                userInfo: userInfo)
             }
         }
     }
+    
+    private func userInfo(at index: Int) -> [String: Int?] {
+        var filteredIndex: Int? = nil
+        filtered.enumerated().forEach { currentIndex, coin in
+            if mainListCoins[index] == coin {
+                filteredIndex = currentIndex
+                return
+            }
+        }
+        var favoritesIndex: Int? = nil
+        favorites.enumerated().forEach { currentIndex, coin in
+            if mainListCoins[index] == coin {
+                favoritesIndex = currentIndex
+                return
+            }
+        }
+        return ["filtered": filteredIndex, "favorites": favoritesIndex]
+    }
 }
+
 
 // MARK: SearchBar
 extension MainListCoinsViewModel {
