@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct WebSocketParameter: Codable {
+struct BithumbWebSocketParameter: Codable {
     let type: String
     let symbols: [String]
     let tickTypes: [String]?

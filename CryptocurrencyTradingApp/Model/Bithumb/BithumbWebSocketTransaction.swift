@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct WebSocketTransaction: Decodable, WebSocketDataModel {
+struct BithumbWebSocketTransaction: Decodable, WebSocketDataModel {
     let content: Content
     
     struct Content: Decodable {

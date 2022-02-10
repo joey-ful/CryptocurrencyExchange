@@ -96,7 +96,7 @@ final class CandleCoreDataManager {
         saveContext()
     }
 
-    func addToCoreData(coin: CoinType, _ candleStick: [[CandleStick.CandleStickData]], entityName: RequestChartInterval) {
+    func addToCoreData(coin: CoinType, _ candleStick: [[BithumbCandleStick.CandleStickData]], entityName: RequestChartInterval) {
         guard let fetched = read(entityName: entityName, coin: coin) else { return }
         
         candleStick.forEach { index in
@@ -109,7 +109,7 @@ final class CandleCoreDataManager {
         }
     }
     
-    private func convert(_ candleData: CandleStick.CandleStickData) -> Double {
+    private func convert(_ candleData: BithumbCandleStick.CandleStickData) -> Double {
         switch candleData {
         case .string(let result):
             return Double(result) ?? .zero
@@ -118,7 +118,7 @@ final class CandleCoreDataManager {
         }
     }
     
-    private func convertToInt(_ candleData: CandleStick.CandleStickData) -> String {
+    private func convertToInt(_ candleData: BithumbCandleStick.CandleStickData) -> String {
         switch candleData {
         case .string(let result):
             return String(result)

@@ -51,7 +51,7 @@ class OrdersViewModel {
 extension OrdersViewModel {
     private func initiateRestAPI() {
         restAPIManager.fetch(type: .orderbook, paymentCurrency: .KRW, coin: coinType)
-        { (parsedResult: Result<RestAPIOrderbook, Error>) in
+        { (parsedResult: Result<BithumbRestAPIOrderbook, Error>) in
             
             switch parsedResult {
             case .success(let parsedData):
@@ -76,7 +76,7 @@ extension OrdersViewModel {
     
     private func initiateWebSocketTicker() {
         webSocketManager.connectWebSocket(.orderbookdepth, [coinType], nil)
-        { (parsedResult: Result<WebSocketOrderBook?, Error>) in
+        { (parsedResult: Result<BithumbWebSocketOrderBook?, Error>) in
             
             self.initiateRestAPI()
         }

@@ -63,7 +63,7 @@ extension PopularCoinViewModel {
         restAPIManager.fetch(type: .candlestick,
                              paymentCurrency: .KRW,
                              coin: coin,
-                             chartIntervals: .oneHour) { (parsedResult: Result<CandleStick, Error>) in
+                             chartIntervals: .oneHour) { (parsedResult: Result<BithumbCandleStick, Error>) in
             
             switch parsedResult {
             case .success(let parsedData):
@@ -79,7 +79,7 @@ extension PopularCoinViewModel {
         }
     }
     
-    private func convert(_ candleData: CandleStick.CandleStickData) -> Double {
+    private func convert(_ candleData: BithumbCandleStick.CandleStickData) -> Double {
         switch candleData {
         case .string(let result):
             return Double(result) ?? .zero

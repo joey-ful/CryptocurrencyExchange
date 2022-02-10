@@ -59,7 +59,7 @@ extension MainListCoinsViewModel {
     private func initiateRestAPI() {
         restAPIManager.fetch(type: .tickerAll,
                              paymentCurrency: .KRW)
-        { (parsedResult: Result<RestAPITickerAll, Error>) in
+        { (parsedResult: Result<BithumbRestAPITickerAll, Error>) in
             
             switch parsedResult {
             case .success(let parsedData):
@@ -101,7 +101,7 @@ extension MainListCoinsViewModel {
         webSocketManager.connectWebSocket(.transaction,
                                           CoinType.allCoins,
                                           nil)
-        { (parsedResult: Result<WebSocketTransaction?, Error>) in
+        { (parsedResult: Result<BithumbWebSocketTransaction?, Error>) in
             
             switch parsedResult {
             case .success(let parsedData):
@@ -117,7 +117,7 @@ extension MainListCoinsViewModel {
         webSocketManager.connectWebSocket(.ticker,
                                           CoinType.allCoins,
                                           [.twentyfour, .yesterday])
-        { (parsedResult: Result<WebSocketTicker?, Error>) in
+        { (parsedResult: Result<BithumbWebSocketTicker?, Error>) in
             
             switch parsedResult {
             case .success(let parsedData):
@@ -133,7 +133,7 @@ extension MainListCoinsViewModel {
         }
     }
     
-    private func updateTransaction(_ transaction: WebSocketTransaction.Transaction) {
+    private func updateTransaction(_ transaction: BithumbWebSocketTransaction.Transaction) {
         mainListCoins.enumerated().forEach { index, oldCoin in
             let newSymbol = transaction.symbol.lose(from: "_").lowercased()
 
@@ -152,7 +152,7 @@ extension MainListCoinsViewModel {
         }
     }
     
-    private func updateTradeValue(_ ticker: WebSocketTicker.Ticker) {
+    private func updateTradeValue(_ ticker: BithumbWebSocketTicker.Ticker) {
         mainListCoins.enumerated().forEach { index, oldCoin in
             let newSymbol = ticker.symbol.lose(from: "_").lowercased()
             
@@ -166,7 +166,7 @@ extension MainListCoinsViewModel {
         }
     }
     
-    private func updateFluctuationAndUnisTraded(_ ticker: WebSocketTicker.Ticker) {
+    private func updateFluctuationAndUnisTraded(_ ticker: BithumbWebSocketTicker.Ticker) {
         mainListCoins.enumerated().forEach { index, oldCoin in
             let newSymbol = ticker.symbol.lose(from: "_").lowercased()
             

@@ -34,7 +34,7 @@ class WebSocketManager: NSObject {
     
     private func sendMessage(_ type: RequestType, _ symbols: [CoinType], _ tickTypes: [RequestTik]?) {
         let encoder = JSONEncoder()
-        let parameters = WebSocketParameter(type, symbols, tickTypes)
+        let parameters = BithumbWebSocketParameter(type, symbols, tickTypes)
         guard let data = try? encoder.encode(parameters) else {
             return
         }
@@ -72,11 +72,11 @@ class WebSocketManager: NSObject {
         do {
             var parsedData: T?
             if text.contains("ticker") {
-                parsedData = try JSONDecoder().decode(WebSocketTicker.self, from: data) as? T
+                parsedData = try JSONDecoder().decode(BithumbWebSocketTicker.self, from: data) as? T
             } else if text.contains("transaction") {
-                parsedData = try JSONDecoder().decode(WebSocketTransaction.self, from: data) as? T
+                parsedData = try JSONDecoder().decode(BithumbWebSocketTransaction.self, from: data) as? T
             } else if text.contains("orderbookdepth") {
-                parsedData = try JSONDecoder().decode(WebSocketOrderBook.self, from: data) as? T
+                parsedData = try JSONDecoder().decode(BithumbWebSocketOrderBook.self, from: data) as? T
             }
             guard let parsedData = parsedData else { return }
             DispatchQueue.main.async {
