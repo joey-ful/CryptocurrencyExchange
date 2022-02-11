@@ -21,19 +21,14 @@ enum RestAPIType: String {
       return "https://api.bithumb.com/public/"
     }
 
-    enum PaymentCurrency {
-        case KRW
-        case BTC
-    }
-    
-    func urlString(paymentCurrency: PaymentCurrency, coin: CoinType? = nil, chartIntervals: RequestChartInterval? = .twentyFourHour) -> String? {
+    func urlString(paymentCurrency: PaymentCurrency, coin: CoinType? = nil, chartIntervals: ChartInterval? = .twentyFourHour) -> String? {
         let path = self.rawValue
     
         if path.contains("ALL") {
             return baseURL + path + "_\(paymentCurrency)"
         } else if path.contains("candlestick") {
             guard let coinSymbol = coin?.symbol, let chartIntervals = chartIntervals else { return nil }
-            return baseURL + path + "\(coinSymbol)_\(paymentCurrency)\(chartIntervals.rawValue)"
+            return baseURL + path + "\(coinSymbol)_\(paymentCurrency)\(chartIntervals.bitThumbPath)"
         } else {
             guard let coinSymbol = coin?.symbol else { return nil }
             return baseURL + path + "\(coinSymbol)_\(paymentCurrency)"

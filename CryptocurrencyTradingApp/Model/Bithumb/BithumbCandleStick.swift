@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CandleStick: Codable {
+struct BithumbCandleStick: Codable {
     let status: String
     let data: [[CandleStickData]]
     

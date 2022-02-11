@@ -70,7 +70,7 @@ class RestAPITickerViewModel {
     private func initiateRestAPI(_ coin: CoinType) {
         restAPIManager.fetch(type: .ticker,
                              paymentCurrency: .KRW,
-                             coin: coin) { (parsedResult: Result<RestAPITicker, Error>) in
+                             coin: coin) { (parsedResult: Result<BithumbRestAPITicker, Error>) in
             
             switch parsedResult {
             case .success(let parsedData):

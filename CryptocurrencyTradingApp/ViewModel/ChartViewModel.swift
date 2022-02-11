@@ -34,16 +34,16 @@ final class ChartViewModel: ObservableObject {
     var medianY: Double = .one
     var hasRisenList: [Bool] = []
     
-    init(coin: CoinType, chartIntervals: RequestChartInterval) {
+    init(coin: CoinType, chartIntervals: ChartInterval) {
         self.coin = coin
         initiateViewModel(chartIntervals: chartIntervals)
     }
     
-    func initiateViewModel(chartIntervals: RequestChartInterval) {
+    func initiateViewModel(chartIntervals: ChartInterval) {
         restAPIManager.fetch(type: .candlestick,
                              paymentCurrency: .KRW,
                              coin: coin,
-                             chartIntervals: chartIntervals) { [weak self] (parsedResult: Result<CandleStick, Error>) in
+                             chartIntervals: chartIntervals) { [weak self] (parsedResult: Result<BithumbCandleStick, Error>) in
             switch parsedResult {
             case .success(let parsedData):
                 self?.multiplier = chartIntervals.multiplier
@@ -56,7 +56,7 @@ final class ChartViewModel: ObservableObject {
         }
     }
     
-    private func prepareCandleData(_ candleData: [[CandleStick.CandleStickData]]) {
+    private func prepareCandleData(_ candleData: [[BithumbCandleStick.CandleStickData]]) {
         let candleQueue = DispatchQueue(label: "queue", attributes: .concurrent)
         let lineQueue = DispatchQueue(label: "queue", attributes: .concurrent)
         let barQueue = DispatchQueue(label: "queue", attributes: .concurrent)
@@ -128,7 +128,7 @@ final class ChartViewModel: ObservableObject {
         }
     }
     
-    private func convert(_ candleData: CandleStick.CandleStickData) -> Double {
+    private func convert(_ candleData: BithumbCandleStick.CandleStickData) -> Double {
         switch candleData {
         case .string(let result):
             return Double(result) ?? .zero

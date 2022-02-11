@@ -27,7 +27,7 @@ extension AssetStatusListViewModel {
     private func initiateRestAPI() {
         restAPIManager.fetch(type: .assetsStatusAll,
                              paymentCurrency: .KRW)
-        { (parsedResult: Result<RestAPIAssetStatus, Error>) in
+        { (parsedResult: Result<BithumbRestAPIAssetStatus, Error>) in
             
             switch parsedResult {
             case .success(let parsedData):

@@ -49,7 +49,7 @@ class DetailCoinViewModel {
     }
     
     func initiateViewModel () {
-        restAPIManager.fetch(type: .ticker, paymentCurrency: .KRW, coin: coin) { [weak self]  (parsedResult: Result<RestAPITicker, Error>) in
+        restAPIManager.fetch(type: .ticker, paymentCurrency: .KRW, coin: coin) { [weak self]  (parsedResult: Result<BithumbRestAPITicker, Error>) in
             switch parsedResult {
             case .success(let parsedData):
                 self?.coinInfomation = Ticker(symbol: self?.coin?.rawValue ?? "-", currentPrice: parsedData.data.closingPrice, fluctuationAmount: parsedData.data.fluctuation24H, fluctuationRate: parsedData.data.fluctuationRate24H)
@@ -62,7 +62,8 @@ class DetailCoinViewModel {
     }
     
     private func updateFluctuation(coin: CoinType) {
-        webSocketManager.connectWebSocket(.ticker, [coin],[.yesterday]) { [weak self] (parsedResult: Result<WebSocketTicker?, Error>) in
+        webSocketManager.connectWebSocket(parameter: BithumbWebSocketParameter(.ticker, [coin], [.yesterday])) { [weak self] (parsedResult: Result<BithumbWebSocketTicker?, Error>) in
+            
             guard case .success(let data) = parsedResult, let dataContent = data?.content else {
                 return
             }
@@ -73,7 +74,7 @@ class DetailCoinViewModel {
     }
     
     private func updateCurrentPrice(coin: CoinType) {
-        webSocketManager.connectWebSocket(.transaction, [coin],nil) { [weak self] (parsedResult: Result<WebSocketTransaction?, Error>) in
+        webSocketManager.connectWebSocket(parameter: BithumbWebSocketParameter(.transaction, [coin], nil)) { [weak self] (parsedResult: Result<BithumbWebSocketTransaction?, Error>) in
 
             guard case .success(let data) = parsedResult, let dataContent = data?.content.list else {
                 return

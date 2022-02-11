@@ -11,9 +11,9 @@ class RestAPIManager {
     private let rangeOfSuccessState = 200...299
     
     func fetch<T: Decodable>(type: RestAPIType,
-                  paymentCurrency: RestAPIType.PaymentCurrency,
+                  paymentCurrency: PaymentCurrency,
                   coin: CoinType? = nil,
-                  chartIntervals: RequestChartInterval? = .twentyFourHour,
+                  chartIntervals: ChartInterval? = .twentyFourHour,
                   completion: @escaping (Result<T, Error>) -> Void)
     {
         guard coin != .unverified else {

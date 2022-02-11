@@ -61,7 +61,7 @@ extension TransactionsViewModel {
     private func initiateRestAPITransactionHistory() {
         restAPIManager.fetch(type: .transactionHistory,
                              paymentCurrency: .KRW,
-                             coin: coinType) { (parsedResult: Result<RestAPITransaction, Error>) in
+                             coin: coinType) { (parsedResult: Result<BithumbRestAPITransaction, Error>) in
 
             guard case .success(let parsedData) = parsedResult else { return }
             self.transactions = parsedData.data.map {
@@ -85,7 +85,7 @@ extension TransactionsViewModel {
     }
     
     private func initiateRestAPICandleStick() {
-        restAPIManager.fetch(type: .candlestick, paymentCurrency: .KRW, coin: coinType, chartIntervals: .twentyFourHour) { (parsedResult: Result<CandleStick, Error>) in
+        restAPIManager.fetch(type: .candlestick, paymentCurrency: .KRW, coin: coinType, chartIntervals: .twentyFourHour) { (parsedResult: Result<BithumbCandleStick, Error>) in
             switch parsedResult {
             case .success(let parsedData):
                 self.convertCandleToTransaction(parsedData.data)
@@ -98,7 +98,7 @@ extension TransactionsViewModel {
         }
     }
     
-    private func convertCandleToTransaction(_ candleData: [[CandleStick.CandleStickData]]) {
+    private func convertCandleToTransaction(_ candleData: [[BithumbCandleStick.CandleStickData]]) {
         dayTransactions = candleData.enumerated().map { index, candle in
             let price: Double = convert(candle[2])
             let prevPrice: Double = index == 0
@@ -114,7 +114,7 @@ extension TransactionsViewModel {
         }.sorted { $0.date > $1.date }
     }
     
-    private func convert(_ candleData: CandleStick.CandleStickData) -> Double {
+    private func convert(_ candleData: BithumbCandleStick.CandleStickData) -> Double {
         switch candleData {
         case .string(let result):
             return Double(result) ?? .zero
@@ -123,7 +123,7 @@ extension TransactionsViewModel {
         }
     }
     
-    private func convert(_ candleData: CandleStick.CandleStickData) -> String {
+    private func convert(_ candleData: BithumbCandleStick.CandleStickData) -> String {
         switch candleData {
         case .string(let result):
             return String(result)
@@ -135,7 +135,7 @@ extension TransactionsViewModel {
     private func initiateRestAPITicker() {
         restAPIManager.fetch(type: .ticker,
                              paymentCurrency: .KRW,
-                             coin: coinType) { (parsedResult: Result<RestAPITicker, Error>) in
+                             coin: coinType) { (parsedResult: Result<BithumbRestAPITicker, Error>) in
             
             guard case .success(let parsedData) = parsedResult else { return }
             let ticker = parsedData.data
@@ -153,10 +153,8 @@ extension TransactionsViewModel {
 // MARK: WebSocket
 extension TransactionsViewModel {
     func initiateTimeWebSocket() {
-        webSocketManager.createWebSocket()
-        webSocketManager.connectWebSocket(.transaction,
-                                          [coinType],
-                                          nil) { (parsedResult: Result<WebSocketTransaction?, Error>) in
+        webSocketManager.createWebSocket(of: .bithumb)
+        webSocketManager.connectWebSocket(parameter: BithumbWebSocketParameter(.transaction, [coinType], nil)) { (parsedResult: Result<BithumbWebSocketTransaction?, Error>) in
             
             switch parsedResult {
             case .success(let parsedData):
