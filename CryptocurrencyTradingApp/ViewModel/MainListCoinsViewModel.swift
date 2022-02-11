@@ -88,7 +88,7 @@ extension MainListCoinsViewModel {
 // MARK: WebSocket
 extension MainListCoinsViewModel {
     func initiateWebSocket() {
-        webSocketManager.createWebSocket()
+        webSocketManager.createWebSocket(exchange: .bithumb)
         initiateTransactionWebSocket()
         initiateTickerWebSocket()
     }
@@ -98,9 +98,7 @@ extension MainListCoinsViewModel {
     }
     
     private func initiateTransactionWebSocket() {
-        webSocketManager.connectWebSocket(.transaction,
-                                          CoinType.allCoins,
-                                          nil)
+        webSocketManager.connectWebSocket(parameter: BithumbWebSocketParameter(.transaction, CoinType.allCoins, nil))
         { (parsedResult: Result<BithumbWebSocketTransaction?, Error>) in
             
             switch parsedResult {
@@ -114,9 +112,7 @@ extension MainListCoinsViewModel {
     }
     
     private func initiateTickerWebSocket() {
-        webSocketManager.connectWebSocket(.ticker,
-                                          CoinType.allCoins,
-                                          [.twentyfour, .yesterday])
+        webSocketManager.connectWebSocket(parameter: BithumbWebSocketParameter(.ticker, CoinType.allCoins, [.twentyfour, .yesterday]))
         { (parsedResult: Result<BithumbWebSocketTicker?, Error>) in
             
             switch parsedResult {

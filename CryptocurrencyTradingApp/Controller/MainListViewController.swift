@@ -75,6 +75,7 @@ class MainListViewController: UIViewController {
     }
 
     override func viewWillDisappear(_ animated: Bool) {
+        viewModel.closeWebSocket()
         NotificationCenter.default.removeObserver(self, name: .webSocketTransactionsNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: .webSocketTicker24HNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: .webSocketTickerNotification, object: nil)
@@ -82,7 +83,7 @@ class MainListViewController: UIViewController {
     }
     
     deinit {
-        viewModel.closeWebSocket()
+        
         NotificationCenter.default.removeObserver(self, name: .restAPITickerAllNotification, object: nil)
     }
 }

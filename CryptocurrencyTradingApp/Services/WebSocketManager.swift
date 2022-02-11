@@ -8,38 +8,30 @@
 import Foundation
 
 class WebSocketManager: NSObject {
-    private lazy var webSocket: URLSessionWebSocketTask = {
-        let url = URL(string: "wss://pubwss.bithumb.com/pub/ws")!
-        let webSocket = URLSession.shared.webSocketTask(with: url)
-        webSocket.delegate = self
-        webSocket.resume()
-        return webSocket
-    }()
+    private var webSocket: URLSessionWebSocketTask?
     
-    func createWebSocket() {
-        let url = URL(string: "wss://pubwss.bithumb.com/pub/ws")!
+    func createWebSocket(exchange: WebSocketURL) {
+        let url = URL(string: exchange.urlString)!
         webSocket = URLSession.shared.webSocketTask(with: url)
-        webSocket.delegate = self
-        webSocket.resume()
+        webSocket?.delegate = self
+        webSocket?.resume()
     }
     
-    func connectWebSocket<T: WebSocketDataModel>(_ type: RequestType,
-                             _ symbols: [CoinType],
-                             _ tickTypes: [RequestTik]?,
+    func connectWebSocket<T: WebSocketDataModel, S: WebSocketParameter>(parameter: S,
                              completion: @escaping (Result<T?, Error>) -> Void)
     {
-        sendMessage(type, symbols, tickTypes)
+        sendMessage(parameter)
         receiveMessage(completion: completion)
     }
     
-    private func sendMessage(_ type: RequestType, _ symbols: [CoinType], _ tickTypes: [RequestTik]?) {
+    private func sendMessage<S: WebSocketParameter>(_ parameter: S) {
         let encoder = JSONEncoder()
-        let parameters = BithumbWebSocketParameter(type, symbols, tickTypes)
+        let parameters = parameter
         guard let data = try? encoder.encode(parameters) else {
             return
         }
         let message = URLSessionWebSocketTask.Message.data(data)
-        webSocket.send(message) { error in
+        webSocket?.send(message) { error in
             if let error = error {
                 assertionFailure("\(error)")
             }
@@ -47,7 +39,7 @@ class WebSocketManager: NSObject {
     }
     
     private func receiveMessage<T: WebSocketDataModel>(completion: @escaping (Result<T?, Error>) -> Void) {
-        webSocket.receive(completionHandler: { [weak self] result in
+        webSocket?.receive(completionHandler: { [weak self] result in
             switch result {
             case .success(let message):
                 switch message {
@@ -90,7 +82,7 @@ class WebSocketManager: NSObject {
     }
     
     private func ping() {
-        webSocket.sendPing(pongReceiveHandler: { error in
+        webSocket?.sendPing(pongReceiveHandler: { error in
             if let error = error {
                 print("Ping error: \(error)")
             }
@@ -102,7 +94,7 @@ class WebSocketManager: NSObject {
     
     func close() {
         let reason = Data("Close webSocket before view transition".utf8)
-        webSocket.cancel(with: .normalClosure, reason: reason)
+        webSocket?.cancel(with: .normalClosure, reason: reason)
     }
 }
 

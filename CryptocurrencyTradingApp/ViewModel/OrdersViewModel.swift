@@ -75,7 +75,7 @@ extension OrdersViewModel {
     }
     
     private func initiateWebSocketTicker() {
-        webSocketManager.connectWebSocket(.orderbookdepth, [coinType], nil)
+        webSocketManager.connectWebSocket(parameter: BithumbWebSocketParameter(.orderbookdepth, [coinType], nil))
         { (parsedResult: Result<BithumbWebSocketOrderBook?, Error>) in
             
             self.initiateRestAPI()

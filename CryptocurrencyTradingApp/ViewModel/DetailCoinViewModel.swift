@@ -62,7 +62,8 @@ class DetailCoinViewModel {
     }
     
     private func updateFluctuation(coin: CoinType) {
-        webSocketManager.connectWebSocket(.ticker, [coin],[.yesterday]) { [weak self] (parsedResult: Result<BithumbWebSocketTicker?, Error>) in
+        webSocketManager.connectWebSocket(parameter: BithumbWebSocketParameter(.ticker, [coin], [.yesterday])) { [weak self] (parsedResult: Result<BithumbWebSocketTicker?, Error>) in
+            
             guard case .success(let data) = parsedResult, let dataContent = data?.content else {
                 return
             }
@@ -73,7 +74,7 @@ class DetailCoinViewModel {
     }
     
     private func updateCurrentPrice(coin: CoinType) {
-        webSocketManager.connectWebSocket(.transaction, [coin],nil) { [weak self] (parsedResult: Result<BithumbWebSocketTransaction?, Error>) in
+        webSocketManager.connectWebSocket(parameter: BithumbWebSocketParameter(.transaction, [coin], nil)) { [weak self] (parsedResult: Result<BithumbWebSocketTransaction?, Error>) in
 
             guard case .success(let data) = parsedResult, let dataContent = data?.content.list else {
                 return
