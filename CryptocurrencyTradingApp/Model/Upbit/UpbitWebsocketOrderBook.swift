@@ -1,16 +1,18 @@
 //
-//  UpbitOrderBook.swift
+//  UpbitWebsocketOrder.swift
 //  CryptocurrencyTradingApp
 //
-//  Created by 김준건 on 2022/02/10.
+//  Created by 김준건 on 2022/02/11.
 //
 
 import Foundation
 
-struct UpbitOrderBook: Decodable {
+struct UpbitWebsocketOrderBook: Decodable, WebSocketDataModel {
+    let market: String
     let data: [OrderData]
     
     enum CodingKeys: String, CodingKey {
+        case market = "code"
         case data = "orderbook_units"
     }
     struct OrderData: Decodable {

@@ -76,6 +76,9 @@
 		D4D0D2B227A0024B00734C42 /* TransactionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0D2B127A0024B00734C42 /* TransactionViewModel.swift */; };
 		E605E0B127B65465002B84F1 /* UpbitRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = E605E0B027B65465002B84F1 /* UpbitRoute.swift */; };
 		E605E0B327B654F6002B84F1 /* PaymentCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = E605E0B227B654F6002B84F1 /* PaymentCurrency.swift */; };
+		E605E0B627B679D2002B84F1 /* UpbitWebsocketTicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E605E0B527B679D2002B84F1 /* UpbitWebsocketTicker.swift */; };
+		E605E0B827B679E4002B84F1 /* UpbitWebsocketOrderBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = E605E0B727B679E4002B84F1 /* UpbitWebsocketOrderBook.swift */; };
+		E605E0BA27B67A0A002B84F1 /* UpbitWebsocketTrade.swift in Sources */ = {isa = PBXBuildFile; fileRef = E605E0B927B67A0A002B84F1 /* UpbitWebsocketTrade.swift */; };
 		E6197F9127A6A9B900EF207B /* DetailChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6197F9027A6A9B900EF207B /* DetailChartViewController.swift */; };
 		E6197F9327A6AC3100EF207B /* DetailCoinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6197F9227A6AC3100EF207B /* DetailCoinViewController.swift */; };
 		E6197F9527A6AD7000EF207B /* DetailCoinViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6197F9427A6AD7000EF207B /* DetailCoinViewModel.swift */; };
@@ -183,6 +186,9 @@
 		D4D0D2B127A0024B00734C42 /* TransactionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionViewModel.swift; sourceTree = "<group>"; };
 		E605E0B027B65465002B84F1 /* UpbitRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpbitRoute.swift; sourceTree = "<group>"; };
 		E605E0B227B654F6002B84F1 /* PaymentCurrency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentCurrency.swift; sourceTree = "<group>"; };
+		E605E0B527B679D2002B84F1 /* UpbitWebsocketTicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpbitWebsocketTicker.swift; sourceTree = "<group>"; };
+		E605E0B727B679E4002B84F1 /* UpbitWebsocketOrderBook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpbitWebsocketOrderBook.swift; sourceTree = "<group>"; };
+		E605E0B927B67A0A002B84F1 /* UpbitWebsocketTrade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpbitWebsocketTrade.swift; sourceTree = "<group>"; };
 		E6197F9027A6A9B900EF207B /* DetailChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailChartViewController.swift; sourceTree = "<group>"; };
 		E6197F9227A6AC3100EF207B /* DetailCoinViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCoinViewController.swift; sourceTree = "<group>"; };
 		E6197F9427A6AD7000EF207B /* DetailCoinViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCoinViewModel.swift; sourceTree = "<group>"; };
@@ -423,6 +429,9 @@
 				E672AD4627B5563B0082F003 /* UpbitTicker.swift */,
 				E672AD4827B55C070082F003 /* UpbitOrderBook.swift */,
 				D4C9F90527B65DEE00EDF156 /* UpbitWebSocketParameter.swift */,
+				E605E0B527B679D2002B84F1 /* UpbitWebsocketTicker.swift */,
+				E605E0B727B679E4002B84F1 /* UpbitWebsocketOrderBook.swift */,
+				E605E0B927B67A0A002B84F1 /* UpbitWebsocketTrade.swift */,
 			);
 			path = Upbit;
 			sourceTree = "<group>";
@@ -585,6 +594,7 @@
 				D4B40E1627A556D000EDA235 /* AssetStatusListViewModel.swift in Sources */,
 				D4B40E0827A404BA00EDA235 /* OrderTransactionCell.swift in Sources */,
 				E6C96497279A9A7F0007B55E /* ChartInterval.swift in Sources */,
+				E605E0B627B679D2002B84F1 /* UpbitWebsocketTicker.swift in Sources */,
 				D4B40E0A27A4110F00EDA235 /* RestAPITickerViewModel.swift in Sources */,
 				D4CC02272795B3C700F15957 /* RestAPIManager.swift in Sources */,
 				D4C9F90627B65DEE00EDF156 /* UpbitWebSocketParameter.swift in Sources */,
@@ -607,6 +617,7 @@
 				D4B40DFE27A3C00300EDA235 /* OrderViewModel.swift in Sources */,
 				E672AD4127B54ADF0082F003 /* UpbitMarket.swift in Sources */,
 				E6BDEFAD27A3E2FD00018967 /* CandleData10M+CoreDataProperties.swift in Sources */,
+				E605E0B827B679E4002B84F1 /* UpbitWebsocketOrderBook.swift in Sources */,
 				E6197F9127A6A9B900EF207B /* DetailChartViewController.swift in Sources */,
 				D4C9F90427B65BCE00EDF156 /* WebSocketURL.swift in Sources */,
 				E6BDEFAB27A3E23200018967 /* CandleData30M+CoreDataClass.swift in Sources */,
@@ -626,6 +637,7 @@
 				E644D50E27A40E320086972E /* CandleData1H+CoreDataClass.swift in Sources */,
 				D4B40DEC27A2065000EDA235 /* TransactionsCell.swift in Sources */,
 				D4AFEB2F27A03FB300011251 /* MainListCoinViewModel.swift in Sources */,
+				E605E0BA27B67A0A002B84F1 /* UpbitWebsocketTrade.swift in Sources */,
 				D4B40E2027A5646900EDA235 /* StatusHeader.swift in Sources */,
 				D4CC01FB27953FAF00F15957 /* CryptocurrencyTradingApp.xcdatamodeld in Sources */,
 				E672AD4927B55C070082F003 /* UpbitOrderBook.swift in Sources */,
