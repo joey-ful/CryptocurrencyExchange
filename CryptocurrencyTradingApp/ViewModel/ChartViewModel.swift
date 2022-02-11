@@ -34,12 +34,12 @@ final class ChartViewModel: ObservableObject {
     var medianY: Double = .one
     var hasRisenList: [Bool] = []
     
-    init(coin: CoinType, chartIntervals: RequestChartInterval) {
+    init(coin: CoinType, chartIntervals: ChartInterval) {
         self.coin = coin
         initiateViewModel(chartIntervals: chartIntervals)
     }
     
-    func initiateViewModel(chartIntervals: RequestChartInterval) {
+    func initiateViewModel(chartIntervals: ChartInterval) {
         restAPIManager.fetch(type: .candlestick,
                              paymentCurrency: .KRW,
                              coin: coin,

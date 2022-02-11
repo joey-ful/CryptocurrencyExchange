@@ -29,7 +29,7 @@ final class CandleCoreDataManager {
             }
     }
     
-    func read(entityName: RequestChartInterval, coin: CoinType) -> [CandleStickCoreDataEntity]? {
+    func read(entityName: ChartInterval, coin: CoinType) -> [CandleStickCoreDataEntity]? {
             let candlePredicate = NSPredicate(format: "coin == %@", coin.rawValue)
                 if entityName.rawValue.contains("1m") {
                     let fetchRequest = CandleData1M.fetchRequest()
@@ -62,7 +62,7 @@ final class CandleCoreDataManager {
         }
 
     
-    private func filter(_ entity: RequestChartInterval) -> NSManagedObject? {
+    private func filter(_ entity: ChartInterval) -> NSManagedObject? {
             if entity.rawValue.contains("1m") {
                 return CandleData1M(context: context)
                 
@@ -84,7 +84,7 @@ final class CandleCoreDataManager {
 
     }
     
-    private func create(entity: NSManagedObject, coin: CoinType,entityName: RequestChartInterval, date: String, openPrice: Double, closePrice: Double, highPrice: Double, lowPrice: Double, tradeVolume: Double) {
+    private func create(entity: NSManagedObject, coin: CoinType,entityName: ChartInterval, date: String, openPrice: Double, closePrice: Double, highPrice: Double, lowPrice: Double, tradeVolume: Double) {
  
         entity.setValue(coin.rawValue, forKey: "coin")
         entity.setValue(date, forKey: "date")
@@ -96,7 +96,7 @@ final class CandleCoreDataManager {
         saveContext()
     }
 
-    func addToCoreData(coin: CoinType, _ candleStick: [[BithumbCandleStick.CandleStickData]], entityName: RequestChartInterval) {
+    func addToCoreData(coin: CoinType, _ candleStick: [[BithumbCandleStick.CandleStickData]], entityName: ChartInterval) {
         guard let fetched = read(entityName: entityName, coin: coin) else { return }
         
         candleStick.forEach { index in
