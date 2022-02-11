@@ -153,7 +153,7 @@ extension TransactionsViewModel {
 // MARK: WebSocket
 extension TransactionsViewModel {
     func initiateTimeWebSocket() {
-        webSocketManager.createWebSocket(exchange: .bithumb)
+        webSocketManager.createWebSocket(of: .bithumb)
         webSocketManager.connectWebSocket(parameter: BithumbWebSocketParameter(.transaction, [coinType], nil)) { (parsedResult: Result<BithumbWebSocketTransaction?, Error>) in
             
             switch parsedResult {

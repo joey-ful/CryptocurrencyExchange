@@ -9,8 +9,15 @@ import Foundation
 
 class WebSocketManager: NSObject {
     private var webSocket: URLSessionWebSocketTask?
+    let uuid = UUID()
     
-    func createWebSocket(exchange: WebSocketURL) {
+    init(of exchange: WebSocketURL = .bithumb) {
+        super.init()
+        
+        createWebSocket(of: exchange)
+    }
+    
+    func createWebSocket(of exchange: WebSocketURL) {
         let url = URL(string: exchange.urlString)!
         webSocket = URLSession.shared.webSocketTask(with: url)
         webSocket?.delegate = self
@@ -18,7 +25,7 @@ class WebSocketManager: NSObject {
     }
     
     func connectWebSocket<T: WebSocketDataModel, S: WebSocketParameter>(parameter: S,
-                             completion: @escaping (Result<T?, Error>) -> Void)
+                                                                        completion: @escaping (Result<T?, Error>) -> Void)
     {
         sendMessage(parameter)
         receiveMessage(completion: completion)
@@ -47,6 +54,8 @@ class WebSocketManager: NSObject {
                     if message.contains("status") == false {
                         self?.parse(text: message, completion: completion)
                     }
+                case .data(let data):
+                    self?.parseUpbit(data: data, completion: completion)
                 default:
                     break
                 }
@@ -69,6 +78,32 @@ class WebSocketManager: NSObject {
                 parsedData = try JSONDecoder().decode(BithumbWebSocketTransaction.self, from: data) as? T
             } else if text.contains("orderbookdepth") {
                 parsedData = try JSONDecoder().decode(BithumbWebSocketOrderBook.self, from: data) as? T
+            }
+            guard let parsedData = parsedData else { return }
+            DispatchQueue.main.async {
+                completion(.success(parsedData))
+            }
+        } catch {
+            DispatchQueue.main.async {
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    private func parseUpbit<T: WebSocketDataModel>(data: Data,
+                                                   completion: @escaping (Result<T?, Error>) -> Void) {
+        guard let text = String(data: data, encoding: .utf8) else {
+            return completion(.failure(ParsingError.decodingError))
+        }
+        
+        do {
+            var parsedData: T?
+            if text.contains("ticker") {
+                parsedData = try JSONDecoder().decode(UpbitWebsocketTicker.self, from: data) as? T
+            } else if text.contains("trade") {
+                parsedData = try JSONDecoder().decode(UpbitWebsocketTrade.self, from: data) as? T
+            } else if text.contains("orderbook") {
+                parsedData = try JSONDecoder().decode(UpbitWebsocketOrderBook.self, from: data) as? T
             }
             guard let parsedData = parsedData else { return }
             DispatchQueue.main.async {

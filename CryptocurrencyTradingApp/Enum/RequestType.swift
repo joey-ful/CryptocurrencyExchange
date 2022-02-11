@@ -15,4 +15,15 @@ enum RequestType: String {
     var name: String {
         return self.rawValue
     }
+    
+    var upbitName: String {
+        switch self {
+        case .ticker:
+            return "ticker"
+        case .transaction:
+            return "trade"
+        case .orderbookdepth:
+            return "orderbook"
+        }
+    }
 }

@@ -88,7 +88,7 @@ extension MainListCoinsViewModel {
 // MARK: WebSocket
 extension MainListCoinsViewModel {
     func initiateWebSocket() {
-        webSocketManager.createWebSocket(exchange: .bithumb)
+        webSocketManager.createWebSocket(of: .bithumb)
         initiateTransactionWebSocket()
         initiateTickerWebSocket()
     }
