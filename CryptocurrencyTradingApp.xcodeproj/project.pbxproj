@@ -44,6 +44,12 @@
 		D4B40E2A27A59EC300EDA235 /* PopularCoinCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E2927A59EC300EDA235 /* PopularCoinCell.swift */; };
 		D4B40E2C27A5A4B000EDA235 /* PopularCoinViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E2B27A5A4B000EDA235 /* PopularCoinViewModel.swift */; };
 		D4B40E3227A65AA000EDA235 /* MiniChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E3127A65AA000EDA235 /* MiniChartView.swift */; };
+		D4C9F8F727B64F7900EDF156 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C9F8F627B64F7900EDF156 /* NetworkManager.swift */; };
+		D4C9F8F927B64F8C00EDF156 /* NetworkModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C9F8F827B64F8C00EDF156 /* NetworkModule.swift */; };
+		D4C9F8FB27B64F9F00EDF156 /* Networkable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C9F8FA27B64F9F00EDF156 /* Networkable.swift */; };
+		D4C9F8FD27B64FA900EDF156 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C9F8FC27B64FA900EDF156 /* Route.swift */; };
+		D4C9F8FF27B64FD000EDF156 /* URLRequestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C9F8FE27B64FCF00EDF156 /* URLRequestBuilder.swift */; };
+		D4C9F90227B64FFA00EDF156 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C9F90127B64FFA00EDF156 /* HTTPMethod.swift */; };
 		D4CC01F127953FAF00F15957 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F027953FAF00F15957 /* AppDelegate.swift */; };
 		D4CC01F327953FAF00F15957 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F227953FAF00F15957 /* SceneDelegate.swift */; };
 		D4CC01F527953FAF00F15957 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F427953FAF00F15957 /* MainTabBarViewController.swift */; };
@@ -138,6 +144,12 @@
 		D4B40E2927A59EC300EDA235 /* PopularCoinCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularCoinCell.swift; sourceTree = "<group>"; };
 		D4B40E2B27A5A4B000EDA235 /* PopularCoinViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularCoinViewModel.swift; sourceTree = "<group>"; };
 		D4B40E3127A65AA000EDA235 /* MiniChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniChartView.swift; sourceTree = "<group>"; };
+		D4C9F8F627B64F7900EDF156 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		D4C9F8F827B64F8C00EDF156 /* NetworkModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkModule.swift; sourceTree = "<group>"; };
+		D4C9F8FA27B64F9F00EDF156 /* Networkable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networkable.swift; sourceTree = "<group>"; };
+		D4C9F8FC27B64FA900EDF156 /* Route.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
+		D4C9F8FE27B64FCF00EDF156 /* URLRequestBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRequestBuilder.swift; sourceTree = "<group>"; };
+		D4C9F90127B64FFA00EDF156 /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
 		D4CC01ED27953FAE00F15957 /* CryptocurrencyTradingApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CryptocurrencyTradingApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4CC01F027953FAF00F15957 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D4CC01F227953FAF00F15957 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -307,6 +319,7 @@
 			children = (
 				E64BFA3527959B7100BC17A1 /* WebSocketDataModel.swift */,
 				D4B40DF327A25BBA00EDA235 /* TransactionViewModelType.swift */,
+				D4C9F8FC27B64FA900EDF156 /* Route.swift */,
 			);
 			path = Protocol;
 			sourceTree = "<group>";
@@ -320,6 +333,8 @@
 				E6C96496279A9A7F0007B55E /* RequestChartInterval.swift */,
 				E64BFA3127958BD900BC17A1 /* CoinType.swift */,
 				D4D0D29D279C29B500734C42 /* Sort.swift */,
+				D4C9F90127B64FFA00EDF156 /* HTTPMethod.swift */,
+				D4C9F8FE27B64FCF00EDF156 /* URLRequestBuilder.swift */,
 			);
 			path = Enum;
 			sourceTree = "<group>";
@@ -390,6 +405,9 @@
 		E6899C6E2795444E0006C980 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				D4C9F8F627B64F7900EDF156 /* NetworkManager.swift */,
+				D4C9F8F827B64F8C00EDF156 /* NetworkModule.swift */,
+				D4C9F8FA27B64F9F00EDF156 /* Networkable.swift */,
 				E64BFA262795616600BC17A1 /* WebSocketManager.swift */,
 				D4CC02262795B3C700F15957 /* RestAPIManager.swift */,
 				D4D0D297279AE7A000734C42 /* CandleCoreDataManager.swift */,
@@ -504,15 +522,19 @@
 				D4CC020B279540CF00F15957 /* BithumbWebSockerTicker.swift in Sources */,
 				D4AFEB3327A0552500011251 /* MainListHeaderViewModel.swift in Sources */,
 				D4D0D298279AE7A000734C42 /* CandleCoreDataManager.swift in Sources */,
+				D4C9F8F727B64F7900EDF156 /* NetworkManager.swift in Sources */,
 				D4AFEB3827A1292600011251 /* TransactionsHeader.swift in Sources */,
 				D4D0D294279AE73000734C42 /* CandleData1M+CoreDataClass.swift in Sources */,
+				D4C9F8FD27B64FA900EDF156 /* Route.swift in Sources */,
 				D4AFEB3827A1292600011251 /* TransactionsHeader.swift in Sources */,
 				D4D0D294279AE73000734C42 /* CandleData1M+CoreDataClass.swift in Sources */,
+				D4C9F8FB27B64F9F00EDF156 /* Networkable.swift in Sources */,
 				D4B40E1A27A55A3000EDA235 /* AssetStatus.swift in Sources */,
 				D4B40E1227A5111200EDA235 /* BithumbWebSocketOrderbook.swift in Sources */,
 				E6A126B627AFFF560080EC4D /* ChartDateFormatter.swift in Sources */,
 				D4CC01F127953FAF00F15957 /* AppDelegate.swift in Sources */,
 				D4CC020927953FD300F15957 /* BithumbRestAPITickerAll.swift in Sources */,
+				D4C9F90227B64FFA00EDF156 /* HTTPMethod.swift in Sources */,
 				E6BDEFB127A3E32D00018967 /* CandleData24H+CoreDataProperties.swift in Sources */,
 				D4CC020927953FD300F15957 /* BithumbRestAPITickerAll.swift in Sources */,
 				E6197F9527A6AD7000EF207B /* DetailCoinViewModel.swift in Sources */,
@@ -523,6 +545,7 @@
 				D4D0D2B227A0024B00734C42 /* TransactionViewModel.swift in Sources */,
 				D4B40E1027A4F84A00EDA235 /* OrderInfoCell.swift in Sources */,
 				D47D00A52797A70400E8E305 /* String+Extension.swift in Sources */,
+				D4C9F8F927B64F8C00EDF156 /* NetworkModule.swift in Sources */,
 				D4CC020D2795411A00F15957 /* BithumbWebSocketTransaction.swift in Sources */,
 				E6FA20B8279F04F700CCB1CC /* ChartViewModel.swift in Sources */,
 				D4B40E0027A3C09400EDA235 /* BithumbRestAPIOrderbook.swift in Sources */,
@@ -542,6 +565,7 @@
 				D4CC02272795B3C700F15957 /* RestAPIManager.swift in Sources */,
 				E672AD4327B54BD00082F003 /* UpbitCandleStick.swift in Sources */,
 				D47D009B2797A09400E8E305 /* MainListCell.swift in Sources */,
+				D4C9F8FF27B64FD000EDF156 /* URLRequestBuilder.swift in Sources */,
 				E6E1E86D27B1115E00467E24 /* ChartYAxisFormatter.swift in Sources */,
 				E6899C73279546320006C980 /* ParsingError.swift in Sources */,
 				D4B40DF427A25BBA00EDA235 /* TransactionViewModelType.swift in Sources */,
