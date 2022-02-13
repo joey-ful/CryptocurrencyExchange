@@ -8,20 +8,22 @@
 import Foundation
 
 struct UpbitTicker: Decodable {
-    let openingPrice: String
-    let closingPrice: String
-    let minimumPrice: String
-    let maxiumumPrice: String
-    let unitsTraded: String
-    let tradeValue: String
-    let previousClosingPrice: String
-    let unitsTradedWithin24H: String
-    let tradeValueWithin24H: String
-    let fluctuation24H: String
-    let fluctuationRate24HDividedByHundred: String
-    let date: String
+    let market: String
+    let openingPrice: Double
+    let closingPrice: Double
+    let minimumPrice: Double
+    let maxiumumPrice: Double
+    let unitsTraded: Double
+    let tradeValue: Double
+    let previousClosingPrice: Double
+    let unitsTradedWithin24H: Double
+    let tradeValueWithin24H: Double
+    let fluctuation24H: Double
+    let fluctuationRate24HDividedByHundred: Double
+    let date: Double
     
     enum CodingKeys: String, CodingKey {
+        case market
         case openingPrice = "opening_price"
         case closingPrice = "trade_price"
         case minimumPrice = "low_price"

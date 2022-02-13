@@ -8,6 +8,7 @@
 import UIKit
 
 class MainListCoinsViewModel {
+    private let markets: [UpbitMarket]
     private var mainListCoins: [Ticker] = [] {
         didSet {
             filtered = mainListCoins.filter { existsInFiltered($0) }
@@ -31,6 +32,7 @@ class MainListCoinsViewModel {
     }
     private let restAPIManager = RestAPIManager()
     private let webSocketManager = WebSocketManager()
+    private let networkManager = NetworkManager(networkable: NetworkModule())
     
     var headerViewModel: MainListHeaderViewModel {
         return MainListHeaderViewModel(mainListCoinsViewModel: self)
@@ -48,7 +50,8 @@ class MainListCoinsViewModel {
         return PopularCoinViewModel(popularCoin: popularCoins[index])
     }
     
-    init() {
+    init(_ markets: [UpbitMarket]) {
+        self.markets = markets
         initiateRestAPI()
     }
 }
@@ -57,24 +60,27 @@ class MainListCoinsViewModel {
 extension MainListCoinsViewModel {
     
     private func initiateRestAPI() {
-        restAPIManager.fetch(type: .tickerAll,
-                             paymentCurrency: .KRW)
-        { (parsedResult: Result<BithumbRestAPITickerAll, Error>) in
+        
+        let route = UpbitRoute.ticker
+        networkManager.request(with: route,
+                               queryItems: route.tickerQueryItems(coins: markets),
+                               requestType: .requestWithQueryItems)
+        { (parsedResult: Result<[UpbitTicker], Error>) in
             
             switch parsedResult {
-            case .success(let parsedData):
-                let data = parsedData.data.compactMap { key, value -> Ticker? in
-                    if case let .coin(coin) = value {
-                        return Ticker(name: CoinType.coin(symbol: key)?.name ?? "-",
-                                      symbol: key.lowercased(),
-                                      currentPrice: coin.closingPrice,
-                                      fluctuationRate: coin.fluctateRate24H,
-                                      fluctuationAmount: coin.fluctate24H,
-                                      tradeValue: coin.accTradeValue24H)
-                    } else {
-                        return nil
-                    }
-                }.sorted { $0.tradeValue.toDouble() > $1.tradeValue.toDouble() }    
+            case .success(let tickers):
+                let data: [Ticker] = tickers.map {
+                    let symbol = $0.market.split(separator: "-")[1]
+                    let market = self.markets.filter { $0.market.contains(symbol) }[0]
+                    let fluctuationRate = ($0.fluctuationRate24HDividedByHundred * 100).description
+                    
+                    return Ticker(name: market.koreanName,
+                                  symbol: symbol.lowercased(),
+                                  currentPrice: $0.closingPrice.description,
+                                  fluctuationRate: fluctuationRate,
+                                  fluctuationAmount: $0.fluctuation24H.description,
+                                  tradeValue: $0.tradeValueWithin24H.description)
+                }.sorted { $0.tradeValue.toDouble() > $1.tradeValue.toDouble() }
                 self.filtered = data
                 self.mainListCoins = data
                 NotificationCenter.default.post(name: .restAPITickerAllNotification, object: nil)

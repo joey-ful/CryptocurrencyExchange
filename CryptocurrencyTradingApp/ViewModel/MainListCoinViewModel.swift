@@ -41,7 +41,7 @@ class MainListCoinViewModel {
     }
     
     var fluctuationRate: String {
-        return sign + coin.fluctuationRate + .percent
+        return sign + coin.fluctuationRate.setFractionDigits(to: 2) + .percent
     }
     
     var fluctuationAmount: String {
