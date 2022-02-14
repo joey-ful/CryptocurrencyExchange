@@ -10,7 +10,7 @@ import Foundation
 class RestAPITickerViewModel {
     private let market: UpbitMarket
     private var mainListCoin = Ticker()
-    private let restAPIManager = RestAPIManager()
+    private let networkManager = NetworkManager(networkable: NetworkModule())
     
     var infoList: [(title: String, value: String)] {
         return [
@@ -68,25 +68,25 @@ class RestAPITickerViewModel {
     }
 
     private func initiateRestAPI() {
-//        restAPIManager.fetch(type: .ticker,
-//                             paymentCurrency: .KRW,
-//                             coin: coin) { (parsedResult: Result<BithumbRestAPITicker, Error>) in
-//
-//            switch parsedResult {
-//            case .success(let parsedData):
-//                let ticker = parsedData.data
-//                self.mainListCoin = Ticker(openPrice: ticker.openingPrice,
-//                                                 highPrice: ticker.maxiumumPrice,
-//                                                 lowPrice: ticker.minimumPrice,
-//                                                 prevPrice: ticker.previousClosingPrice,
-//                                                 quantity: ticker.unitsTradedWithin24H,
-//                                                 tradeValue: ticker.tradeValueWithin24H)
-//                NotificationCenter.default.post(name: .restAPITickerNotification, object: nil)
-//            case .failure(NetworkError.unverifiedCoin):
-//                print(NetworkError.unverifiedCoin.localizedDescription)
-//            case .failure(let error):
-//                assertionFailure(error.localizedDescription)
-//            }
-//        }
+        let route = UpbitRoute.ticker
+        networkManager.request(with: route,
+                               queryItems: route.tickerQueryItems(coins: [market]),
+                               requestType: .requestWithQueryItems)
+        { (parsedResult: Result<[UpbitTicker], Error>) in
+            
+            switch parsedResult {
+            case .success(let parsedData):
+                let ticker = parsedData[0]
+                self.mainListCoin = Ticker(openPrice: ticker.openingPrice.description,
+                                           highPrice: ticker.maxiumumPrice.description,
+                                           lowPrice: ticker.minimumPrice.description,
+                                           prevPrice: ticker.previousClosingPrice.description,
+                                           quantity: ticker.unitsTradedWithin24H.description,
+                                           tradeValue: ticker.tradeValueWithin24H.description)
+                NotificationCenter.default.post(name: .restAPITickerNotification, object: nil)
+            case .failure(let error):
+                assertionFailure(error.localizedDescription)
+            }
+        }
     }
 }

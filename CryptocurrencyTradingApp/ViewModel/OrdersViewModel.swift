@@ -9,7 +9,7 @@ import Foundation
 
 class OrdersViewModel {
     private let market: UpbitMarket
-    private let restAPIManager = RestAPIManager()
+    private let networkManager = NetworkManager(networkable: NetworkModule())
     private let webSocketManager = WebSocketManager()
     private var asks: [Order] = []
     private var bids: [Order] = []
@@ -50,20 +50,30 @@ class OrdersViewModel {
 
 extension OrdersViewModel {
     private func initiateRestAPI() {
-//        restAPIManager.fetch(type: .orderbook, paymentCurrency: .KRW, coin: coinType)
-//        { (parsedResult: Result<BithumbRestAPIOrderbook, Error>) in
-//
-//            switch parsedResult {
-//            case .success(let parsedData):
-//                self.asks = parsedData.data.asks.sorted { $0.price > $1.price }
-//                self.bids = parsedData.data.bids
-//                NotificationCenter.default.post(name: .restAPIOrderNotification, object: nil)
-//            case .failure(NetworkError.unverifiedCoin):
-//                print(NetworkError.unverifiedCoin.localizedDescription)
-//            case .failure(let error):
-//                assertionFailure(error.localizedDescription)
-//            }
-//        }
+        let route = UpbitRoute.orderbook
+        networkManager.request(with: route,
+                               queryItems: route.orderbookQueryItems(coins: [market]),
+                               requestType: .requestWithQueryItems)
+        { (parsedResult: Result<[UpbitOrderBook], Error>) in
+            
+            switch parsedResult {
+            case .success(let parsedData):
+                self.asks = parsedData[0].data.map {
+                    Order(price: $0.askPrice.description,
+                          quantity: $0.askSize.description)
+                }
+                self.bids = parsedData[0].data.map {
+                    Order(price: $0.bidPrice.description,
+                          quantity: $0.bidSize.description)
+                }
+                
+                NotificationCenter.default.post(name: .restAPIOrderNotification, object: nil)
+            case .failure(NetworkError.unverifiedCoin):
+                print(NetworkError.unverifiedCoin.localizedDescription)
+            case .failure(let error):
+                assertionFailure(error.localizedDescription)
+            }
+        }
     }
     
 }
