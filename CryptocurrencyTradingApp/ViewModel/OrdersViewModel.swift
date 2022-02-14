@@ -8,7 +8,7 @@
 import Foundation
 
 class OrdersViewModel {
-    private let coinType: CoinType
+    private let market: UpbitMarket
     private let restAPIManager = RestAPIManager()
     private let webSocketManager = WebSocketManager()
     private var asks: [Order] = []
@@ -34,8 +34,8 @@ class OrdersViewModel {
         return asks.contains(order) ? "ask" : "bid"
     }
     
-    init(coin: CoinType) {
-        self.coinType = coin
+    init(_ market: UpbitMarket) {
+        self.market = market
         initiateRestAPI()
     }
     
@@ -50,20 +50,20 @@ class OrdersViewModel {
 
 extension OrdersViewModel {
     private func initiateRestAPI() {
-        restAPIManager.fetch(type: .orderbook, paymentCurrency: .KRW, coin: coinType)
-        { (parsedResult: Result<BithumbRestAPIOrderbook, Error>) in
-            
-            switch parsedResult {
-            case .success(let parsedData):
-                self.asks = parsedData.data.asks.sorted { $0.price > $1.price }
-                self.bids = parsedData.data.bids
-                NotificationCenter.default.post(name: .restAPIOrderNotification, object: nil)
-            case .failure(NetworkError.unverifiedCoin):
-                print(NetworkError.unverifiedCoin.localizedDescription)
-            case .failure(let error):
-                assertionFailure(error.localizedDescription)
-            }
-        }
+//        restAPIManager.fetch(type: .orderbook, paymentCurrency: .KRW, coin: coinType)
+//        { (parsedResult: Result<BithumbRestAPIOrderbook, Error>) in
+//
+//            switch parsedResult {
+//            case .success(let parsedData):
+//                self.asks = parsedData.data.asks.sorted { $0.price > $1.price }
+//                self.bids = parsedData.data.bids
+//                NotificationCenter.default.post(name: .restAPIOrderNotification, object: nil)
+//            case .failure(NetworkError.unverifiedCoin):
+//                print(NetworkError.unverifiedCoin.localizedDescription)
+//            case .failure(let error):
+//                assertionFailure(error.localizedDescription)
+//            }
+//        }
     }
     
 }
@@ -75,10 +75,10 @@ extension OrdersViewModel {
     }
     
     private func initiateWebSocketTicker() {
-        webSocketManager.connectWebSocket(parameter: BithumbWebSocketParameter(.orderbookdepth, [coinType], nil))
-        { (parsedResult: Result<BithumbWebSocketOrderBook?, Error>) in
-            
-            self.initiateRestAPI()
-        }
+//        webSocketManager.connectWebSocket(parameter: BithumbWebSocketParameter(.orderbookdepth, [coinType], nil))
+//        { (parsedResult: Result<BithumbWebSocketOrderBook?, Error>) in
+//            
+//            self.initiateRestAPI()
+//        }
     }
 }

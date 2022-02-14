@@ -22,10 +22,10 @@ class OrderViewController: UIViewController {
     private let orderInfoTableView = UITableView(frame: .zero, style: .plain)
     private var isInitialization: Bool = true
     
-    init(coin: CoinType) {
-        ordersViewModel = OrdersViewModel(coin: coin)
-        transactionsViewModel = TransactionsViewModel(coinType: coin)
-        orderInfoViewModel = RestAPITickerViewModel(coin: coin)
+    init(_ market: UpbitMarket) {
+        ordersViewModel = OrdersViewModel(market)
+        transactionsViewModel = TransactionsViewModel(market)
+        orderInfoViewModel = RestAPITickerViewModel(market)
         super.init(nibName: nil, bundle: nil)
     }
     

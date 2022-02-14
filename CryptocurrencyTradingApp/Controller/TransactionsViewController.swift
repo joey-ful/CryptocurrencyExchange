@@ -12,7 +12,7 @@ typealias TransactionsDataSource = UITableViewDiffableDataSource<Int, Transactio
 
 class TransactionsViewController: UIViewController {
     private var viewModel: TransactionsViewModel
-    private let coinType: CoinType
+    private let market: UpbitMarket
     private let timeTableView = UITableView(frame: .zero, style: .grouped)
     private let dayTableView = UITableView(frame: .zero, style: .grouped)
     private var timeDataSource: TransactionsDataSource?
@@ -27,9 +27,9 @@ class TransactionsViewController: UIViewController {
     }()
     
 
-    init(coin: CoinType) {
-        self.viewModel = TransactionsViewModel(coinType: coin)
-        coinType = coin
+    init(_ market: UpbitMarket) {
+        self.market = market
+        self.viewModel = TransactionsViewModel(market)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -208,7 +208,8 @@ extension TransactionsViewController: UITableViewDelegate {
                 as? TransactionsHeader
         else { return UITableViewHeaderFooterView() }
         
-        header.configure(isTimeCell: isTime, symbol: coinType.symbol)
+        let symbol = market.market.split(separator: "-")[1].lowercased()
+        header.configure(isTimeCell: isTime, symbol: symbol)
         
         return header
     }

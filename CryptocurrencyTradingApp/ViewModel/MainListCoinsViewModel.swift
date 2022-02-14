@@ -8,7 +8,7 @@
 import UIKit
 
 class MainListCoinsViewModel {
-    private let markets: [UpbitMarket]
+    let markets: [UpbitMarket]
     private var mainListCoins: [Ticker] = [] {
         didSet {
             filtered = mainListCoins.filter { existsInFiltered($0) }

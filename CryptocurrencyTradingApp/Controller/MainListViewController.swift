@@ -294,7 +294,9 @@ extension MainListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let list = showFavorites ? viewModel.favorites : viewModel.filtered
         let coin = CoinType.coin(symbol: list[indexPath.row].symbol.lowercased()) ?? .unverified
-        let detailViewController = DetailCoinViewController(coin: coin)
+        let symbol = list[indexPath.row].symbol.uppercased()
+        let market = viewModel.markets.filter { $0.market.contains(symbol) }[0]
+        let detailViewController = DetailCoinViewController(coin: coin, market: market)
         navigationController?.pushViewController(detailViewController, animated: true)
     }
 

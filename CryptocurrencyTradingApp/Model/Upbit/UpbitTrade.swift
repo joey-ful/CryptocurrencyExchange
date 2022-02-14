@@ -8,15 +8,15 @@
 import Foundation
 
 struct UpbitTrade: Decodable {
-    let tradePrice: Double
-    let tradeVolume: Double
-    let tradeDate: String
-    let askBid: String
+    let price: Double
+    let quantity: Double
+    let date: Double
+    let type: String
     
     enum CodingKeys: String, CodingKey {
-        case tradePrice = "trade_price"
-        case tradeVolume = "trade_volume"
-        case tradeDate = "timestamp"
-        case askBid = "ask_bid"
+        case price = "trade_price"
+        case quantity = "trade_volume"
+        case date = "timestamp"
+        case type = "ask_bid"
     }
 }

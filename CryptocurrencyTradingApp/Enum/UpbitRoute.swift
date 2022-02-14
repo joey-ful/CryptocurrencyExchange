@@ -132,7 +132,7 @@ enum UpbitRoute: Route {
         return [URLQueryItem(name: "markets", value: markets.joined(separator: ", "))]
     }
     
-    func tradesQueryItems(market: UpbitMarket, toTime: String? = nil, count: Int?, cursor: String? = nil, daysAgo: Int?) -> [URLQueryItem]? {
+    func tradesQueryItems(market: UpbitMarket, toTime: String? = nil, count: Int?, cursor: String? = nil, daysAgo: Int? = nil) -> [URLQueryItem]? {
 
         var queryItems = [URLQueryItem(name: "market", value: market.market)]
 

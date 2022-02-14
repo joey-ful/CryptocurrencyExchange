@@ -8,7 +8,7 @@
 import Foundation
 
 class RestAPITickerViewModel {
-    private let coin: CoinType
+    private let market: UpbitMarket
     private var mainListCoin = Ticker()
     private let restAPIManager = RestAPIManager()
     
@@ -38,7 +38,7 @@ class RestAPITickerViewModel {
     }
     
     private var quantity: String {
-        return (mainListCoin.quantity?.toDecimal().lose(from: ".") ?? .zero) + .whiteSpace + coin.symbol
+        return (mainListCoin.quantity?.toDecimal().lose(from: ".") ?? .zero) + .whiteSpace + market.market.split(separator: "-")[1]
     }
     
     private var tradeValue: String {
@@ -62,31 +62,31 @@ class RestAPITickerViewModel {
         return mainListCoin.lowPrice?.toDecimal() ?? .zero
     }
     
-    init(coin: CoinType) {
-        self.coin = coin
-        self.initiateRestAPI(coin)
+    init(_ market: UpbitMarket) {
+        self.market = market
+        self.initiateRestAPI()
     }
 
-    private func initiateRestAPI(_ coin: CoinType) {
-        restAPIManager.fetch(type: .ticker,
-                             paymentCurrency: .KRW,
-                             coin: coin) { (parsedResult: Result<BithumbRestAPITicker, Error>) in
-            
-            switch parsedResult {
-            case .success(let parsedData):
-                let ticker = parsedData.data
-                self.mainListCoin = Ticker(openPrice: ticker.openingPrice,
-                                                 highPrice: ticker.maxiumumPrice,
-                                                 lowPrice: ticker.minimumPrice,
-                                                 prevPrice: ticker.previousClosingPrice,
-                                                 quantity: ticker.unitsTradedWithin24H,
-                                                 tradeValue: ticker.tradeValueWithin24H)
-                NotificationCenter.default.post(name: .restAPITickerNotification, object: nil)
-            case .failure(NetworkError.unverifiedCoin):
-                print(NetworkError.unverifiedCoin.localizedDescription)
-            case .failure(let error):
-                assertionFailure(error.localizedDescription)
-            }
-        }
+    private func initiateRestAPI() {
+//        restAPIManager.fetch(type: .ticker,
+//                             paymentCurrency: .KRW,
+//                             coin: coin) { (parsedResult: Result<BithumbRestAPITicker, Error>) in
+//
+//            switch parsedResult {
+//            case .success(let parsedData):
+//                let ticker = parsedData.data
+//                self.mainListCoin = Ticker(openPrice: ticker.openingPrice,
+//                                                 highPrice: ticker.maxiumumPrice,
+//                                                 lowPrice: ticker.minimumPrice,
+//                                                 prevPrice: ticker.previousClosingPrice,
+//                                                 quantity: ticker.unitsTradedWithin24H,
+//                                                 tradeValue: ticker.tradeValueWithin24H)
+//                NotificationCenter.default.post(name: .restAPITickerNotification, object: nil)
+//            case .failure(NetworkError.unverifiedCoin):
+//                print(NetworkError.unverifiedCoin.localizedDescription)
+//            case .failure(let error):
+//                assertionFailure(error.localizedDescription)
+//            }
+//        }
     }
 }

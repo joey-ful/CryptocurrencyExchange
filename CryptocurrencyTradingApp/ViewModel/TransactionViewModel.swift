@@ -34,8 +34,7 @@ class TransactionViewModel: TransactionViewModelType {
     }
     
     var time: String {
-        let time = transaction.date.split(separator: " ")[1]
-        return String(time.split(separator: ".")[0])
+        return transaction.date.description.toTime()
     }
     
     var price: String {

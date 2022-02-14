@@ -62,9 +62,28 @@ extension String {
     }
     
     func toDate() -> String {
-        let start = self.startIndex
-        let end = self.index(self.endIndex, offsetBy: -3)
-        let data = Double(self[start..<end]) ?? .zero
+        let text = self.lose(from: ".")
+        let start = text.startIndex
+        let end = text.index(text.endIndex, offsetBy: -3)
+        let data = Double(text[start..<end]) ?? .zero
+        
+        func convert(data: Double) -> String{
+            let date = Date(timeIntervalSince1970: data)
+            let formatter = DateFormatter()
+            formatter.locale = Locale(identifier: "ko_kr")
+            formatter.timeZone = TimeZone(abbreviation: "KST")
+            formatter.dateFormat = "HH:mm:ss"
+            
+            return formatter.string(from: date)
+        }
+        return convert(data: data)
+    }
+    
+    func toTime() -> String {
+        let text = self.lose(from: ".")
+        let start = text.startIndex
+        let end = text.index(text.endIndex, offsetBy: -3)
+        let data = Double(text[start..<end]) ?? .zero
         
         func convert(data: Double) -> String{
             let date = Date(timeIntervalSince1970: data)
