@@ -26,7 +26,6 @@ class MainTabBarViewController: UITabBarController {
         }
     }
 
-
     private func initTabBar(with markets: [UpbitMarket]) {
         tabBar.backgroundColor = .white
         tabBar.barTintColor = UIColor.white // TabBar 의 배경 색

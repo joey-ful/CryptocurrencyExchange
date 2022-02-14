@@ -19,8 +19,8 @@ struct UpbitWebsocketTicker: Decodable, WebSocketDataModel {
         case market = "code"
         case tickType
         case accumulatedTradeValue = "acc_trade_price_24h"
-        case fluctuationRate = "change_rate"
-        case fluctuationAmount = "change_price"
+        case fluctuationRate = "signed_change_rate"
+        case fluctuationAmount = "signed_change_price"
         case volume = "acc_trade_volume_24h"
 
     }

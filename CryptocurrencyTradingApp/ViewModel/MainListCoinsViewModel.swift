@@ -31,7 +31,7 @@ class MainListCoinsViewModel {
         )
     }
     private let restAPIManager = RestAPIManager()
-    private let webSocketManager = WebSocketManager()
+    private let webSocketManager = WebSocketManager(of: .upbit)
     private let networkManager = NetworkManager(networkable: NetworkModule())
     
     var headerViewModel: MainListHeaderViewModel {
@@ -93,60 +93,62 @@ extension MainListCoinsViewModel {
 
 // MARK: WebSocket
 extension MainListCoinsViewModel {
-    func initiateWebSocket() {
-        webSocketManager.createWebSocket(of: .bithumb)
-        initiateTransactionWebSocket()
-        initiateTickerWebSocket()
+    func initiateWebSocket(to exchange: WebSocketURL) {
+        initiateTransactionWebSocket(to: exchange)
+        initiateTickerWebSocket(to: exchange)
     }
     
     func closeWebSocket() {
         webSocketManager.close()
     }
     
-    private func initiateTransactionWebSocket() {
-        webSocketManager.connectWebSocket(parameter: BithumbWebSocketParameter(.transaction, CoinType.allCoins, nil))
-        { (parsedResult: Result<BithumbWebSocketTransaction?, Error>) in
+    private func initiateTransactionWebSocket(to exchange: WebSocketURL) {
+        webSocketManager.connectWebSocket(to: exchange,
+                                          parameter: UpbitWebSocketParameter(ticket: UUID(),
+                                                                             .transaction,
+                                                                             markets))
+        { (parsedResult: Result<UpbitWebsocketTrade?, Error>) in
             
             switch parsedResult {
             case .success(let parsedData):
-                guard let transactions = parsedData?.content.list else { return }
-                transactions.forEach { self.updateTransaction($0) }
+                self.updateTransaction(parsedData)
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
             }
         }
     }
     
-    private func initiateTickerWebSocket() {
-        webSocketManager.connectWebSocket(parameter: BithumbWebSocketParameter(.ticker, CoinType.allCoins, [.twentyfour, .yesterday]))
-        { (parsedResult: Result<BithumbWebSocketTicker?, Error>) in
-            
+    private func initiateTickerWebSocket(to exchange: WebSocketURL) {
+        webSocketManager.connectWebSocket(to: exchange,
+                                          parameter: UpbitWebSocketParameter(ticket: webSocketManager.uuid,
+                                                                             .ticker,
+                                                                             markets))
+        { (parsedResult: Result<UpbitWebsocketTicker?, Error>) in
+
             switch parsedResult {
             case .success(let parsedData):
-                guard let ticker = parsedData?.content else { return }
-                if ticker.tickType == "24H" {
-                    self.updateTradeValue(ticker)
-                } else if ticker.tickType == "MID" {
-                    self.updateFluctuationAndUnisTraded(ticker)
-                }
+                self.updateTradeValueAndFluctuations(parsedData)
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
             }
         }
     }
     
-    private func updateTransaction(_ transaction: BithumbWebSocketTransaction.Transaction) {
+    private func updateTransaction(_ transaction: UpbitWebsocketTrade?) {
+        guard let transaction = transaction else { return }
+
         mainListCoins.enumerated().forEach { index, oldCoin in
-            let newSymbol = transaction.symbol.lose(from: "_").lowercased()
+            let newSymbol = transaction.market.split(separator: "-")[1].lowercased()
 
             if mainListCoins[index].symbol == newSymbol
             {
+                
                 let oldPrice = mainListCoins[index].currentPrice
-                let newPrice = transaction.price
+                let newPrice = transaction.price.description
                 if newPrice == oldPrice { return }
                 
                 mainListCoins[index].currentPrice = newPrice
-                let userInfo = userInfo(at: index, hasRisen: newPrice > oldPrice)
+                let userInfo = userInfo(at: index, hasRisen: newPrice.toDouble() > oldPrice.toDouble())
                 NotificationCenter.default.post(name: .webSocketTransactionsNotification,
                                                 object: "currentPrice",
                                                 userInfo: userInfo)
@@ -154,32 +156,17 @@ extension MainListCoinsViewModel {
         }
     }
     
-    private func updateTradeValue(_ ticker: BithumbWebSocketTicker.Ticker) {
+    private func updateTradeValueAndFluctuations(_ ticker: UpbitWebsocketTicker?) {
+        guard let ticker = ticker else { return }
+        
         mainListCoins.enumerated().forEach { index, oldCoin in
-            let newSymbol = ticker.symbol.lose(from: "_").lowercased()
+            let newSymbol = ticker.market.split(separator: "-")[1].lowercased()
             
             if mainListCoins[index].symbol == newSymbol {
-                mainListCoins[index].tradeValue = ticker.accumulatedTradeValue
-                let userInfo = userInfo(at: index)
-                NotificationCenter.default.post(name: .webSocketTicker24HNotification,
-                                                object: "tradeValue",
-                                                userInfo: userInfo)
-            }
-        }
-    }
-    
-    private func updateFluctuationAndUnisTraded(_ ticker: BithumbWebSocketTicker.Ticker) {
-        mainListCoins.enumerated().forEach { index, oldCoin in
-            let newSymbol = ticker.symbol.lose(from: "_").lowercased()
-            
-            if mainListCoins[index].symbol == newSymbol {
-                mainListCoins[index].fluctuationRate = ticker.fluctuationRate
-                mainListCoins[index].fluctuationAmount = ticker.fluctuationAmount
                 
-                let userInfo = userInfo(at: index)
-                NotificationCenter.default.post(name: .webSocketTickerNotification,
-                                                object: "fluctuation",
-                                                userInfo: userInfo)
+                mainListCoins[index].tradeValue = ticker.accumulatedTradeValue.description
+                mainListCoins[index].fluctuationRate = (ticker.fluctuationRate * 100).description
+                mainListCoins[index].fluctuationAmount = ticker.fluctuationAmount.description
             }
         }
     }

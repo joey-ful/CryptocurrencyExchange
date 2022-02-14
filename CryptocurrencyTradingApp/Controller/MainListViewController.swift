@@ -55,7 +55,7 @@ class MainListViewController: UIViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        viewModel.initiateWebSocket()
+        viewModel.initiateWebSocket(to: .upbit)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(updateDataSource),
                                                name: .webSocketTransactionsNotification,
@@ -63,10 +63,6 @@ class MainListViewController: UIViewController {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(updateDataSource),
                                                name: .webSocketTicker24HNotification,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(updateDataSource),
-                                               name: .webSocketTickerNotification,
                                                object: nil)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(makeSnapshot),
@@ -78,7 +74,6 @@ class MainListViewController: UIViewController {
         viewModel.closeWebSocket()
         NotificationCenter.default.removeObserver(self, name: .webSocketTransactionsNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: .webSocketTicker24HNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .webSocketTickerNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: .updateSortNotification, object: nil)
     }
     
