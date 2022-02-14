@@ -17,4 +17,8 @@ struct UpbitMarket: Decodable {
         case koreanName = "korean_name"
         case englishName = "english_name"
     }
+    
+    var symbol: String {
+            return market.split(separator: "-")[1].lowercased()
+        }
 }

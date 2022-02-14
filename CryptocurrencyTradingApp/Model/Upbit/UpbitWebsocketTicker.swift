@@ -14,14 +14,17 @@ struct UpbitWebsocketTicker: Decodable, WebSocketDataModel {
     let fluctuationRate: Double
     let fluctuationAmount: Double
     let volume: Double
+    let change: String
+    let tradePrice: Double
 
     enum CodingKeys: String, CodingKey {
         case market = "code"
-        case tickType
+        case tickType, change
         case accumulatedTradeValue = "acc_trade_price_24h"
         case fluctuationRate = "change_rate"
         case fluctuationAmount = "change_price"
         case volume = "acc_trade_volume_24h"
+        case tradePrice = "trade_price"
 
     }
 }
