@@ -13,6 +13,7 @@ final class DetailCoinViewController: UIViewController {
     private var containerView = UIView()
     private var viewModel: DetailCoinViewModel!
     private let coin: CoinType?
+    private let market: UpbitMarket
     private let priceLabel = UILabel.makeLabel(font: .title1)
     private let incrementLabel = UILabel.makeLabel(font: .caption1)
     private let percentLabel = UILabel.makeLabel(font: .caption1)
@@ -28,8 +29,8 @@ final class DetailCoinViewController: UIViewController {
         return menuControl
     }()
     private let chartViewController: DetailChartViewController
-    private lazy var transactionVC = TransactionsViewController(coin: coin ?? .unverified)
-    private lazy var orderViewController = OrderViewController(coin: coin ?? .unverified)
+    private lazy var transactionVC = TransactionsViewController(market)
+    private lazy var orderViewController = OrderViewController(market)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,8 +51,9 @@ final class DetailCoinViewController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: .coinDetailNotificaion, object: nil)
     }
 
-    init(coin: CoinType) {
+    init(coin: CoinType, market: UpbitMarket) {
         self.coin = coin
+        self.market = market
         viewModel = DetailCoinViewModel(coin: coin)
         chartViewController = DetailChartViewController(coin: coin)
         super.init(nibName: nil, bundle: nil)

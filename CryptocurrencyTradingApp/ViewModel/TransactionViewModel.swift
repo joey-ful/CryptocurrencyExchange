@@ -34,7 +34,7 @@ class TransactionViewModel: TransactionViewModelType {
     }
     
     var time: String {
-        return transaction.date.description.toTime()
+        return transaction.date.description.toDate(.fullTime)
     }
     
     var price: String {

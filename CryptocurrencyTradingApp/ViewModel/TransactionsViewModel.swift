@@ -55,11 +55,11 @@ extension TransactionsViewModel {
             case .success(let parsedData):
                 self.transactions = parsedData.map {
                     Transaction(symbol: nil,
-                                type: $0.type,
+                                type: $0.type.lowercased(),
                                 price: $0.price.description,
                                 quantity: $0.quantity.description,
                                 amount: ($0.price * $0.quantity).description,
-                                date: $0.date.description.toDate(),
+                                date: $0.date.description,
                                 upDown: nil)
                 }.sorted { $0.date > $1.date }
             case .failure(let error):
@@ -129,27 +129,27 @@ extension TransactionsViewModel {
 // MARK: WebSocket
 extension TransactionsViewModel {
     func initiateTimeWebSocket() {
-        webSocketManager.createWebSocket(of: .bithumb)
-        webSocketManager.connectWebSocket(parameter: BithumbWebSocketParameter(.transaction, [coinType], nil)) { (parsedResult: Result<BithumbWebSocketTransaction?, Error>) in
-            
-            switch parsedResult {
-            case .success(let parsedData):
-                guard let parsedData = parsedData else { return }
-                let newTransactions = parsedData.content.list.map {
-                    Transaction(symbol: $0.symbol,
-                                type: $0.type,
-                                price: $0.price,
-                                quantity: $0.quantity,
-                                amount: $0.amount,
-                                date: $0.dateTime,
-                                upDown: $0.upDown)
-                }
-                self.transactions = (self.transactions + newTransactions).sorted { $0.date > $1.date }
-                NotificationCenter.default.post(name: .webSocketTransactionsNotification,
-            case .failure(let error):
-                assertionFailure(error.localizedDescription)
-            }
-        }
+//        webSocketManager.createWebSocket(of: .bithumb)
+//        webSocketManager.connectWebSocket(parameter: BithumbWebSocketParameter(.transaction, [coinType], nil)) { (parsedResult: Result<BithumbWebSocketTransaction?, Error>) in
+//
+//            switch parsedResult {
+//            case .success(let parsedData):
+//                guard let parsedData = parsedData else { return }
+//                let newTransactions = parsedData.content.list.map {
+//                    Transaction(symbol: $0.symbol,
+//                                type: $0.type,
+//                                price: $0.price,
+//                                quantity: $0.quantity,
+//                                amount: $0.amount,
+//                                date: $0.dateTime,
+//                                upDown: $0.upDown)
+//                }
+//                self.transactions = (self.transactions + newTransactions).sorted { $0.date > $1.date }
+//                NotificationCenter.default.post(name: .webSocketTransactionsNotification,
+//            case .failure(let error):
+//                assertionFailure(error.localizedDescription)
+//            }
+//        }
     }
     
     func closeWebSocket() {
