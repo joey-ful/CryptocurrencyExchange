@@ -129,27 +129,27 @@ extension TransactionsViewModel {
 // MARK: WebSocket
 extension TransactionsViewModel {
     func initiateTimeWebSocket() {
-//        webSocketManager.createWebSocket(of: .bithumb)
-//        webSocketManager.connectWebSocket(parameter: BithumbWebSocketParameter(.transaction, [coinType], nil)) { (parsedResult: Result<BithumbWebSocketTransaction?, Error>) in
-//
-//            switch parsedResult {
-//            case .success(let parsedData):
-//                guard let parsedData = parsedData else { return }
-//                let newTransactions = parsedData.content.list.map {
-//                    Transaction(symbol: $0.symbol,
-//                                type: $0.type,
-//                                price: $0.price,
-//                                quantity: $0.quantity,
-//                                amount: $0.amount,
-//                                date: $0.dateTime,
-//                                upDown: $0.upDown)
-//                }
-//                self.transactions = (self.transactions + newTransactions).sorted { $0.date > $1.date }
-//                NotificationCenter.default.post(name: .webSocketTransactionsNotification,
-//            case .failure(let error):
-//                assertionFailure(error.localizedDescription)
-//            }
-//        }
+        
+        webSocketManager.connectWebSocket(to: .upbit,
+                                          parameter: UpbitWebSocketParameter(ticket: webSocketManager.uuid, .transaction, [market]))
+        { (parsedResult: Result<UpbitWebsocketTrade?, Error>) in
+            
+            switch parsedResult {
+            case .success(let parsedData):
+                guard let parsedData = parsedData else { return }
+                let newTransactions = Transaction(symbol: parsedData.symbol,
+                                                  type: parsedData.type.lowercased(),
+                                                  price: parsedData.price.description,
+                                                  quantity: parsedData.quantity.description,
+                                                  amount: (parsedData.price * parsedData.quantity).description,
+                                                  date: parsedData.dateTime.description,
+                                                  upDown: parsedData.upDown)
+                self.transactions = (self.transactions + [newTransactions]).sorted { $0.date > $1.date }
+                NotificationCenter.default.post(name: .webSocketTransactionsNotification, object: nil)
+            case .failure(let error):
+                assertionFailure(error.localizedDescription)
+            }
+        }
     }
     
     func closeWebSocket() {

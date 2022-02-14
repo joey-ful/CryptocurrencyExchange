@@ -208,7 +208,7 @@ extension TransactionsViewController: UITableViewDelegate {
                 as? TransactionsHeader
         else { return UITableViewHeaderFooterView() }
         
-        let symbol = market.market.split(separator: "-")[1].lowercased()
+        header.configure(isTimeCell: isTime, symbol: market.symbol)
         header.configure(isTimeCell: isTime, symbol: symbol)
         
         return header
