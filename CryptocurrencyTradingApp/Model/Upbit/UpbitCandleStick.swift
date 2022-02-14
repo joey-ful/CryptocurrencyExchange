@@ -8,14 +8,16 @@
 import Foundation
 
 struct UpbitCandleStick: Decodable {
+    let market: String
     let openingPrice: Double
     let closingPrice: Double
     let lowPrice: Double
     let highPrice: Double
-    let candleDateTime: Double
+    let candleDateTime: String
     let tradeVolume: Double
     
     enum CodingKeys: String, CodingKey {
+        case market
         case openingPrice = "opening_price"
         case closingPrice = "trade_price"
         case lowPrice = "low_price"

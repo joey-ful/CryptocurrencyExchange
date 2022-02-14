@@ -30,7 +30,6 @@ class MainListCoinsViewModel {
                 .prefix(10)
         )
     }
-    private let restAPIManager = RestAPIManager()
     private let webSocketManager = WebSocketManager(of: .upbit)
     private let networkManager = NetworkManager(networkable: NetworkModule())
     
@@ -47,7 +46,9 @@ class MainListCoinsViewModel {
     }
     
     func popularCoinViewModel(at index: Int) -> PopularCoinViewModel {
-        return PopularCoinViewModel(popularCoin: popularCoins[index])
+        let symbol = popularCoins[index].symbol
+        let market = markets.filter { $0.market.contains(symbol.uppercased()) }[0]
+        return PopularCoinViewModel(popularCoin: popularCoins[index], market)
     }
     
     init(_ markets: [UpbitMarket]) {

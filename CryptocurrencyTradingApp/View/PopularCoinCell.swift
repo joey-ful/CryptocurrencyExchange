@@ -31,7 +31,7 @@ class PopularCoinCell: UICollectionViewCell {
                                                                spacing: 10,
                                                                subviews: [labelStackView, host.view])
     private lazy var host: UIHostingController = {
-        return UIHostingController(rootView: MiniChart(viewModel: viewModel ?? PopularCoinViewModel(popularCoin: Ticker())))
+        return UIHostingController(rootView: MiniChart(viewModel: viewModel ?? PopularCoinViewModel(popularCoin: Ticker(), UpbitMarket())))
     }()
     
     func configure(_ viewModel: PopularCoinViewModel, parent: UIViewController) {

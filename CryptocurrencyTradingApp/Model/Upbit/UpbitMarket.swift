@@ -18,3 +18,11 @@ struct UpbitMarket: Decodable {
         case englishName = "english_name"
     }
 }
+
+extension UpbitMarket {
+    init() {
+        self.market = ""
+        self.koreanName = ""
+        self.englishName = ""
+    }
+}
