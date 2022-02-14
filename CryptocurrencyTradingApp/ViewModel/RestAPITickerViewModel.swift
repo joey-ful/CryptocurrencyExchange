@@ -38,7 +38,7 @@ class RestAPITickerViewModel {
     }
     
     private var quantity: String {
-        return (mainListCoin.quantity?.toDecimal().lose(from: ".") ?? .zero) + .whiteSpace + market.market.split(separator: "-")[1]
+        return (mainListCoin.quantity?.toDecimal().lose(from: ".") ?? .zero) + .whiteSpace + market.symbol.uppercased()
     }
     
     private var tradeValue: String {

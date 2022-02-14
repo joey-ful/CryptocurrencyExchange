@@ -13,20 +13,17 @@ struct UpbitCandleStick: Decodable {
     let closingPrice: Double
     let lowPrice: Double
     let highPrice: Double
-    let candleDateTime: String
     let tradeVolume: Double
     let prevPrice: Double?
-    let date: Double
+    let timestamp: Double
     
     enum CodingKeys: String, CodingKey {
-        case market
+        case market, timestamp
         case openingPrice = "opening_price"
         case closingPrice = "trade_price"
         case lowPrice = "low_price"
         case highPrice = "high_price"
-        case candleDateTime = "candle_date_time_kst"
         case tradeVolume = "candle_acc_trade_volume"
         case prevPrice = "prev_closing_price"
-        case date = "timestamp"
     }
 }

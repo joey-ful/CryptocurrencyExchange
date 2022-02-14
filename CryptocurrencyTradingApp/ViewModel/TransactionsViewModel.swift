@@ -89,7 +89,7 @@ extension TransactionsViewModel {
                     Transaction(price: $0.closingPrice.description,
                                 prevPrice: $0.prevPrice?.description ?? .zero,
                                 quantity: $0.tradeVolume.description,
-                                date: $0.date.description)
+                                date: $0.timestamp.description)
                 }.sorted { $0.date > $1.date }
                 NotificationCenter.default.post(name: .candlestickNotification, object: nil)
             case .failure(NetworkError.unverifiedCoin):
