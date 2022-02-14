@@ -61,11 +61,11 @@ extension OrdersViewModel {
                 self.asks = parsedData[0].data.map {
                     Order(price: $0.askPrice.description,
                           quantity: $0.askSize.description)
-                }
+                }.sorted { $0.price.toDouble() > $1.price.toDouble() }
                 self.bids = parsedData[0].data.map {
                     Order(price: $0.bidPrice.description,
                           quantity: $0.bidSize.description)
-                }
+                }.sorted { $0.price.toDouble() > $1.price.toDouble() }
                 
                 NotificationCenter.default.post(name: .restAPIOrderNotification, object: nil)
             case .failure(NetworkError.unverifiedCoin):
@@ -84,11 +84,36 @@ extension OrdersViewModel {
         initiateWebSocketTicker()
     }
     
+    func closeWebSocket() {
+        webSocketManager.close()
+    }
+    
     private func initiateWebSocketTicker() {
-//        webSocketManager.connectWebSocket(parameter: BithumbWebSocketParameter(.orderbookdepth, [coinType], nil))
-//        { (parsedResult: Result<BithumbWebSocketOrderBook?, Error>) in
-//            
-//            self.initiateRestAPI()
-//        }
+        webSocketManager.connectWebSocket(to: .upbit,
+                                          parameter: UpbitWebSocketParameter(ticket: webSocketManager.uuid,
+                                                                             .orderbookdepth,
+                                                                             [market]))
+        { (parsedResult: Result<UpbitWebsocketOrderBook?, Error>) in
+
+            switch parsedResult {
+            case .success(let parsedData):
+                guard let parsedData = parsedData else { return }
+                
+                self.asks = parsedData.data.map {
+                    Order(price: $0.askPrice.description,
+                          quantity: $0.askSize.description)
+                }.sorted { $0.price.toDouble() > $1.price.toDouble() }
+                self.bids = parsedData.data.map {
+                    Order(price: $0.bidPrice.description,
+                          quantity: $0.bidSize.description)
+                }.sorted { $0.price.toDouble() > $1.price.toDouble() }
+                
+                NotificationCenter.default.post(name: .restAPIOrderNotification, object: nil)
+            case .failure(NetworkError.unverifiedCoin):
+                print(NetworkError.unverifiedCoin.localizedDescription)
+            case .failure(let error):
+                assertionFailure(error.localizedDescription)
+            }
+        }
     }
 }

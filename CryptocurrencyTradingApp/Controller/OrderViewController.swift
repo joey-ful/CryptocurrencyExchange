@@ -63,6 +63,8 @@ class OrderViewController: UIViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        ordersViewModel.closeWebSocket()
+        transactionsViewModel.closeWebSocket()
         NotificationCenter.default.removeObserver(self, name: .webSocketTransactionsNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: .restAPIOrderNotification, object: nil)
     }
