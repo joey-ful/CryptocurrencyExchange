@@ -9,8 +9,6 @@ import Foundation
 import UIKit.UIColor
 
 class DetailCoinViewModel {
-    private let restAPIManager = NetworkManager(networkable: NetworkModule())
-
     private let webSocketManager = WebSocketManager(of: .upbit)
     var userDefaults: [String] {
         UserDefaults.standard.object(forKey: "favorite") as? [String] ?? []
@@ -41,9 +39,12 @@ class DetailCoinViewModel {
         return sign + coinInfomation.fluctuationAmount.description.toDecimal()
     }
     
+    func closeWebSocket() {
+        webSocketManager.close()
+    }
+
     init(market: UpbitMarket) {
         initiateViewModel(market)
-
     }
     
     func initiateViewModel(_ market: UpbitMarket) {

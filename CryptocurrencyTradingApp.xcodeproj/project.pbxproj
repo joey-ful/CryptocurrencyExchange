@@ -53,6 +53,7 @@
 		D4C9F90427B65BCE00EDF156 /* WebSocketURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C9F90327B65BCE00EDF156 /* WebSocketURL.swift */; };
 		D4C9F90627B65DEE00EDF156 /* UpbitWebSocketParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C9F90527B65DEE00EDF156 /* UpbitWebSocketParameter.swift */; };
 		D4C9F90827B65E0000EDF156 /* WebSocketParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C9F90727B65E0000EDF156 /* WebSocketParameter.swift */; };
+		D4C9F90A27BA5A6C00EDF156 /* DateFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C9F90927BA5A6C00EDF156 /* DateFormat.swift */; };
 		D4CC01F127953FAF00F15957 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F027953FAF00F15957 /* AppDelegate.swift */; };
 		D4CC01F327953FAF00F15957 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F227953FAF00F15957 /* SceneDelegate.swift */; };
 		D4CC01F527953FAF00F15957 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F427953FAF00F15957 /* MainTabBarViewController.swift */; };
@@ -161,6 +162,7 @@
 		D4C9F90327B65BCE00EDF156 /* WebSocketURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketURL.swift; sourceTree = "<group>"; };
 		D4C9F90527B65DEE00EDF156 /* UpbitWebSocketParameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpbitWebSocketParameter.swift; sourceTree = "<group>"; };
 		D4C9F90727B65E0000EDF156 /* WebSocketParameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketParameter.swift; sourceTree = "<group>"; };
+		D4C9F90927BA5A6C00EDF156 /* DateFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormat.swift; sourceTree = "<group>"; };
 		D4CC01ED27953FAE00F15957 /* CryptocurrencyTradingApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CryptocurrencyTradingApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4CC01F027953FAF00F15957 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D4CC01F227953FAF00F15957 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -352,6 +354,7 @@
 				D4D0D29D279C29B500734C42 /* Sort.swift */,
 				E605E0B227B654F6002B84F1 /* PaymentCurrency.swift */,
 				D4C9F90327B65BCE00EDF156 /* WebSocketURL.swift */,
+				D4C9F90927BA5A6C00EDF156 /* DateFormat.swift */,
 			);
 			path = Enum;
 			sourceTree = "<group>";
@@ -556,6 +559,7 @@
 				D4D0D298279AE7A000734C42 /* CandleCoreDataManager.swift in Sources */,
 				D4C9F8F727B64F7900EDF156 /* NetworkManager.swift in Sources */,
 				D4AFEB3827A1292600011251 /* TransactionsHeader.swift in Sources */,
+				D4C9F90A27BA5A6C00EDF156 /* DateFormat.swift in Sources */,
 				D4D0D294279AE73000734C42 /* CandleData1M+CoreDataClass.swift in Sources */,
 				D4C9F8FD27B64FA900EDF156 /* Route.swift in Sources */,
 				D4AFEB3827A1292600011251 /* TransactionsHeader.swift in Sources */,

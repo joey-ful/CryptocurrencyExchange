@@ -19,6 +19,14 @@ struct UpbitMarket: Decodable {
     }
     
     var symbol: String {
-            return market.split(separator: "-")[1].lowercased()
-        }
+        return market.split(separator: "-")[1].lowercased()
+    }
+}
+
+extension UpbitMarket {
+    init() {
+        self.market = ""
+        self.koreanName = ""
+        self.englishName = ""
+    }
 }

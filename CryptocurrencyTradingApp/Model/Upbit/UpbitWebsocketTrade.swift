@@ -23,5 +23,9 @@ struct UpbitWebsocketTrade: Decodable, WebSocketDataModel {
         case dateTime = "trade_timestamp"
         case upDown = "change"
     }
+    
+    var symbol: String {
+        return self.market.split(separator: "-")[1].lowercased()
+    }
 }
 

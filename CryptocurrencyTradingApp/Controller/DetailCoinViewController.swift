@@ -28,8 +28,8 @@ final class DetailCoinViewController: UIViewController {
         return menuControl
     }()
     private let chartViewController: DetailChartViewController
-    private lazy var transactionVC = TransactionsViewController(coin: coin ?? .unverified)
-    private lazy var orderViewController = OrderViewController(coin: coin ?? .unverified)
+    private lazy var transactionVC = TransactionsViewController(market)
+    private lazy var orderViewController = OrderViewController(market)
     
     override func viewDidLoad() {
         super.viewDidLoad()

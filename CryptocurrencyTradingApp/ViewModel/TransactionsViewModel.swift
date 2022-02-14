@@ -13,8 +13,8 @@ class TransactionsViewModel {
             NotificationCenter.default.post(name: .restAPITransactionsNotification, object: nil)
         }
     }
-    private let coinType: CoinType
-    private let restAPIManager = RestAPIManager()
+    private let market: UpbitMarket
+    private let networkManager = NetworkManager(networkable: NetworkModule())
     private let webSocketManager = WebSocketManager()
     private let candleCoreDataManager = CandleCoreDataManager()
     private(set) var dayTransactions: [Transaction] = []
@@ -23,8 +23,8 @@ class TransactionsViewModel {
         transactions.count
     }
     
-    init(coinType: CoinType) {
-        self.coinType = coinType
+    init(_ market: UpbitMarket) {
+        self.market = market
         initiateTimeRestAPI()
         initiateDayRestAPI()
     }
@@ -36,20 +36,6 @@ class TransactionsViewModel {
     func dayTransactionViewModel(at index: Int) -> DayTransactionViewModel {
         return DayTransactionViewModel(dayTransaction: dayTransactions[index])
     }
-    
-    func readDayTransactions() -> [Transaction] {
-        guard let candleData = candleCoreDataManager.read(entityName: .twentyFourHour, coin: coinType)
-                as? [CandleData24H] else { return [] }
-        
-        return candleData.enumerated().map { index, data in
-            let prevPrice = (index == 0 ? candleData[0].closePrice : candleData[index - 1].closePrice)
-            return Transaction(price: data.closePrice.description,
-                               prevPrice: prevPrice.description,
-                               amount: data.tradeVolume.description,
-                               date: data.date)
-        }.sorted { $0.date > $1.date }
-    }
-    
 }
 
 // MARK: RestAPI Time
@@ -59,20 +45,26 @@ extension TransactionsViewModel {
     }
     
     private func initiateRestAPITransactionHistory() {
-        restAPIManager.fetch(type: .transactionHistory,
-                             paymentCurrency: .KRW,
-                             coin: coinType) { (parsedResult: Result<BithumbRestAPITransaction, Error>) in
-
-            guard case .success(let parsedData) = parsedResult else { return }
-            self.transactions = parsedData.data.map {
-                Transaction(symbol: nil,
-                            type: $0.type,
-                            price: $0.price,
-                            quantity: $0.quantity,
-                            amount: $0.amount,
-                            date: $0.date,
-                            upDown: nil)
-            }.sorted { $0.date > $1.date }
+        let route = UpbitRoute.trades
+        networkManager.request(with: route,
+                               queryItems: route.tradesQueryItems(market: market, count: 60),
+                               requestType: .requestWithQueryItems)
+        { (parsedResult: Result<[UpbitTrade], Error>) in
+            
+            switch parsedResult {
+            case .success(let parsedData):
+                self.transactions = parsedData.map {
+                    Transaction(symbol: nil,
+                                type: $0.type.lowercased(),
+                                price: $0.price.description,
+                                quantity: $0.quantity.description,
+                                amount: ($0.price * $0.quantity).description,
+                                date: $0.date.description,
+                                upDown: nil)
+                }.sorted { $0.date > $1.date }
+            case .failure(let error):
+                assertionFailure(error.localizedDescription)
+            }
         }
     }
 }
@@ -85,10 +77,20 @@ extension TransactionsViewModel {
     }
     
     private func initiateRestAPICandleStick() {
-        restAPIManager.fetch(type: .candlestick, paymentCurrency: .KRW, coin: coinType, chartIntervals: .twentyFourHour) { (parsedResult: Result<BithumbCandleStick, Error>) in
+        let route = UpbitRoute.candles(.twentyFourHour)
+        networkManager.request(with: route,
+                               queryItems: route.candlesQueryItems(coin: market, candleCount: 100),
+                               requestType: .requestWithQueryItems)
+        { (parsedResult: Result<[UpbitCandleStick], Error>) in
+            
             switch parsedResult {
             case .success(let parsedData):
-                self.convertCandleToTransaction(parsedData.data)
+                self.dayTransactions = parsedData.map {
+                    Transaction(price: $0.closingPrice.description,
+                                prevPrice: $0.prevPrice?.description ?? .zero,
+                                quantity: $0.tradeVolume.description,
+                                date: $0.timestamp.description)
+                }.sorted { $0.date > $1.date }
                 NotificationCenter.default.post(name: .candlestickNotification, object: nil)
             case .failure(NetworkError.unverifiedCoin):
                 print(NetworkError.unverifiedCoin.localizedDescription)
@@ -98,54 +100,28 @@ extension TransactionsViewModel {
         }
     }
     
-    private func convertCandleToTransaction(_ candleData: [[BithumbCandleStick.CandleStickData]]) {
-        dayTransactions = candleData.enumerated().map { index, candle in
-            let price: Double = convert(candle[2])
-            let prevPrice: Double = index == 0
-            ? convert(candle[2])
-            : convert(candleData[index - 1][2])
-            let quantity: Double = convert(candle[5])
-            let date: String = convert(candle[0])
-            
-            return Transaction(price: price.description,
-                               prevPrice: prevPrice.description,
-                               quantity: quantity.description,
-                               date: date)
-        }.sorted { $0.date > $1.date }
-    }
-    
-    private func convert(_ candleData: BithumbCandleStick.CandleStickData) -> Double {
-        switch candleData {
-        case .string(let result):
-            return Double(result) ?? .zero
-        case .integer(let date):
-            return Double(date)
-        }
-    }
-    
-    private func convert(_ candleData: BithumbCandleStick.CandleStickData) -> String {
-        switch candleData {
-        case .string(let result):
-            return String(result)
-        case .integer(let date):
-            return String(date)
-        }
-    }
-    
     private func initiateRestAPITicker() {
-        restAPIManager.fetch(type: .ticker,
-                             paymentCurrency: .KRW,
-                             coin: coinType) { (parsedResult: Result<BithumbRestAPITicker, Error>) in
+        let route = UpbitRoute.ticker
+        networkManager.request(with: route,
+                               queryItems: route.tickerQueryItems(coins: [market]),
+                               requestType: .requestWithQueryItems)
+        { (parsedResult: Result<[UpbitTicker], Error>) in
             
-            guard case .success(let parsedData) = parsedResult else { return }
-            let ticker = parsedData.data
-            let newTransaction = Transaction(price: ticker.closingPrice,
-                                             prevPrice: self.dayTransactions.last?.price ?? "0",
-                                             quantity: ticker.unitsTraded,
-                                             amount: ticker.tradeValue,
-                                             date: ticker.date.toDate())
-            self.dayTransactions.append(newTransaction)
-            NotificationCenter.default.post(name: .restAPITickerNotification, object: nil)
+            switch parsedResult {
+            case .success(let parsedData):
+                let ticker = parsedData[0]
+                let newTransaction = Transaction(price: ticker.closingPrice.description,
+                                                 prevPrice: self.dayTransactions.last?.price ?? "0",
+                                                 quantity: ticker.unitsTraded.description,
+                                                 amount: ticker.tradeValue.description,
+                                                 date: ticker.date.description.toDate())
+                self.dayTransactions.append(newTransaction)
+                NotificationCenter.default.post(name: .restAPITickerNotification, object: nil)
+            case .failure(NetworkError.unverifiedCoin):
+                print(NetworkError.unverifiedCoin.localizedDescription)
+            case .failure(let error):
+                assertionFailure(error.localizedDescription)
+            }
         }
     }
 }
@@ -153,24 +129,23 @@ extension TransactionsViewModel {
 // MARK: WebSocket
 extension TransactionsViewModel {
     func initiateTimeWebSocket() {
-        webSocketManager.createWebSocket(of: .bithumb)
-        webSocketManager.connectWebSocket(parameter: BithumbWebSocketParameter(.transaction, [coinType], nil)) { (parsedResult: Result<BithumbWebSocketTransaction?, Error>) in
+        
+        webSocketManager.connectWebSocket(to: .upbit,
+                                          parameter: UpbitWebSocketParameter(ticket: webSocketManager.uuid, .transaction, [market]))
+        { (parsedResult: Result<UpbitWebsocketTrade?, Error>) in
             
             switch parsedResult {
             case .success(let parsedData):
                 guard let parsedData = parsedData else { return }
-                let newTransactions = parsedData.content.list.map {
-                    Transaction(symbol: $0.symbol,
-                                type: $0.type,
-                                price: $0.price,
-                                quantity: $0.quantity,
-                                amount: $0.amount,
-                                date: $0.dateTime,
-                                upDown: $0.upDown)
-                }
-                self.transactions = (self.transactions + newTransactions).sorted { $0.date > $1.date }
-                NotificationCenter.default.post(name: .webSocketTransactionsNotification,
-                                                object: nil)
+                let newTransactions = Transaction(symbol: parsedData.symbol,
+                                                  type: parsedData.type.lowercased(),
+                                                  price: parsedData.price.description,
+                                                  quantity: parsedData.quantity.description,
+                                                  amount: (parsedData.price * parsedData.quantity).description,
+                                                  date: parsedData.dateTime.description,
+                                                  upDown: parsedData.upDown)
+                self.transactions = (self.transactions + [newTransactions]).sorted { $0.date > $1.date }
+                NotificationCenter.default.post(name: .webSocketTransactionsNotification, object: nil)
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
             }

@@ -9,6 +9,7 @@ import Foundation
 
 class WebSocketManager: NSObject {
     private var webSocket: URLSessionWebSocketTask?
+    private var webSockets: [URLSessionWebSocketTask] = []
     let uuid = UUID()
     
     init(of exchange: WebSocketURL = .bithumb) {
@@ -17,36 +18,42 @@ class WebSocketManager: NSObject {
         createWebSocket(of: exchange)
     }
     
-    func createWebSocket(of exchange: WebSocketURL) {
+    @discardableResult
+    func createWebSocket(of exchange: WebSocketURL) -> URLSessionWebSocketTask {
         let url = URL(string: exchange.urlString)!
-        webSocket = URLSession.shared.webSocketTask(with: url)
-        webSocket?.delegate = self
-        webSocket?.resume()
+        let webSocket = URLSession.shared.webSocketTask(with: url)
+        webSocket.delegate = self
+        webSocket.resume()
+        webSockets.append(webSocket)
+        return webSocket
     }
     
-    func connectWebSocket<T: WebSocketDataModel, S: WebSocketParameter>(parameter: S,
+    func connectWebSocket<T: WebSocketDataModel, S: WebSocketParameter>(to exchange: WebSocketURL = .bithumb,
+                                                                        parameter: S,
                                                                         completion: @escaping (Result<T?, Error>) -> Void)
     {
-        sendMessage(parameter)
-        receiveMessage(completion: completion)
+        let webSocket = createWebSocket(of: exchange)
+        sendMessage(through: webSocket, parameter)
+        receiveMessage(of: webSocket, completion: completion)
     }
     
-    private func sendMessage<S: WebSocketParameter>(_ parameter: S) {
+    private func sendMessage<S: WebSocketParameter>(through webSocket: URLSessionWebSocketTask, _ parameter: S) {
         let encoder = JSONEncoder()
         let parameters = parameter
         guard let data = try? encoder.encode(parameters) else {
             return
         }
         let message = URLSessionWebSocketTask.Message.data(data)
-        webSocket?.send(message) { error in
+        
+        webSocket.send(message) { error in
             if let error = error {
                 assertionFailure("\(error)")
             }
         }
     }
     
-    private func receiveMessage<T: WebSocketDataModel>(completion: @escaping (Result<T?, Error>) -> Void) {
-        webSocket?.receive(completionHandler: { [weak self] result in
+    private func receiveMessage<T: WebSocketDataModel>(of webSocket: URLSessionWebSocketTask, completion: @escaping (Result<T?, Error>) -> Void) {
+        webSocket.receive(completionHandler: { [weak self] result in
             switch result {
             case .success(let message):
                 switch message {
@@ -62,7 +69,7 @@ class WebSocketManager: NSObject {
             case .failure(let error):
                 assertionFailure("\(error)")
             }
-            self?.receiveMessage(completion: completion)
+            self?.receiveMessage(of: webSocket, completion: completion)
         })
     }
     
@@ -95,7 +102,7 @@ class WebSocketManager: NSObject {
         guard let text = String(data: data, encoding: .utf8) else {
             return completion(.failure(ParsingError.decodingError))
         }
-        
+
         do {
             var parsedData: T?
             if text.contains("ticker") {
@@ -129,7 +136,7 @@ class WebSocketManager: NSObject {
     
     func close() {
         let reason = Data("Close webSocket before view transition".utf8)
-        webSocket?.cancel(with: .normalClosure, reason: reason)
+        webSockets.forEach {  $0.cancel(with: .normalClosure, reason: reason) }
     }
 }
 

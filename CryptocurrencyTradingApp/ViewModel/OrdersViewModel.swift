@@ -8,8 +8,8 @@
 import Foundation
 
 class OrdersViewModel {
-    private let coinType: CoinType
-    private let restAPIManager = RestAPIManager()
+    private let market: UpbitMarket
+    private let networkManager = NetworkManager(networkable: NetworkModule())
     private let webSocketManager = WebSocketManager()
     private var asks: [Order] = []
     private var bids: [Order] = []
@@ -34,8 +34,8 @@ class OrdersViewModel {
         return asks.contains(order) ? "ask" : "bid"
     }
     
-    init(coin: CoinType) {
-        self.coinType = coin
+    init(_ market: UpbitMarket) {
+        self.market = market
         initiateRestAPI()
     }
     
@@ -50,13 +50,23 @@ class OrdersViewModel {
 
 extension OrdersViewModel {
     private func initiateRestAPI() {
-        restAPIManager.fetch(type: .orderbook, paymentCurrency: .KRW, coin: coinType)
-        { (parsedResult: Result<BithumbRestAPIOrderbook, Error>) in
+        let route = UpbitRoute.orderbook
+        networkManager.request(with: route,
+                               queryItems: route.orderbookQueryItems(coins: [market]),
+                               requestType: .requestWithQueryItems)
+        { (parsedResult: Result<[UpbitOrderBook], Error>) in
             
             switch parsedResult {
             case .success(let parsedData):
-                self.asks = parsedData.data.asks.sorted { $0.price > $1.price }
-                self.bids = parsedData.data.bids
+                self.asks = parsedData[0].data.map {
+                    Order(price: $0.askPrice.description,
+                          quantity: $0.askSize.description)
+                }.sorted { $0.price.toDouble() > $1.price.toDouble() }
+                self.bids = parsedData[0].data.map {
+                    Order(price: $0.bidPrice.description,
+                          quantity: $0.bidSize.description)
+                }.sorted { $0.price.toDouble() > $1.price.toDouble() }
+                
                 NotificationCenter.default.post(name: .restAPIOrderNotification, object: nil)
             case .failure(NetworkError.unverifiedCoin):
                 print(NetworkError.unverifiedCoin.localizedDescription)
@@ -74,11 +84,36 @@ extension OrdersViewModel {
         initiateWebSocketTicker()
     }
     
+    func closeWebSocket() {
+        webSocketManager.close()
+    }
+    
     private func initiateWebSocketTicker() {
-        webSocketManager.connectWebSocket(parameter: BithumbWebSocketParameter(.orderbookdepth, [coinType], nil))
-        { (parsedResult: Result<BithumbWebSocketOrderBook?, Error>) in
-            
-            self.initiateRestAPI()
+        webSocketManager.connectWebSocket(to: .upbit,
+                                          parameter: UpbitWebSocketParameter(ticket: webSocketManager.uuid,
+                                                                             .orderbookdepth,
+                                                                             [market]))
+        { (parsedResult: Result<UpbitWebsocketOrderBook?, Error>) in
+
+            switch parsedResult {
+            case .success(let parsedData):
+                guard let parsedData = parsedData else { return }
+                
+                self.asks = parsedData.data.map {
+                    Order(price: $0.askPrice.description,
+                          quantity: $0.askSize.description)
+                }.sorted { $0.price.toDouble() > $1.price.toDouble() }
+                self.bids = parsedData.data.map {
+                    Order(price: $0.bidPrice.description,
+                          quantity: $0.bidSize.description)
+                }.sorted { $0.price.toDouble() > $1.price.toDouble() }
+                
+                NotificationCenter.default.post(name: .restAPIOrderNotification, object: nil)
+            case .failure(NetworkError.unverifiedCoin):
+                print(NetworkError.unverifiedCoin.localizedDescription)
+            case .failure(let error):
+                assertionFailure(error.localizedDescription)
+            }
         }
     }
 }
