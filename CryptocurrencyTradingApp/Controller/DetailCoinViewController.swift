@@ -12,7 +12,6 @@ import SwiftUI
 final class DetailCoinViewController: UIViewController {
     private var containerView = UIView()
     private var viewModel: DetailCoinViewModel!
-    private let coin: CoinType?
     private let market: UpbitMarket
     private let priceLabel = UILabel.makeLabel(font: .title1)
     private let incrementLabel = UILabel.makeLabel(font: .caption1)
@@ -40,8 +39,7 @@ final class DetailCoinViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        guard let coin = coin else { return }
-        if viewModel.userDefaults.contains(coin.rawValue) {
+        if viewModel.userDefaults.contains(market.symbol) {
             navigationItem.rightBarButtonItem?.image = UIImage(systemName: "star.fill")
         }
         NotificationCenter.default.addObserver(self, selector: #selector(setDataForLabel), name: .coinDetailNotificaion, object: nil)
@@ -51,11 +49,10 @@ final class DetailCoinViewController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: .coinDetailNotificaion, object: nil)
     }
 
-    init(coin: CoinType, market: UpbitMarket) {
-        self.coin = coin
+    init(market: UpbitMarket) {
         self.market = market
-        viewModel = DetailCoinViewModel(coin: coin)
-        chartViewController = DetailChartViewController(coin: coin)
+        viewModel = DetailCoinViewModel(market: market)
+        chartViewController = DetailChartViewController(market: market)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -72,13 +69,12 @@ final class DetailCoinViewController: UIViewController {
     }
     
     @objc func addTapped(_ sender: Any) {
-        guard let coin = coin else { return }
         if navigationItem.rightBarButtonItem?.image == UIImage(systemName: "star") {
             navigationItem.rightBarButtonItem?.image = UIImage(systemName: "star.fill")
-            viewModel.addToUserDefaults(coin: coin.rawValue)
+            viewModel.addToUserDefaults(market: market.symbol)
         } else {
             navigationItem.rightBarButtonItem?.image = UIImage(systemName: "star")
-            viewModel.removeFromUserDefaults(coin: coin.rawValue)
+            viewModel.removeFromUserDefaults(market: market.symbol)
         }
     }
     
@@ -102,7 +98,7 @@ final class DetailCoinViewController: UIViewController {
     }
     
     private func setNavigationItem() {
-        self.title = coin?.name
+        self.title = market.symbol
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "star"), style: .plain, target: self, action: #selector(addTapped))
     }
     
