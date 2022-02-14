@@ -8,7 +8,6 @@
 import Foundation
 
 class WebSocketManager: NSObject {
-    private var webSocket: URLSessionWebSocketTask?
     private var webSockets: [URLSessionWebSocketTask] = []
     let uuid = UUID()
     
@@ -19,7 +18,7 @@ class WebSocketManager: NSObject {
     }
     
     @discardableResult
-    func createWebSocket(of exchange: WebSocketURL) -> URLSessionWebSocketTask {
+    private func createWebSocket(of exchange: WebSocketURL) -> URLSessionWebSocketTask {
         let url = URL(string: exchange.urlString)!
         let webSocket = URLSession.shared.webSocketTask(with: url)
         webSocket.delegate = self
@@ -28,7 +27,7 @@ class WebSocketManager: NSObject {
         return webSocket
     }
     
-    func connectWebSocket<T: WebSocketDataModel, S: WebSocketParameter>(to exchange: WebSocketURL = .bithumb,
+    func connectWebSocket<T: WebSocketDataModel, S: WebSocketParameter>(to exchange: WebSocketURL,
                                                                         parameter: S,
                                                                         completion: @escaping (Result<T?, Error>) -> Void)
     {
@@ -124,14 +123,14 @@ class WebSocketManager: NSObject {
     }
     
     private func ping() {
-        webSocket?.sendPing(pongReceiveHandler: { error in
+        webSockets.forEach{ $0.sendPing(pongReceiveHandler: { error in
             if let error = error {
                 print("Ping error: \(error)")
             }
-            DispatchQueue.global().asyncAfter(deadline: .now() + 30) { [weak self] in
+            DispatchQueue.global().asyncAfter(deadline: .now() + 110) { [weak self] in
                 self?.ping()
             }
-        })
+        })}
     }
     
     func close() {

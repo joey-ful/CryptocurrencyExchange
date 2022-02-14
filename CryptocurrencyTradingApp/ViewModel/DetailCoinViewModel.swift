@@ -48,8 +48,7 @@ class DetailCoinViewModel {
     }
     
     func initiateViewModel(_ market: UpbitMarket) {
-        webSocketManager.createWebSocket(of: .upbit)
-        webSocketManager.connectWebSocket(parameter: UpbitWebSocketParameter(ticket: webSocketManager.uuid, .ticker, [market])) { [weak self] (parsedResult: Result<UpbitWebsocketTicker?, Error>) in
+        webSocketManager.connectWebSocket(to: .upbit, parameter: UpbitWebSocketParameter(ticket: webSocketManager.uuid, .ticker, [market])) { [weak self] (parsedResult: Result<UpbitWebsocketTicker?, Error>) in
             guard case .success(let data) = parsedResult, let data = data else { return }
             self?.coinInfomation = data
         }
