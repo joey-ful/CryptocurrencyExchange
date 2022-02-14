@@ -9,6 +9,7 @@ import Foundation
 
 class WebSocketManager: NSObject {
     private var webSocket: URLSessionWebSocketTask?
+    private var webSockets: [URLSessionWebSocketTask] = []
     let uuid = UUID()
     
     init(of exchange: WebSocketURL = .bithumb) {
@@ -23,6 +24,7 @@ class WebSocketManager: NSObject {
         let webSocket = URLSession.shared.webSocketTask(with: url)
         webSocket.delegate = self
         webSocket.resume()
+        webSockets.append(webSocket)
         return webSocket
     }
     
@@ -42,7 +44,7 @@ class WebSocketManager: NSObject {
             return
         }
         let message = URLSessionWebSocketTask.Message.data(data)
-        print(webSocket)
+        
         webSocket.send(message) { error in
             if let error = error {
                 assertionFailure("\(error)")
@@ -134,7 +136,7 @@ class WebSocketManager: NSObject {
     
     func close() {
         let reason = Data("Close webSocket before view transition".utf8)
-        webSocket?.cancel(with: .normalClosure, reason: reason)
+        webSockets.forEach {  $0.cancel(with: .normalClosure, reason: reason) }
     }
 }
 

@@ -75,6 +75,7 @@ class TransactionsViewController: UIViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        viewModel.closeWebSocket()
         removeWebSocketNotification()
     }
     
@@ -209,7 +210,6 @@ extension TransactionsViewController: UITableViewDelegate {
         else { return UITableViewHeaderFooterView() }
         
         header.configure(isTimeCell: isTime, symbol: market.symbol)
-        header.configure(isTimeCell: isTime, symbol: symbol)
         
         return header
     }

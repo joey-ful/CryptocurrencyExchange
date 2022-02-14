@@ -61,6 +61,10 @@ class DetailCoinViewModel {
         }
     }
     
+    func closeWebSocket() {
+        webSocketManager.close()
+    }
+    
     private func updateFluctuation(coin: CoinType) {
         webSocketManager.connectWebSocket(parameter: BithumbWebSocketParameter(.ticker, [coin], [.yesterday])) { [weak self] (parsedResult: Result<BithumbWebSocketTicker?, Error>) in
             
