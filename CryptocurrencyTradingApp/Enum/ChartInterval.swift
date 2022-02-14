@@ -13,6 +13,8 @@ enum ChartInterval: String {
     case thirtyMinute
     case oneHour
     case twentyFourHour
+    case week
+    case month
     
     var multiplier: Double {
         switch self {
@@ -26,22 +28,31 @@ enum ChartInterval: String {
             return 60 * 60
         case .twentyFourHour:
             return 60 * 60 * 24
+        case .week:
+            return 60 * 60 * 24 * 7
+        case .month:
+            return 60 * 60 * 24 * 30
         }
     }
     
     var upbitPath: String {
             switch self {
             case .oneMinute:
-                return "/minutes/1"
+                return "minutes/1"
             case .tenMinute:
-                return "/minutes/10"
+                return "minutes/10"
             case .thirtyMinute:
                 return "minutes/30"
             case .oneHour:
                 return "minutes/60"
             case .twentyFourHour:
-                return "/days"
+                return "days"
+            case .week:
+                return "weeks"
+            case .month:
+                return "months"
             }
+            
         }
     
     var bitThumbPath: String {
@@ -56,6 +67,10 @@ enum ChartInterval: String {
                 return "/1h"
             case .twentyFourHour:
                 return "/24h"
+            case .week:
+                return ""
+            case .month:
+                return ""
             }
         }
 }
