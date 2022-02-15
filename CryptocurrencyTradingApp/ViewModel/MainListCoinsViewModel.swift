@@ -65,7 +65,7 @@ extension MainListCoinsViewModel {
         let route = UpbitRoute.ticker
         networkManager.request(with: route,
                                queryItems: route.tickerQueryItems(coins: markets),
-                               requestType: .requestWithQueryItems)
+                               requestType: .request)
         { (parsedResult: Result<[UpbitTicker], Error>) in
             
             switch parsedResult {

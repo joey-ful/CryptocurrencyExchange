@@ -38,7 +38,7 @@ final class ChartViewModel: ObservableObject {
     }
 
     func initiateViewModel(chartIntervals: ChartInterval) {
-        restAPIManager.request(with: UpbitRoute.candles(chartIntervals), queryItems: [.init(name: "market", value: "KRW-ETH"), .init(name: "count", value: "200")], header: nil, bodyParameters: nil, httpMethod: .get, requestType: .requestWithQueryItems) { [weak self] (pasedResult: Result<[UpbitCandleStick], Error>) in
+        restAPIManager.request(with: UpbitRoute.candles(chartIntervals), queryItems: [.init(name: "market", value: "KRW-ETH"), .init(name: "count", value: "200")], header: nil, bodyParameters: nil, httpMethod: .get, requestType: .request) { [weak self] (pasedResult: Result<[UpbitCandleStick], Error>) in
             switch pasedResult {
             case .success(let data):
                 self?.multiplier = chartIntervals.multiplier

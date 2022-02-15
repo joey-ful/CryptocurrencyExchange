@@ -8,8 +8,8 @@
 import Foundation
 
 enum URLRequestBuilder {
-    case requestWithPath
-    case requestWithQueryItems
+    case request
+    case requestWithHeader
     
     func buildRequest(route: Route,
                       queryItems: [URLQueryItem]?,
@@ -20,25 +20,33 @@ enum URLRequestBuilder {
         guard let url = createURL(route: route, with: queryItems) else { return nil }
         var urlRequest: URLRequest?
         switch self {
-        case .requestWithQueryItems:
-            urlRequest = buildRequstWithQueryItems(route: route,
-                                                   with: queryItems,
-                                                   httpMethod: httpMethod,
-                                                   url: url)
-        case .requestWithPath:
-            urlRequest = URLRequest(url: url)
+        case .request:
+            urlRequest = buildRequest(httpMethod, url)
+        case .requestWithHeader:
+            urlRequest = buildRequestWithHeader(header, httpMethod, url)
         }
 
         return urlRequest
     }
     
-    private func buildRequstWithQueryItems(route: Route,
-                                           with parameters: [URLQueryItem]?,
-                                           httpMethod: HTTPMethod, url: URL) -> URLRequest?
-    {
+    private func buildRequest(_ httpMethod: HTTPMethod, _ url: URL) -> URLRequest? {
         
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = httpMethod.type
+        
+        return urlRequest
+    }
+    
+    private func buildRequestWithHeader(_ header: [String: String]?,
+                                        _ httpMethod: HTTPMethod,
+                                        _ url: URL) -> URLRequest?
+    {
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = httpMethod.type
+        
+        header?.forEach { key, value in
+            urlRequest.addValue(value, forHTTPHeaderField: key)
+        }
         
         return urlRequest
     }

@@ -71,7 +71,7 @@ class RestAPITickerViewModel {
         let route = UpbitRoute.ticker
         networkManager.request(with: route,
                                queryItems: route.tickerQueryItems(coins: [market]),
-                               requestType: .requestWithQueryItems)
+                               requestType: .request)
         { (parsedResult: Result<[UpbitTicker], Error>) in
             
             switch parsedResult {
