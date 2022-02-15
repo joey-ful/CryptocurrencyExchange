@@ -10,13 +10,16 @@ import Foundation
 class AssetStatusListViewModel {
     private(set) var assetStatusList: [AssetStatus] = []
     private(set) var filtered: [AssetStatus] = []
-    private let restAPIManager = RestAPIManager()
+    private let networkManager = NetworkManager(networkable: NetworkModule())
+    private let jwtGenerator = JWTGenerator()
+    private let markets: [UpbitMarket]
     
     func assetStatusViewModel(at index: Int) -> AssetStatusViewModel {
         return AssetStatusViewModel(data: filtered[index])
     }
     
-    init() {
+    init(_ markets: [UpbitMarket]) {
+        self.markets = markets
         initiateRestAPI()
     }
 }
@@ -25,18 +28,25 @@ class AssetStatusListViewModel {
 extension AssetStatusListViewModel {
     
     private func initiateRestAPI() {
-        restAPIManager.fetch(type: .assetsStatusAll,
-                             paymentCurrency: .KRW)
-        { (parsedResult: Result<BithumbRestAPIAssetStatus, Error>) in
+        let route = UpbitRoute.assetsstatus
+        
+        networkManager.request(with: route,
+                               header: route.JWTHeader,
+                               requestType: .requestWithHeader)
+        { (parsedResult: Result<[UpbitAssetStatus], Error>) in
             
             switch parsedResult {
             case .success(let parsedData):
-                let data: [AssetStatus] = parsedData.data.map { symbol, assetStatus in
-                    let coin = CoinType.coin(symbol: symbol) ?? .unverified
-                    return AssetStatus(coinName: coin.name,
-                                       symbol: coin.symbol,
-                                       withdraw: assetStatus.withdrawStatus,
-                                       deposit: assetStatus.depositStatus)
+                let data: [AssetStatus] = parsedData.map { assetStatus in
+                    let markets = self.markets.filter { $0.market.contains(assetStatus.currency) }
+                    let name = markets.isEmpty ? "-" : markets[0].koreanName
+                    let withdraw = assetStatus.walletState == "working" || assetStatus.walletState == "withdraw_only"
+                    let deposit = assetStatus.walletState == "working" || assetStatus.walletState == "deposit_only"
+                    
+                    return AssetStatus(coinName: name,
+                                       symbol: assetStatus.currency,
+                                       withdraw: withdraw,
+                                       deposit: deposit)
                 }
                 self.filtered = data
                 self.assetStatusList = data

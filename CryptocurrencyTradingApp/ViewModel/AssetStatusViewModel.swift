@@ -22,11 +22,11 @@ class AssetStatusViewModel {
         return data.symbol
     }
     
-    var withdrawStatus: Int {
+    var withdrawStatus: Bool {
         return data.withdraw
     }
     
-    var depositStatus: Int {
+    var depositStatus: Bool {
         return data.deposit
     }
 }

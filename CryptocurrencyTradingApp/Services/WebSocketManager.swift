@@ -124,9 +124,11 @@ class WebSocketManager: NSObject {
     
     private func ping() {
         webSockets.forEach{ $0.sendPing(pongReceiveHandler: { error in
-            if let error = error {
+            if let error = error,
+                (error as NSError).code != -999 && (error as NSError).code != 89 {
                 print("Ping error: \(error)")
             }
+            
             DispatchQueue.global().asyncAfter(deadline: .now() + 110) { [weak self] in
                 self?.ping()
             }

@@ -63,7 +63,7 @@ extension PopularCoinViewModel {
         let route = UpbitRoute.candles(.twentyFourHour)
         networkManager.request(with: route,
                                queryItems: route.candlesQueryItems(coin: market, candleCount: 24),
-                               requestType: .requestWithQueryItems)
+                               requestType: .request)
         { (parsedResult: Result<[UpbitCandleStick], Error>) in
             
             switch parsedResult {

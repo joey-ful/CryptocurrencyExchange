@@ -53,7 +53,7 @@ extension OrdersViewModel {
         let route = UpbitRoute.orderbook
         networkManager.request(with: route,
                                queryItems: route.orderbookQueryItems(coins: [market]),
-                               requestType: .requestWithQueryItems)
+                               requestType: .request)
         { (parsedResult: Result<[UpbitOrderBook], Error>) in
             
             switch parsedResult {

@@ -48,7 +48,7 @@ extension TransactionsViewModel {
         let route = UpbitRoute.trades
         networkManager.request(with: route,
                                queryItems: route.tradesQueryItems(market: market, count: 60),
-                               requestType: .requestWithQueryItems)
+                               requestType: .request)
         { (parsedResult: Result<[UpbitTrade], Error>) in
             
             switch parsedResult {
@@ -80,7 +80,7 @@ extension TransactionsViewModel {
         let route = UpbitRoute.candles(.twentyFourHour)
         networkManager.request(with: route,
                                queryItems: route.candlesQueryItems(coin: market, candleCount: 100),
-                               requestType: .requestWithQueryItems)
+                               requestType: .request)
         { (parsedResult: Result<[UpbitCandleStick], Error>) in
             
             switch parsedResult {
@@ -104,7 +104,7 @@ extension TransactionsViewModel {
         let route = UpbitRoute.ticker
         networkManager.request(with: route,
                                queryItems: route.tickerQueryItems(coins: [market]),
-                               requestType: .requestWithQueryItems)
+                               requestType: .request)
         { (parsedResult: Result<[UpbitTicker], Error>) in
             
             switch parsedResult {
