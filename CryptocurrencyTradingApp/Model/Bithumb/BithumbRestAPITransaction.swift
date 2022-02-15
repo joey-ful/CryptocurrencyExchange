@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct RestAPITransaction: Decodable {
+struct BithumbRestAPITransaction: Decodable {
     let data: [Transaction]
     
     struct Transaction: Decodable {

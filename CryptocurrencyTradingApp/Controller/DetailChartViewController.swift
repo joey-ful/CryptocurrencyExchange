@@ -33,8 +33,8 @@ class DetailChartViewController: UIViewController {
         return timeControl
     }()
     
-    init(coin: CoinType) {
-        self.viewModel = ChartViewModel(coin: coin, chartIntervals: .oneMinute)
+    init(market: UpbitMarket) {
+        self.viewModel = ChartViewModel(market: market, chartIntervals: .oneMinute)
         super.init(nibName: nil, bundle: nil)
     }
     

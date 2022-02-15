@@ -11,8 +11,8 @@ struct AssetStatus: Hashable {
     let id = UUID()
     let coinName: String
     let symbol: String
-    let withdraw: Int
-    let deposit: Int
+    let withdraw: Bool
+    let deposit: Bool
     
     static func == (lhs: AssetStatus, rhs: AssetStatus) -> Bool {
         return lhs.id == rhs.id

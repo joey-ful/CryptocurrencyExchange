@@ -61,17 +61,18 @@ extension String {
         return Double(number) ?? .zero
     }
     
-    func toDate() -> String {
-        let start = self.startIndex
-        let end = self.index(self.endIndex, offsetBy: -3)
-        let data = Double(self[start..<end]) ?? .zero
+    func toDate(_ format: DateFormat = .fullDateTime) -> String {
+        let text = self.lose(from: ".")
+        let start = text.startIndex
+        let end = text.index(text.endIndex, offsetBy: -3)
+        let data = Double(text[start..<end]) ?? .zero
         
         func convert(data: Double) -> String{
             let date = Date(timeIntervalSince1970: data)
             let formatter = DateFormatter()
             formatter.locale = Locale(identifier: "ko_kr")
             formatter.timeZone = TimeZone(abbreviation: "KST")
-            formatter.dateFormat = "yyyy-MM-dd HH:mm"
+            formatter.dateFormat = format.style
             
             return formatter.string(from: date)
         }

@@ -10,18 +10,18 @@ import SwiftUI
 
 class PopularCoinViewModel: ObservableObject {
     private let popularCoin: Ticker
-    private let coin: CoinType
-    private let restAPIManager = RestAPIManager()
+    private let market: UpbitMarket
+    private let networkManager = NetworkManager(networkable: NetworkModule())
     @Published var highPriceList: [Double]
     var lineColor: Color {
         popularCoin.fluctuationRate.contains("-") ? .blue : .red
     }
     
-    init(popularCoin: Ticker) {
+    init(popularCoin: Ticker, _ market: UpbitMarket) {
         self.popularCoin = popularCoin
-        self.coin = CoinType.coin(symbol: popularCoin.symbol) ?? .unverified
+        self.market = market
         highPriceList = []
-        initializeRestAPICandle(coin: coin)
+        initializeRestAPICandle(market)
     }
 
     var coinName: String {
@@ -59,18 +59,17 @@ class PopularCoinViewModel: ObservableObject {
 
 extension PopularCoinViewModel {
     
-    func initializeRestAPICandle(coin: CoinType) {
-        restAPIManager.fetch(type: .candlestick,
-                             paymentCurrency: .KRW,
-                             coin: coin,
-                             chartIntervals: .oneHour) { (parsedResult: Result<CandleStick, Error>) in
+    func initializeRestAPICandle(_ market: UpbitMarket) {
+        let route = UpbitRoute.candles(.twentyFourHour)
+        networkManager.request(with: route,
+                               queryItems: route.candlesQueryItems(coin: market, candleCount: 24),
+                               requestType: .request)
+        { (parsedResult: Result<[UpbitCandleStick], Error>) in
             
             switch parsedResult {
             case .success(let parsedData):
-                
-                let data = Array(parsedData.data.suffix(24))
-                self.highPriceList = data
-                    .map { self.convert($0[3])}
+                self.highPriceList = parsedData
+                    .map { $0.highPrice }
             case .failure(NetworkError.unverifiedCoin):
                 print(NetworkError.unverifiedCoin.localizedDescription)
             case .failure(let error):
@@ -79,7 +78,7 @@ extension PopularCoinViewModel {
         }
     }
     
-    private func convert(_ candleData: CandleStick.CandleStickData) -> Double {
+    private func convert(_ candleData: BithumbCandleStick.CandleStickData) -> Double {
         switch candleData {
         case .string(let result):
             return Double(result) ?? .zero

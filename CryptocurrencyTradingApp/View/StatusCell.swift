@@ -53,9 +53,9 @@ class StatusCell: UITableViewCell {
     private func configureLabels(viewModel: AssetStatusViewModel) {
         coinNameLabel.text = viewModel.coinName
         symbolLabel.text = viewModel.symbol
-        withdrawStatusLabel.text = viewModel.withdrawStatus == 1 ? "가능" : "불가"
-        withdrawStatusLabel.textColor = viewModel.withdrawStatus == 1 ? .systemGreen : .systemRed.withAlphaComponent(0.7)
-        depositStatusLabel.text = viewModel.depositStatus == 1 ? "가능" : "불가"
-        depositStatusLabel.textColor = viewModel.depositStatus == 1 ? .systemGreen : .systemRed.withAlphaComponent(0.7)
+        withdrawStatusLabel.text = viewModel.withdrawStatus ? "가능" : "불가"
+        withdrawStatusLabel.textColor = viewModel.withdrawStatus ? .systemGreen : .systemRed.withAlphaComponent(0.7)
+        depositStatusLabel.text = viewModel.depositStatus ? "가능" : "불가"
+        depositStatusLabel.textColor = viewModel.depositStatus ? .systemGreen : .systemRed.withAlphaComponent(0.7)
     }
 }

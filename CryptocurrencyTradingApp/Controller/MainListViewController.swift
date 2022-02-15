@@ -55,7 +55,7 @@ class MainListViewController: UIViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        viewModel.initiateWebSocket()
+        viewModel.initiateWebSocket(to: .upbit)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(updateDataSource),
                                                name: .webSocketTransactionsNotification,
@@ -65,24 +65,20 @@ class MainListViewController: UIViewController {
                                                name: .webSocketTicker24HNotification,
                                                object: nil)
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(updateDataSource),
-                                               name: .webSocketTickerNotification,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
                                                selector: #selector(makeSnapshot),
                                                name: .updateSortNotification,
                                                object: nil)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
+        viewModel.closeWebSocket()
         NotificationCenter.default.removeObserver(self, name: .webSocketTransactionsNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: .webSocketTicker24HNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .webSocketTickerNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: .updateSortNotification, object: nil)
     }
     
     deinit {
-        viewModel.closeWebSocket()
+        
         NotificationCenter.default.removeObserver(self, name: .restAPITickerAllNotification, object: nil)
     }
 }
@@ -298,7 +294,9 @@ extension MainListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let list = showFavorites ? viewModel.favorites : viewModel.filtered
         let coin = CoinType.coin(symbol: list[indexPath.row].symbol.lowercased()) ?? .unverified
-        let detailViewController = DetailCoinViewController(coin: coin)
+        let symbol = list[indexPath.row].symbol.uppercased()
+        let market = viewModel.markets.filter { $0.market.contains(symbol) }[0]
+        let detailViewController = DetailCoinViewController(market: market)
         navigationController?.pushViewController(detailViewController, animated: true)
     }
 

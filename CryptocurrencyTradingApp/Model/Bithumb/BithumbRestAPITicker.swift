@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct RestAPITicker: Decodable {
+struct BithumbRestAPITicker: Decodable {
     let data: Data
     
     struct Data: Decodable {
