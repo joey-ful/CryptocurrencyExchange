@@ -15,6 +15,7 @@ enum UpbitRoute: Route {
     case candles(ChartInterval)
     case orderbook
     case orderbookAll
+    case assetsstatus
     
     var scheme: String {
         return "https"
@@ -36,7 +37,34 @@ enum UpbitRoute: Route {
             return "/v1/candles/\(chartInterval.upbitPath)"
         case .orderbook, .orderbookAll:
             return "/v1/orderbook"
+        case .assetsstatus:
+            return "/v1/status/wallet"
         }
+    }
+    
+    var JWTHeader: [String: String]? {
+        var header: [String: String] = [:]
+        header["Content-Type"] = "application/json"
+        guard let token = JWTGenerator().token() else { return nil }
+        header["Authorization"] = "Bearer \(token)"
+        
+        return header
+    }
+    
+    private static var apiKeyDictionary: [String: String]? {
+        guard let filePath = Bundle.main.path(forResource: "APIKey", ofType: "plist") else { return nil }
+        let dictionary = NSDictionary(contentsOfFile: filePath)
+        return dictionary as? [String: String]
+    }
+    
+    static var publicKey: String? {
+        guard let dictionary = apiKeyDictionary else { return nil }
+        return dictionary["UpbitPublicKey"]
+    }
+    
+    static var privateKey: String? {
+        guard let dictionary = apiKeyDictionary else { return nil }
+        return dictionary["UpbitPrivateKey"]
     }
     
     //    var tickerAllQueryItems: [URLQueryItem]? {

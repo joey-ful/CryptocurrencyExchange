@@ -54,6 +54,11 @@
 		D4C9F90627B65DEE00EDF156 /* UpbitWebSocketParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C9F90527B65DEE00EDF156 /* UpbitWebSocketParameter.swift */; };
 		D4C9F90827B65E0000EDF156 /* WebSocketParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C9F90727B65E0000EDF156 /* WebSocketParameter.swift */; };
 		D4C9F90A27BA5A6C00EDF156 /* DateFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C9F90927BA5A6C00EDF156 /* DateFormat.swift */; };
+		D4C9F91127BB640600EDF156 /* SwiftJWT in Frameworks */ = {isa = PBXBuildFile; productRef = D4C9F91027BB640600EDF156 /* SwiftJWT */; };
+		D4C9F91327BB8B0E00EDF156 /* JWTGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C9F91227BB8B0E00EDF156 /* JWTGenerator.swift */; };
+		D4C9F91527BB8B5D00EDF156 /* Data+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C9F91427BB8B5D00EDF156 /* Data+Extension.swift */; };
+		D4C9F91727BB8B7700EDF156 /* JWTModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C9F91627BB8B7700EDF156 /* JWTModel.swift */; };
+		D4C9F91B27BB9BB400EDF156 /* APIKey.plist in Resources */ = {isa = PBXBuildFile; fileRef = D4C9F91A27BB9BB400EDF156 /* APIKey.plist */; };
 		D4CC01F127953FAF00F15957 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F027953FAF00F15957 /* AppDelegate.swift */; };
 		D4CC01F327953FAF00F15957 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F227953FAF00F15957 /* SceneDelegate.swift */; };
 		D4CC01F527953FAF00F15957 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CC01F427953FAF00F15957 /* MainTabBarViewController.swift */; };
@@ -163,6 +168,10 @@
 		D4C9F90527B65DEE00EDF156 /* UpbitWebSocketParameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpbitWebSocketParameter.swift; sourceTree = "<group>"; };
 		D4C9F90727B65E0000EDF156 /* WebSocketParameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketParameter.swift; sourceTree = "<group>"; };
 		D4C9F90927BA5A6C00EDF156 /* DateFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormat.swift; sourceTree = "<group>"; };
+		D4C9F91227BB8B0E00EDF156 /* JWTGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWTGenerator.swift; sourceTree = "<group>"; };
+		D4C9F91427BB8B5D00EDF156 /* Data+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extension.swift"; sourceTree = "<group>"; };
+		D4C9F91627BB8B7700EDF156 /* JWTModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWTModel.swift; sourceTree = "<group>"; };
+		D4C9F91A27BB9BB400EDF156 /* APIKey.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = APIKey.plist; sourceTree = "<group>"; };
 		D4CC01ED27953FAE00F15957 /* CryptocurrencyTradingApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CryptocurrencyTradingApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4CC01F027953FAF00F15957 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D4CC01F227953FAF00F15957 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -314,6 +323,7 @@
 				D4CC01FE27953FB000F15957 /* LaunchScreen.storyboard */,
 				D4CC020127953FB000F15957 /* Info.plist */,
 				D4CC01F927953FAF00F15957 /* CryptocurrencyTradingApp.xcdatamodeld */,
+				D4C9F91A27BB9BB400EDF156 /* APIKey.plist */,
 			);
 			path = CryptocurrencyTradingApp;
 			sourceTree = "<group>";
@@ -328,6 +338,7 @@
 				D4B40E0127A3C33D00EDA235 /* Order.swift */,
 				D4AFEB2C27A0350800011251 /* Transaction.swift */,
 				D4B40E1927A55A3000EDA235 /* AssetStatus.swift */,
+				D4C9F91627BB8B7700EDF156 /* JWTModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -419,6 +430,7 @@
 				D47D00A42797A70400E8E305 /* String+Extension.swift */,
 				D4B40DFB27A36B6100EDA235 /* UIButton+Extension.swift */,
 				D4B40E0B27A4EDD400EDA235 /* Double+Extension.swift */,
+				D4C9F91427BB8B5D00EDF156 /* Data+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -448,6 +460,7 @@
 				D4D0D297279AE7A000734C42 /* CandleCoreDataManager.swift */,
 				E6A126B527AFFF560080EC4D /* ChartDateFormatter.swift */,
 				E6E1E86C27B1115E00467E24 /* ChartYAxisFormatter.swift */,
+				D4C9F91227BB8B0E00EDF156 /* JWTGenerator.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -527,6 +540,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4C9F91B27BB9BB400EDF156 /* APIKey.plist in Resources */,
 				D4CC020027953FB000F15957 /* LaunchScreen.storyboard in Resources */,
 				D4CC01FD27953FB000F15957 /* Assets.xcassets in Resources */,
 			);
@@ -556,10 +570,12 @@
 				D4B40E0C27A4EDD400EDA235 /* Double+Extension.swift in Sources */,
 				D4CC020B279540CF00F15957 /* BithumbWebSockerTicker.swift in Sources */,
 				D4AFEB3327A0552500011251 /* MainListHeaderViewModel.swift in Sources */,
+				D4C9F91727BB8B7700EDF156 /* JWTModel.swift in Sources */,
 				D4D0D298279AE7A000734C42 /* CandleCoreDataManager.swift in Sources */,
 				D4C9F8F727B64F7900EDF156 /* NetworkManager.swift in Sources */,
 				D4AFEB3827A1292600011251 /* TransactionsHeader.swift in Sources */,
 				D4C9F90A27BA5A6C00EDF156 /* DateFormat.swift in Sources */,
+				D4C9F91527BB8B5D00EDF156 /* Data+Extension.swift in Sources */,
 				D4D0D294279AE73000734C42 /* CandleData1M+CoreDataClass.swift in Sources */,
 				D4C9F8FD27B64FA900EDF156 /* Route.swift in Sources */,
 				D4AFEB3827A1292600011251 /* TransactionsHeader.swift in Sources */,
@@ -616,6 +632,7 @@
 				E64BFA3927959D3100BC17A1 /* NotificationName+Extension.swift in Sources */,
 				D4B40E1E27A55BFC00EDA235 /* StatusCell.swift in Sources */,
 				D4B40E0427A3C4AC00EDA235 /* OrdersViewModel.swift in Sources */,
+				D4C9F91327BB8B0E00EDF156 /* JWTGenerator.swift in Sources */,
 				D47D009D2797A0C700E8E305 /* UILable+Extension.swift in Sources */,
 				D4B40E0627A3CBB100EDA235 /* OrderCell.swift in Sources */,
 				D4B40DFE27A3C00300EDA235 /* OrderViewModel.swift in Sources */,
