@@ -14,12 +14,11 @@ class MainTabBarViewController: UITabBarController {
         super.viewDidLoad()
         
         networkManager.request(with: UpbitRoute.market,
-                               requestType: .requestWithQueryItems) { (result: Result<[UpbitMarket], Error>) in
-            
+                               requestType: .request) { (result: Result<[UpbitMarket], Error>) in
+
             switch result {
             case .success(let data):
-                let markets = data.filter { $0.market.contains("KRW") }
-                self.initTabBar(with: markets)
+                self.initTabBar(with: data)
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
             }
@@ -32,12 +31,13 @@ class MainTabBarViewController: UITabBarController {
         tabBar.tintColor = UIColor.black // TabBar Item 이 선택되었을때의 색
         tabBar.unselectedItemTintColor = UIColor.systemGray // TabBar Item 의 기본 색
 
-        let mainViewController = MainListViewController(viewModel: MainListCoinsViewModel(markets))
+        let filteredMarkets = markets.filter { $0.market.contains("KRW") }
+        let mainViewController = MainListViewController(viewModel: MainListCoinsViewModel(filteredMarkets))
         let firstViewController = UINavigationController(rootViewController: mainViewController)
         firstViewController.tabBarItem.image = UIImage(systemName: "chart.line.uptrend.xyaxis")
         firstViewController.tabBarItem.title = "거래소" // TabBar Item 의 이름
 
-        let secondViewController = UINavigationController(rootViewController: AssetStatusViewController(viewModel: AssetStatusListViewModel()))
+        let secondViewController = UINavigationController(rootViewController: AssetStatusViewController(viewModel: AssetStatusListViewModel(markets)))
         secondViewController.tabBarItem.image = UIImage(systemName: "arrow.left.and.right.square")
         secondViewController.tabBarItem.title = "입출금"
 
