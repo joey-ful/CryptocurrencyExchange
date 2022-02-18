@@ -9,12 +9,12 @@ import UIKit
 
 class MainListCoinsViewModel {
     let markets: [UpbitMarket]
-    private var mainListCoins: [Ticker] = [] {
-        didSet {
-            filtered = mainListCoins.filter { existsInFiltered($0) }
-            favorites = filtered.filter { favoriteSymbols.contains( $0.symbol.lowercased() ) }
-        }
-    }
+    private var mainListCoins: [Ticker] = []
+//        didSet {
+//            filtered = mainListCoins.filter { existsInFiltered($0) }
+//            favorites = filtered.filter { favoriteSymbols.contains( $0.symbol.lowercased() ) }
+//        }
+//    }
     
     private var favoriteSymbols: [String] {
         return UserDefaults.standard.array(forKey: "favorite") as? [String] ?? []
@@ -149,6 +149,8 @@ extension MainListCoinsViewModel {
                 if newPrice == oldPrice { return }
                 
                 mainListCoins[index].currentPrice = newPrice
+                filtered = mainListCoins.filter { existsInFiltered($0) }
+                favorites = filtered.filter { favoriteSymbols.contains( $0.symbol.lowercased() ) }
                 let userInfo = userInfo(at: index, hasRisen: newPrice.toDouble() > oldPrice.toDouble())
                 NotificationCenter.default.post(name: .webSocketTransactionsNotification,
                                                 object: "currentPrice",
@@ -168,6 +170,8 @@ extension MainListCoinsViewModel {
                 mainListCoins[index].tradeValue = ticker.accumulatedTradeValue.description
                 mainListCoins[index].fluctuationRate = (ticker.fluctuationRate * 100).description
                 mainListCoins[index].fluctuationAmount = ticker.fluctuationAmount.description
+                filtered = mainListCoins.filter { existsInFiltered($0) }
+                favorites = filtered.filter { favoriteSymbols.contains( $0.symbol.lowercased() ) }
             }
         }
     }
