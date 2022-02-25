@@ -16,6 +16,7 @@ struct UpbitCandleStick: Decodable {
     let tradeVolume: Double
     let prevPrice: Double?
     let timestamp: Double
+    let dateKST: String
     
     enum CodingKeys: String, CodingKey {
         case market, timestamp
@@ -25,5 +26,6 @@ struct UpbitCandleStick: Decodable {
         case highPrice = "high_price"
         case tradeVolume = "candle_acc_trade_volume"
         case prevPrice = "prev_closing_price"
+        case dateKST = "candle_date_time_kst"
     }
 }
