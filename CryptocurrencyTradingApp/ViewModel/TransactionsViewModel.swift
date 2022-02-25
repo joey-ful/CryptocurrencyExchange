@@ -59,7 +59,7 @@ extension TransactionsViewModel {
                                 price: $0.price.description,
                                 quantity: $0.quantity.description,
                                 amount: ($0.price * $0.quantity).description,
-                                date: $0.date.description,
+                                date: $0.timestamp.description,
                                 upDown: nil)
                 }.sorted { $0.date > $1.date }
                 self.timeCursor = parsedData.last?.cursor.description.lose(from: ".")
@@ -98,7 +98,7 @@ extension TransactionsViewModel {
                     Transaction(price: $0.closingPrice.description,
                                 prevPrice: $0.prevPrice?.description ?? .zero,
                                 quantity: $0.tradeVolume.description,
-                                date: $0.timestamp.description)
+                                date: $0.dateKST.replacingOccurrences(of: "T", with: " ").dropLast(3))
                 }
                 self.dayLastDate = parsedData.last?.dateKST
                 NotificationCenter.default.post(name: .candlestickNotification, object: nil)
