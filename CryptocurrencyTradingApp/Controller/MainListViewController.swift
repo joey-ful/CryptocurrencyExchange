@@ -8,15 +8,15 @@
 import UIKit
 import SnapKit
 
-typealias MainListDataSource = UITableViewDiffableDataSource<Int, Ticker>
-typealias PopularDataSource = UICollectionViewDiffableDataSource<Int, Ticker>
+//typealias MainListDataSource = UITableViewDiffableDataSource<Int, Ticker>
+//typealias PopularDataSource = UICollectionViewDiffableDataSource<Int, Ticker>
 
 class MainListViewController: UIViewController {
     private let viewModel: MainListCoinsViewModel
     private let tableView = UITableView(frame: .zero, style: .plain)
-    private var dataSource: MainListDataSource?
+//    private var dataSource: MainListDataSource?
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-    private var collectionViewDataSource: PopularDataSource?
+//    private var collectionViewDataSource: PopularDataSource?
     private let collectionViewHeaderTop = UIView()
     private let collectionViewHeaderLeading = UIView()
     private let collectionViewHeader = UILabel.makeLabel(font: .subheadline, text: "인기 코인")
@@ -33,7 +33,7 @@ class MainListViewController: UIViewController {
         menuControl.layer.masksToBounds = true
         return menuControl
     }()
-    private var showFavorites: Bool = false
+//    private var showFavorites: Bool = false
 
     init(viewModel: MainListCoinsViewModel) {
         self.viewModel = viewModel
@@ -46,11 +46,6 @@ class MainListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(makeAllSnapshots),
-                                               name: .restAPITickerAllNotification,
-                                               object: nil)
         buildUI()
     }
 
@@ -63,10 +58,6 @@ class MainListViewController: UIViewController {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(updateDataSource),
                                                name: .webSocketTicker24HNotification,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(makeSnapshot),
-                                               name: .updateSortNotification,
                                                object: nil)
     }
 
@@ -87,13 +78,8 @@ class MainListViewController: UIViewController {
 extension MainListViewController {
     @objc private func updateDataSource(notification: Notification) {
         guard let userInfo = notification.userInfo as? [String: Any] else { return }
-        guard let targetIndex = (showFavorites ? userInfo["favorites"] : userInfo["filtered"]) as? Int else { return }
-        
-        guard let item = dataSource?.itemIdentifier(for: IndexPath(row: targetIndex, section: 0)) else { return }
-        guard var snapshot = dataSource?.snapshot() else { return }
-        snapshot.reconfigureItems([item])
-        dataSource?.apply(snapshot, animatingDifferences: true)
-        
+        guard let targetIndex = (viewModel.showFavorites ? userInfo["favorites"] : userInfo["filtered"]) as? Int else { return }
+
         guard notification.object as? String == "currentPrice",
               let hasRisen = userInfo["hasRisen"] as? Bool
         else { return }
@@ -128,7 +114,7 @@ extension MainListViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         let text = searchController.searchBar.text
         viewModel.filter(text)
-        makeSnapshot()
+        viewModel.makeSnapshot()
     }
 }
 
@@ -137,13 +123,13 @@ extension MainListViewController {
     @objc func menuSelect(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 0:
-            showFavorites = false
+            viewModel.showFavorites = false
         case 1:
-            showFavorites = true
+            viewModel.showFavorites = true
         default:
             break
         }
-        makeSnapshot()
+        viewModel.makeSnapshot()
     }
 }
 
@@ -155,26 +141,6 @@ extension MainListViewController {
         registerCell()
         registerCollectionViewCell()
         setCollectionViweFlowLayout()
-    }
-    
-    @objc private func makeAllSnapshots() {
-        makeSnapshot()
-        makeCollectionViewSnapshot()
-    }
-
-    @objc private func makeSnapshot() {
-        var snapshot = NSDiffableDataSourceSnapshot<Int, Ticker>()
-        snapshot.appendSections([0])
-        let data = showFavorites ? viewModel.favorites : viewModel.filtered
-        snapshot.appendItems(data, toSection: 0)
-        dataSource?.apply(snapshot, animatingDifferences: false)
-    }
-    
-    @objc private func makeCollectionViewSnapshot() {
-        var snapshot = NSDiffableDataSourceSnapshot<Int, Ticker>()
-        snapshot.appendSections([0])
-        snapshot.appendItems(viewModel.popularCoins, toSection: 0)
-        collectionViewDataSource?.apply(snapshot, animatingDifferences: false)
     }
 
     private func setUpTableView() {
@@ -249,12 +215,12 @@ extension MainListViewController {
 
     // MARK: CellRegistrations
     private func registerCell() {
-        dataSource = MainListDataSource(tableView: tableView,
+        viewModel.dataSource = MainListDataSource(tableView: tableView,
                                         cellProvider: { [weak self ] tableView, indexPath, mainListCoin in
 
             guard let weakSelf = self else { return UITableViewCell() }
-            
-            let viewModel = weakSelf.showFavorites ? weakSelf.viewModel.favoriteCoinViewModel(at: indexPath.row) : weakSelf.viewModel.coinViewModel(at: indexPath.row)
+//            viewModel.initiateRestAPI()
+            let viewModel = weakSelf.viewModel.showFavorites ? weakSelf.viewModel.favoriteCoinViewModel(at: indexPath.row) : weakSelf.viewModel.coinViewModel(at: indexPath.row)
             
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "mainListCell",
                                                            for: indexPath) as? MainListCell
@@ -266,7 +232,7 @@ extension MainListViewController {
 
             return cell
         })
-        tableView.dataSource = dataSource
+        tableView.dataSource = viewModel.dataSource
     }
     
     private func registerCollectionViewCell() {
@@ -279,20 +245,20 @@ extension MainListViewController {
             }
         }
         
-        collectionViewDataSource = PopularDataSource(collectionView: collectionView)
+        viewModel.collectionViewDataSource = PopularDataSource(collectionView: collectionView)
         { collectionView, indexPath, popularCoin in
             return collectionView.dequeueConfiguredReusableCell(using: cellRegistration,
                                                                 for: indexPath,
                                                                 item: popularCoin)
         }
-        collectionView.dataSource = collectionViewDataSource
+        collectionView.dataSource = viewModel.collectionViewDataSource
     }
 }
 
 // MARK: TableViewHeader
 extension MainListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let list = showFavorites ? viewModel.favorites : viewModel.filtered
+        let list = viewModel.showFavorites ? viewModel.favorites : viewModel.filtered
         let coin = CoinType.coin(symbol: list[indexPath.row].symbol.lowercased()) ?? .unverified
         let symbol = list[indexPath.row].symbol.uppercased()
         let market = viewModel.markets.filter { $0.market.contains(symbol) }[0]
