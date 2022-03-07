@@ -65,7 +65,9 @@ extension TransactionsViewModel {
                 self.timeCursor = parsedData.last?.cursor.description.lose(from: ".")
                 NotificationCenter.default.post(name: .restAPITransactionsNotification, object: nil)
             case .failure(let error):
-                assertionFailure(error.localizedDescription)
+                if error.localizedDescription != "cancelled" {
+                    assertionFailure(error.localizedDescription)
+                }
             }
         }
     }
@@ -86,7 +88,7 @@ extension TransactionsViewModel {
         let route = UpbitRoute.candles(.twentyFourHour)
         networkManager.request(with: route,
                                queryItems: route.candlesQueryItems(coin: market,
-                                                                   lastDate: dayLastDate,
+                                                                   lastDate: dayLastDate?.replacingOccurrences(of: "T", with: " "),
                                                                    candleCount: 50),
                                requestType: .request)
         { (parsedResult: Result<[UpbitCandleStick], Error>) in
@@ -105,7 +107,9 @@ extension TransactionsViewModel {
             case .failure(NetworkError.unverifiedCoin):
                 print(NetworkError.unverifiedCoin.localizedDescription)
             case .failure(let error):
-                assertionFailure(error.localizedDescription)
+                if error.localizedDescription != "cancelled" {
+                    assertionFailure(error.localizedDescription)
+                }
             }
         }
     }
@@ -130,7 +134,9 @@ extension TransactionsViewModel {
             case .failure(NetworkError.unverifiedCoin):
                 print(NetworkError.unverifiedCoin.localizedDescription)
             case .failure(let error):
-                assertionFailure(error.localizedDescription)
+                if error.localizedDescription != "cancelled" {
+                    assertionFailure(error.localizedDescription)
+                }
             }
         }
     }

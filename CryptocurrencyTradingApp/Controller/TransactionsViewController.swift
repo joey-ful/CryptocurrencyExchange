@@ -26,7 +26,6 @@ class TransactionsViewController: UIViewController {
         return menuControl
     }()
     
-
     init(_ market: UpbitMarket) {
         self.market = market
         self.viewModel = TransactionsViewModel(market)
@@ -92,6 +91,7 @@ class TransactionsViewController: UIViewController {
     }
 }
 
+// MARK: UISegmentedControl
 extension TransactionsViewController {
     private func menuControlAutolayout() {
         view.addSubview(menuControl)
@@ -120,6 +120,7 @@ extension TransactionsViewController {
     }
 }
 
+// MARK: UITableView
 extension TransactionsViewController {
 
     @objc private func makeTimeSnapshot() {
@@ -212,5 +213,21 @@ extension TransactionsViewController: UITableViewDelegate {
         header.configure(isTimeCell: isTime, symbol: market.symbol)
         
         return header
+    }
+}
+
+// MARK: Infinite Scroll
+extension TransactionsViewController {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let scrollViewHeight = scrollView.contentSize.height
+        let screenHeight = scrollView.contentOffset.y
+        let remainingBottomContentHeight = scrollViewHeight - screenHeight
+
+        let frameHeight = scrollView.frame.size.height
+        if remainingBottomContentHeight < frameHeight {
+            dayTableView.isHidden
+            ? viewModel.loadMoreTimeTransactions()
+            : viewModel.loadMoreDayTransactions()
+        }
     }
 }
