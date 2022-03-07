@@ -25,7 +25,7 @@ class TransactionsViewController: UIViewController {
         menuControl.layer.masksToBounds = true
         return menuControl
     }()
-    
+
     init(_ market: UpbitMarket) {
         self.market = market
         self.viewModel = TransactionsViewModel(market)

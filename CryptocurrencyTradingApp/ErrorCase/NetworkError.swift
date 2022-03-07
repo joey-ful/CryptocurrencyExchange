@@ -12,6 +12,7 @@ enum NetworkError: LocalizedError {
     case invalidData
     case invalidURL
     case unverifiedCoin
+    case overlappingRequest
     
     var errorDescription: String? {
         switch self {
@@ -23,6 +24,8 @@ enum NetworkError: LocalizedError {
             return "유효한 URL이 아닙니다"
         case .unverifiedCoin:
             return "확인되지 않은 코인입니다"
+        case .overlappingRequest:
+            return "cancelled"
         }
     }
 }

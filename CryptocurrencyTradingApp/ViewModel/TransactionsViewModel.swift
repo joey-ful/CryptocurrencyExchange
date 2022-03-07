@@ -107,9 +107,11 @@ extension TransactionsViewModel {
             case .failure(NetworkError.unverifiedCoin):
                 print(NetworkError.unverifiedCoin.localizedDescription)
             case .failure(let error):
+//                assertionFailure(error.localizedDescription)
                 if error.localizedDescription != "cancelled" {
                     assertionFailure(error.localizedDescription)
                 }
+//                print(error.localizedDescription)
             }
         }
     }
