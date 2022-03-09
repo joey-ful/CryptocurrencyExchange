@@ -55,22 +55,12 @@ class MainListViewController: UIViewController {
                                                selector: #selector(updateDataSource),
                                                name: .webSocketTransactionsNotification,
                                                object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(updateDataSource),
-                                               name: .webSocketTicker24HNotification,
-                                               object: nil)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         viewModel.closeWebSocket()
         NotificationCenter.default.removeObserver(self, name: .webSocketTransactionsNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .webSocketTicker24HNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: .updateSortNotification, object: nil)
-    }
-    
-    deinit {
-        
-        NotificationCenter.default.removeObserver(self, name: .restAPITickerAllNotification, object: nil)
     }
 }
 

@@ -5,10 +5,10 @@
 //  Created by 홍정아 on 2022/01/25.
 //
 
+import UIKit
+
 typealias MainListDataSource = UITableViewDiffableDataSource<Int, Ticker>
 typealias PopularDataSource = UICollectionViewDiffableDataSource<Int, Ticker>
-
-import UIKit
 
 class MainListCoinsViewModel {
     let markets: [UpbitMarket]
@@ -110,7 +110,7 @@ extension MainListCoinsViewModel {
                 weakSelf.mainListCoins = data
                 weakSelf.makeSnapshot()
                 weakSelf.makeCollectionViewSnapshot()
-                NotificationCenter.default.post(name: .restAPITickerAllNotification, object: nil)
+
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
             }

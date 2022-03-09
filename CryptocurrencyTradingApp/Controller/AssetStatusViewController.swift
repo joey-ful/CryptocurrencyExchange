@@ -32,10 +32,6 @@ class AssetStatusViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         viewModel.makeSnapshot()
     }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: .assetStatusNotification, object: nil)
-    }
 }
 
 extension AssetStatusViewController {
