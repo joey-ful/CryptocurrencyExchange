@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RxSwift
 
 class AssetStatusListViewModel {
     private(set) var assetStatusList: [AssetStatus] = []
@@ -13,6 +14,7 @@ class AssetStatusListViewModel {
     private let networkManager = NetworkManager(networkable: NetworkModule())
     private let jwtGenerator = JWTGenerator()
     private let markets: [UpbitMarket]
+    private var diposedBag = DisposeBag()
     
     func assetStatusViewModel(at index: Int) -> AssetStatusViewModel {
         return AssetStatusViewModel(data: filtered[index])
@@ -20,7 +22,8 @@ class AssetStatusListViewModel {
     
     init(_ markets: [UpbitMarket]) {
         self.markets = markets
-        initiateRestAPI()
+//        initiateRestAPI()
+        initAPI()
     }
 }
 
@@ -56,6 +59,21 @@ extension AssetStatusListViewModel {
             }
         }
     }
+    
+    func initAPI() {
+        let route = UpbitRoute.assetsstatus
+        let requestBuilder = URLRequestBuilder.requestWithHeader
+        guard let request = requestBuilder.buildRequest(route: route, queryItems: nil, header: route.JWTHeader, bodyParameters: nil, httpMethod: .get) else { return }
+        _ = Observable.just(request)
+            .flatMap { request in RXnetworkManager().download(request: request)}
+            .filter {$0 != nil }
+            .map { $0!}
+            .map { data in try JSONDecoder().decode([UpbitAssetStatus].self, from: data)}
+            .map { data in 
+                data.filter { markets.contains($0.currency)}
+            }
+    }
+    
 }
 
 // MARK: SearchBar
