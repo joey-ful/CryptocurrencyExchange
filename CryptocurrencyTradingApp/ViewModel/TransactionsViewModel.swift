@@ -11,11 +11,7 @@ typealias TransactionsDataSource = UITableViewDiffableDataSource<Int, Transactio
 typealias TransactionDataSource = UITableViewDiffableDataSource<Int, Transaction>
 
 class TransactionsViewModel {
-    private(set) var transactions: [Transaction] = [] {
-        didSet {
-            makeTimeSnapshot()
-        }
-    }
+    private(set) var transactions: [Transaction] = []
     private let market: UpbitMarket
     private let networkManager = NetworkManager(networkable: NetworkModule())
     private let webSocketManager = WebSocketManager()
@@ -26,6 +22,7 @@ class TransactionsViewModel {
     var timeDataSource: TransactionsDataSource?
     var dayDataSource: TransactionsDataSource?
     var transactionDataSource: TransactionDataSource?
+    var workItem: DispatchWorkItem?
 
     var count: Int {
         transactions.count
@@ -75,6 +72,8 @@ extension TransactionsViewModel {
         loadRestAPITransactions()
     }
     
+    
+    
     private func loadRestAPITransactions() {
         let route = UpbitRoute.trades
         networkManager.request(with: route,
@@ -96,7 +95,6 @@ extension TransactionsViewModel {
                                 upDown: nil)
                 }.sorted { $0.date > $1.date }
                 self.timeCursor = parsedData.last?.cursor.description.lose(from: ".")
-                NotificationCenter.default.post(name: .restAPITransactionsNotification, object: nil)
             case .failure(let error):
                 if error.localizedDescription != "cancelled" {
                     assertionFailure(error.localizedDescription)
@@ -104,7 +102,7 @@ extension TransactionsViewModel {
             }
         }
     }
-    
+
     func loadMoreTimeTransactions() {
         loadRestAPITransactions()
     }
@@ -129,25 +127,21 @@ extension TransactionsViewModel {
             switch parsedResult {
             case .success(let parsedData):
                 let candleStickData = parsedData.sorted { $0.timestamp > $1.timestamp }[1..<parsedData.endIndex]
-                self.dayTransactions += candleStickData.map {
+                self?.dayTransactions += candleStickData.map {
                     Transaction(price: $0.closingPrice.description,
                                 prevPrice: $0.prevPrice?.description ?? .zero,
                                 quantity: $0.tradeVolume.description,
                                 date: $0.dateKST.replacingOccurrences(of: "T", with: " ").dropLast(3))
                 }
-                self.dayLastDate = parsedData.last?.dateKST
-                NotificationCenter.default.post(name: .candlestickNotification, object: nil)
+                self?.dayLastDate = parsedData.last?.dateKST
                 self?.makeDaySnapshot()
                 NotificationCenter.default.post(name: .restAPITickerNotification, object: nil)
-
             case .failure(NetworkError.unverifiedCoin):
                 print(NetworkError.unverifiedCoin.localizedDescription)
             case .failure(let error):
-//                assertionFailure(error.localizedDescription)
                 if error.localizedDescription != "cancelled" {
                     assertionFailure(error.localizedDescription)
                 }
-//                print(error.localizedDescription)
             }
         }
     }
@@ -203,7 +197,7 @@ extension TransactionsViewModel {
                                                   amount: (parsedData.price * parsedData.quantity).description,
                                                   date: parsedData.dateTime.description,
                                                   upDown: parsedData.upDown)
-                self?.transactions = (self?.transactions ?? [] + [newTransactions]).sorted { $0.date > $1.date }
+                self?.transactions = ((self?.transactions ?? []) + [newTransactions]).sorted { $0.date > $1.date }
                 self?.makeTimeSnapshot()
                 self?.makeTransactionSnapshot()
             case .failure(let error):
