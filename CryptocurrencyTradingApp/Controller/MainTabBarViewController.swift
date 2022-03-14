@@ -6,23 +6,30 @@
 //
 
 import UIKit
+import Combine
 
 class MainTabBarViewController: UITabBarController {
-    let networkManager = NetworkManager(networkable: NetworkModule())
+    private let networkManager = NetworkManager(networkable: NetworkModule())
+    private var subscriptions: Set<AnyCancellable> = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        networkManager.request(with: UpbitRoute.market,
-                               requestType: .request) { (result: Result<[UpbitMarket], Error>) in
-
-            switch result {
-            case .success(let data):
-                self.initTabBar(with: data)
-            case .failure(let error):
-                assertionFailure(error.localizedDescription)
+        networkManager.dataTaskPublisher(with: UpbitRoute.market, requestType: .request)
+            .receive(on: DispatchQueue.main)
+            .sink { completion in
+                switch completion {
+                case .finished: break
+                case .failure(let error):
+                    if error != NetworkError.overlappingRequest {
+                        assertionFailure(error.localizedDescription)
+                    }
+                }
+            } receiveValue: { [weak self] (markets: [UpbitMarket]) in
+                guard let self = self else { return }
+                self.initTabBar(with: markets)
             }
-        }
+            .store(in: &subscriptions)
     }
 
     private func initTabBar(with markets: [UpbitMarket]) {
