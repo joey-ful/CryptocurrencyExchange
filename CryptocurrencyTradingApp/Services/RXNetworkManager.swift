@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 
 struct RXnetworkManager {
-    func download(request: URLRequest) -> Observable<Data?> {
+    func download<T: Decodable>(request: URLRequest) -> Observable<T> {
         return Observable.create { emitter in
             let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 if let error = error {
@@ -17,8 +17,8 @@ struct RXnetworkManager {
                     return
                 }
                 
-                if let data = data {
-                    emitter.onNext(data)
+                if let data = data, let result = try? JSONDecoder().decode(T.self, from: data) {
+                    emitter.onNext(result)
                 }
                 
                 emitter.onCompleted()
