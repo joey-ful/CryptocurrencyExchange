@@ -7,8 +7,15 @@
 
 import UIKit
 
+typealias TransactionsDataSource = UITableViewDiffableDataSource<Int, Transaction>
+typealias TransactionDataSource = UITableViewDiffableDataSource<Int, Transaction>
+
 class TransactionsViewModel {
-    private(set) var transactions: [Transaction] = []
+    private(set) var transactions: [Transaction] = [] {
+        didSet {
+            makeTimeSnapshot()
+        }
+    }
     private let market: UpbitMarket
     private let networkManager = NetworkManager(networkable: NetworkModule())
     private let webSocketManager = WebSocketManager()
@@ -16,7 +23,10 @@ class TransactionsViewModel {
     private(set) var dayTransactions: [Transaction] = []
     private var timeCursor: String?
     private var dayLastDate: String?
-    
+    var timeDataSource: TransactionsDataSource?
+    var dayDataSource: TransactionsDataSource?
+    var transactionDataSource: TransactionDataSource?
+
     var count: Int {
         transactions.count
     }
@@ -34,6 +44,29 @@ class TransactionsViewModel {
     func dayTransactionViewModel(at index: Int) -> DayTransactionViewModel {
         return DayTransactionViewModel(dayTransaction: dayTransactions[index])
     }
+    
+    func makeTimeSnapshot() {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, Transaction>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(transactions, toSection: 0)
+        timeDataSource?.apply(snapshot, animatingDifferences: false)
+    }
+    
+    func makeDaySnapshot() {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, Transaction>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(dayTransactions, toSection: 0)
+        dayDataSource?.apply(snapshot, animatingDifferences: false)
+    }
+    
+    func makeTransactionSnapshot() {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, Transaction>()
+        snapshot.appendSections([0])
+        let data = Array(transactions.prefix(30))
+        snapshot.appendItems(data, toSection: 0)
+        transactionDataSource?.apply(snapshot, animatingDifferences: false)
+    }
+    
 }
 
 // MARK: RestAPI Time
@@ -91,7 +124,7 @@ extension TransactionsViewModel {
                                                                    lastDate: dayLastDate?.replacingOccurrences(of: "T", with: " "),
                                                                    candleCount: 50),
                                requestType: .request)
-        { (parsedResult: Result<[UpbitCandleStick], Error>) in
+        { [weak self](parsedResult: Result<[UpbitCandleStick], Error>) in
             
             switch parsedResult {
             case .success(let parsedData):
@@ -104,6 +137,9 @@ extension TransactionsViewModel {
                 }
                 self.dayLastDate = parsedData.last?.dateKST
                 NotificationCenter.default.post(name: .candlestickNotification, object: nil)
+                self?.makeDaySnapshot()
+                NotificationCenter.default.post(name: .restAPITickerNotification, object: nil)
+
             case .failure(NetworkError.unverifiedCoin):
                 print(NetworkError.unverifiedCoin.localizedDescription)
             case .failure(let error):
@@ -121,18 +157,19 @@ extension TransactionsViewModel {
         networkManager.request(with: route,
                                queryItems: route.tickerQueryItems(coins: [market]),
                                requestType: .request)
-        { (parsedResult: Result<[UpbitTicker], Error>) in
+        { [weak self](parsedResult: Result<[UpbitTicker], Error>) in
             
             switch parsedResult {
             case .success(let parsedData):
                 let ticker = parsedData[0]
                 let newTransaction = Transaction(price: ticker.closingPrice.description,
-                                                 prevPrice: self.dayTransactions.last?.price ?? "0",
+                                                 prevPrice: self?.dayTransactions.last?.price ?? "0",
                                                  quantity: ticker.unitsTraded.description,
                                                  amount: ticker.tradeValue.description,
                                                  date: ticker.date.description.toDate())
-                self.dayTransactions.insert(newTransaction, at: 0)
-                NotificationCenter.default.post(name: .restAPITickerNotification, object: nil)
+
+                self?.dayTransactions.append(newTransaction)
+                self?.makeDaySnapshot()
             case .failure(NetworkError.unverifiedCoin):
                 print(NetworkError.unverifiedCoin.localizedDescription)
             case .failure(let error):
@@ -153,10 +190,8 @@ extension TransactionsViewModel {
     func initiateTimeWebSocket() {
         
         webSocketManager.connectWebSocket(to: .upbit,
-                                          parameter: UpbitWebSocketParameter(ticket: webSocketManager.uuid,
-                                                                             .transaction,
-                                                                             [market]))
-        { (parsedResult: Result<UpbitWebsocketTrade?, Error>) in
+                                          parameter: UpbitWebSocketParameter(ticket: webSocketManager.uuid, .transaction, [market]))
+        { [weak self] (parsedResult: Result<UpbitWebsocketTrade?, Error>) in
             
             switch parsedResult {
             case .success(let parsedData):
@@ -168,8 +203,9 @@ extension TransactionsViewModel {
                                                   amount: (parsedData.price * parsedData.quantity).description,
                                                   date: parsedData.dateTime.description,
                                                   upDown: parsedData.upDown)
-                self.transactions = (self.transactions + [newTransactions]).sorted { $0.date > $1.date }
-                NotificationCenter.default.post(name: .webSocketTransactionsNotification, object: nil)
+                self?.transactions = (self?.transactions ?? [] + [newTransactions]).sorted { $0.date > $1.date }
+                self?.makeTimeSnapshot()
+                self?.makeTransactionSnapshot()
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
             }

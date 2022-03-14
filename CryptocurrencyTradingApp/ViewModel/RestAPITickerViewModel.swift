@@ -72,12 +72,12 @@ class RestAPITickerViewModel {
         networkManager.request(with: route,
                                queryItems: route.tickerQueryItems(coins: [market]),
                                requestType: .request)
-        { (parsedResult: Result<[UpbitTicker], Error>) in
+        { [weak self] (parsedResult: Result<[UpbitTicker], Error>) in
             
             switch parsedResult {
             case .success(let parsedData):
                 let ticker = parsedData[0]
-                self.mainListCoin = Ticker(openPrice: ticker.openingPrice.description,
+                self?.mainListCoin = Ticker(openPrice: ticker.openingPrice.description,
                                            highPrice: ticker.maxiumumPrice.description,
                                            lowPrice: ticker.minimumPrice.description,
                                            prevPrice: ticker.previousClosingPrice.description,
