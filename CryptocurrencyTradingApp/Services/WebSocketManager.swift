@@ -66,7 +66,9 @@ class WebSocketManager: NSObject {
                     break
                 }
             case .failure(let error):
-                assertionFailure("\(error)")
+                if error.localizedDescription != "cancelled" {
+                    assertionFailure("\(error)")
+                }
             }
             self?.receiveMessage(of: webSocket, completion: completion)
         })
