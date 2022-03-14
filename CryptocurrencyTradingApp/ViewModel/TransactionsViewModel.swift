@@ -104,7 +104,12 @@ extension TransactionsViewModel {
     }
 
     func loadMoreTimeTransactions() {
-        loadRestAPITransactions()
+        workItem?.cancel()
+        workItem = DispatchWorkItem {
+            self.loadRestAPITransactions()
+        }
+        guard let validWorkItem = workItem else { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: validWorkItem)
     }
 }
 
