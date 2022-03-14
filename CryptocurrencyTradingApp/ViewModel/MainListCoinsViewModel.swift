@@ -175,6 +175,8 @@ extension MainListCoinsViewModel {
                 if newPrice == oldPrice { return }
                 
                 mainListCoins[index].currentPrice = newPrice
+                filtered = mainListCoins.filter { existsInFiltered($0) }
+                favorites = filtered.filter { favoriteSymbols.contains( $0.symbol.lowercased() ) }
                 let userInfo = userInfo(at: index, hasRisen: newPrice.toDouble() > oldPrice.toDouble())
                 guard let item = dataSource?.itemIdentifier(for: IndexPath(row: index, section: 0)) else { return }
                 guard var snapShot = dataSource?.snapshot() else { return }
@@ -198,6 +200,8 @@ extension MainListCoinsViewModel {
                 mainListCoins[index].tradeValue = ticker.accumulatedTradeValue.description
                 mainListCoins[index].fluctuationRate = (ticker.fluctuationRate * 100).description
                 mainListCoins[index].fluctuationAmount = ticker.fluctuationAmount.description
+                filtered = mainListCoins.filter { existsInFiltered($0) }
+                favorites = filtered.filter { favoriteSymbols.contains( $0.symbol.lowercased() ) }
             }
         }
     }

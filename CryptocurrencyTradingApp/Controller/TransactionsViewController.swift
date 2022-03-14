@@ -21,7 +21,6 @@ class TransactionsViewController: UIViewController {
         menuControl.layer.masksToBounds = true
         return menuControl
     }()
-    
 
     init(_ market: UpbitMarket) {
         self.market = market
@@ -49,6 +48,7 @@ class TransactionsViewController: UIViewController {
     }
 }
 
+// MARK: UISegmentedControl
 extension TransactionsViewController {
     private func menuControlAutolayout() {
         view.addSubview(menuControl)
@@ -75,6 +75,7 @@ extension TransactionsViewController {
     }
 }
 
+// MARK: UITableView
 extension TransactionsViewController {
 
     private func configureTableView() {
@@ -153,5 +154,21 @@ extension TransactionsViewController: UITableViewDelegate {
         header.configure(isTimeCell: isTime, symbol: market.symbol)
         
         return header
+    }
+}
+
+// MARK: Infinite Scroll
+extension TransactionsViewController {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let scrollViewHeight = scrollView.contentSize.height
+        let screenHeight = scrollView.contentOffset.y
+        let remainingBottomContentHeight = scrollViewHeight - screenHeight
+
+        let frameHeight = scrollView.frame.size.height
+        if remainingBottomContentHeight < frameHeight {
+            dayTableView.isHidden
+            ? viewModel.loadMoreTimeTransactions()
+            : viewModel.loadMoreDayTransactions()
+        }
     }
 }

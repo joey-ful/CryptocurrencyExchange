@@ -15,7 +15,7 @@ class DayTransactionViewModel:TransactionViewModelType {
     }
     
     var date: String {
-        dayTransaction.date.toDate()
+        dayTransaction.date
     }
     
     var closePrice: String {
