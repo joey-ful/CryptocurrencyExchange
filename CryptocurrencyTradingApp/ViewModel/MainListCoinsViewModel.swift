@@ -7,15 +7,20 @@
 
 import UIKit
 
+typealias MainListDataSource = UITableViewDiffableDataSource<Int, Ticker>
+typealias PopularDataSource = UICollectionViewDiffableDataSource<Int, Ticker>
+
 class MainListCoinsViewModel {
     let markets: [UpbitMarket]
-    private var mainListCoins: [Ticker] = [] {
+    var dataSource: MainListDataSource?
+    var collectionViewDataSource: PopularDataSource?
+    var mainListCoins: [Ticker] = [] {
         didSet {
             filtered = mainListCoins.filter { existsInFiltered($0) }
             favorites = filtered.filter { favoriteSymbols.contains( $0.symbol.lowercased() ) }
         }
     }
-    
+    var showFavorites: Bool = false
     private var favoriteSymbols: [String] {
         return UserDefaults.standard.array(forKey: "favorite") as? [String] ?? []
     }
@@ -51,28 +56,47 @@ class MainListCoinsViewModel {
         return PopularCoinViewModel(popularCoin: popularCoins[index], market)
     }
     
+    func makeCollectionViewSnapshot() {
+       var snapshot = NSDiffableDataSourceSnapshot<Int, Ticker>()
+       snapshot.appendSections([0])
+       snapshot.appendItems(popularCoins, toSection: 0)
+       collectionViewDataSource?.apply(snapshot, animatingDifferences: false)
+   }
+    
+    @objc func makeSnapshot() {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, Ticker>()
+        snapshot.appendSections([0])
+        let data = showFavorites ? favorites : filtered
+        snapshot.appendItems(data, toSection: 0)
+        dataSource?.apply(snapshot, animatingDifferences: false)
+    }
+    
     init(_ markets: [UpbitMarket]) {
         self.markets = markets
         initiateRestAPI()
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(makeSnapshot),
+                                               name: .updateSortNotification,
+                                               object: nil)
     }
 }
 
 // MARK: RestAPI
 extension MainListCoinsViewModel {
     
-    private func initiateRestAPI() {
+    func initiateRestAPI() {
         
         let route = UpbitRoute.ticker
         networkManager.request(with: route,
                                queryItems: route.tickerQueryItems(coins: markets),
                                requestType: .request)
-        { (parsedResult: Result<[UpbitTicker], Error>) in
-            
+        { [weak self](parsedResult: Result<[UpbitTicker], Error>) in
+            guard let weakSelf = self, var snapShot = weakSelf.dataSource?.snapshot() else { return }
             switch parsedResult {
             case .success(let tickers):
                 let data: [Ticker] = tickers.map {
                     let symbol = $0.market.split(separator: "-")[1]
-                    let market = self.markets.filter { $0.market.contains(symbol) }[0]
+                    let market = weakSelf.markets.filter { $0.market.contains(symbol) }[0]
                     let fluctuationRate = ($0.fluctuationRate24HDividedByHundred * 100).description
                     
                     return Ticker(name: market.koreanName,
@@ -82,9 +106,11 @@ extension MainListCoinsViewModel {
                                   fluctuationAmount: $0.fluctuation24H.description,
                                   tradeValue: $0.tradeValueWithin24H.description)
                 }.sorted { $0.tradeValue.toDouble() > $1.tradeValue.toDouble() }
-                self.filtered = data
-                self.mainListCoins = data
-                NotificationCenter.default.post(name: .restAPITickerAllNotification, object: nil)
+                weakSelf.filtered = data
+                weakSelf.mainListCoins = data
+                weakSelf.makeSnapshot()
+                weakSelf.makeCollectionViewSnapshot()
+
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
             }
@@ -150,6 +176,10 @@ extension MainListCoinsViewModel {
                 
                 mainListCoins[index].currentPrice = newPrice
                 let userInfo = userInfo(at: index, hasRisen: newPrice.toDouble() > oldPrice.toDouble())
+                guard let item = dataSource?.itemIdentifier(for: IndexPath(row: index, section: 0)) else { return }
+                guard var snapShot = dataSource?.snapshot() else { return }
+                snapShot.reconfigureItems([item])
+                dataSource?.apply(snapShot, animatingDifferences:  true)
                 NotificationCenter.default.post(name: .webSocketTransactionsNotification,
                                                 object: "currentPrice",
                                                 userInfo: userInfo)

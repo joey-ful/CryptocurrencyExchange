@@ -8,12 +8,11 @@
 import UIKit
 import SnapKit
 
-typealias StatusDataSource = UITableViewDiffableDataSource<Int, AssetStatus>
+//typealias StatusDataSource = UITableViewDiffableDataSource<Int, AssetStatus>
 
 class AssetStatusViewController: UIViewController {
     private let viewModel: AssetStatusListViewModel
     private let tableView = UITableView(frame: .zero, style: .grouped)
-    private var dataSource: StatusDataSource?
     private let searchBar = UISearchBar(frame: .zero)
     
     init(viewModel: AssetStatusListViewModel) {
@@ -27,19 +26,11 @@ class AssetStatusViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(makeSnapshot),
-                                               name: .assetStatusNotification,
-                                               object: nil)
         buildUI()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        makeSnapshot()
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: .assetStatusNotification, object: nil)
+        viewModel.makeSnapshot()
     }
 }
 
@@ -82,7 +73,7 @@ extension AssetStatusViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         let text = searchBar.text
         viewModel.filter(text)
-        makeSnapshot()
+        viewModel.makeSnapshot()
     }
 }
 
@@ -92,13 +83,6 @@ extension AssetStatusViewController {
         setUpTableView()
         setTableViewAutoLayout()
         registerCell()
-    }
-
-    @objc private func makeSnapshot() {
-        var snapshot = NSDiffableDataSourceSnapshot<Int, AssetStatus>()
-        snapshot.appendSections([0])
-        snapshot.appendItems(viewModel.filtered, toSection: 0)
-        dataSource?.apply(snapshot, animatingDifferences: false)
     }
 
     private func setUpTableView() {
@@ -125,7 +109,7 @@ extension AssetStatusViewController {
     }
 
     private func registerCell() {
-        dataSource = StatusDataSource(tableView: tableView,
+        viewModel.dataSource = StatusDataSource(tableView: tableView,
                                         cellProvider: { [weak self] tableView, indexPath, mainListCoin in
 
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "statusCell",
@@ -138,7 +122,7 @@ extension AssetStatusViewController {
 
             return cell
         })
-        tableView.dataSource = dataSource
+        tableView.dataSource = viewModel.dataSource
     }
 }
 

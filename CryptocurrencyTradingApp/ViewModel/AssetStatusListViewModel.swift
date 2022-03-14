@@ -5,7 +5,9 @@
 //  Created by 홍정아 on 2022/01/29.
 //
 
-import Foundation
+import UIKit
+
+typealias StatusDataSource = UITableViewDiffableDataSource<Int, AssetStatus>
 
 class AssetStatusListViewModel {
     private(set) var assetStatusList: [AssetStatus] = []
@@ -13,11 +15,19 @@ class AssetStatusListViewModel {
     private let networkManager = NetworkManager(networkable: NetworkModule())
     private let jwtGenerator = JWTGenerator()
     private let markets: [UpbitMarket]
+    var dataSource: StatusDataSource?
     
     func assetStatusViewModel(at index: Int) -> AssetStatusViewModel {
         return AssetStatusViewModel(data: filtered[index])
     }
     
+    func makeSnapshot() {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, AssetStatus>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(filtered, toSection: 0)
+        dataSource?.apply(snapshot, animatingDifferences: false)
+    }
+
     init(_ markets: [UpbitMarket]) {
         self.markets = markets
         initiateRestAPI()
@@ -33,12 +43,12 @@ extension AssetStatusListViewModel {
         networkManager.request(with: route,
                                header: route.JWTHeader,
                                requestType: .requestWithHeader)
-        { (parsedResult: Result<[UpbitAssetStatus], Error>) in
+        { [weak self](parsedResult: Result<[UpbitAssetStatus], Error>) in
             
             switch parsedResult {
             case .success(let parsedData):
                 let data: [AssetStatus] = parsedData.map { assetStatus in
-                    let markets = self.markets.filter { $0.market.contains(assetStatus.currency) }
+                    let markets = self?.markets.filter { $0.market.contains(assetStatus.currency) } ?? []
                     let name = markets.isEmpty ? "-" : markets[0].koreanName
                     let withdraw = assetStatus.walletState == "working" || assetStatus.walletState == "withdraw_only"
                     let deposit = assetStatus.walletState == "working" || assetStatus.walletState == "deposit_only"
@@ -48,9 +58,9 @@ extension AssetStatusListViewModel {
                                        withdraw: withdraw,
                                        deposit: deposit)
                 }
-                self.filtered = data
-                self.assetStatusList = data
-                NotificationCenter.default.post(name: .assetStatusNotification, object: nil)
+                self?.filtered = data
+                self?.assetStatusList = data
+                self?.makeSnapshot()
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
             }
