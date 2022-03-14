@@ -7,12 +7,13 @@
 
 import Foundation
 
-enum NetworkError: LocalizedError {
+enum NetworkError: LocalizedError, Equatable {
     case badResponse
     case invalidData
     case invalidURL
     case unverifiedCoin
     case overlappingRequest
+    case other(Error)
     
     var errorDescription: String? {
         switch self {
@@ -25,7 +26,17 @@ enum NetworkError: LocalizedError {
         case .unverifiedCoin:
             return "확인되지 않은 코인입니다"
         case .overlappingRequest:
-            return "cancelled"
+            return "중복된 요청입니다"
+        case .other(let error):
+            return error.localizedDescription
         }
+    }
+    
+    static func map(_ error: Error) -> NetworkError {
+      return (error as? NetworkError) ?? .other(error)
+    }
+    
+    static func == (lhs: NetworkError, rhs: NetworkError) -> Bool {
+        return lhs.localizedDescription == rhs.localizedDescription
     }
 }
