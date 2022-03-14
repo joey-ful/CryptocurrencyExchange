@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import UIKit.UITableView
+import Combine
 
 typealias StatusDataSource = UITableViewDiffableDataSource<Int, AssetStatus>
 
@@ -13,9 +15,9 @@ class AssetStatusListViewModel {
     private(set) var assetStatusList: [AssetStatus] = []
     private(set) var filtered: [AssetStatus] = []
     private let networkManager = NetworkManager(networkable: NetworkModule())
-    private let jwtGenerator = JWTGenerator()
     private let markets: [UpbitMarket]
     var dataSource: StatusDataSource?
+    private var subscriptions: Set<AnyCancellable> = []
     
     func assetStatusViewModel(at index: Int) -> AssetStatusViewModel {
         return AssetStatusViewModel(data: filtered[index])
@@ -30,42 +32,52 @@ class AssetStatusListViewModel {
 
     init(_ markets: [UpbitMarket]) {
         self.markets = markets
-        initiateRestAPI()
     }
 }
 
 // MARK: RestAPI
 extension AssetStatusListViewModel {
     
-    private func initiateRestAPI() {
-        let route = UpbitRoute.assetsstatus
-        
-        networkManager.request(with: route,
-                               header: route.JWTHeader,
-                               requestType: .requestWithHeader)
-        { [weak self](parsedResult: Result<[UpbitAssetStatus], Error>) in
-            
-            switch parsedResult {
-            case .success(let parsedData):
-                let data: [AssetStatus] = parsedData.map { assetStatus in
-                    let markets = self?.markets.filter { $0.market.contains(assetStatus.currency) } ?? []
-                    let name = markets.isEmpty ? "-" : markets[0].koreanName
-                    let withdraw = assetStatus.walletState == "working" || assetStatus.walletState == "withdraw_only"
-                    let deposit = assetStatus.walletState == "working" || assetStatus.walletState == "deposit_only"
-                    
-                    return AssetStatus(coinName: name,
-                                       symbol: assetStatus.currency,
-                                       withdraw: withdraw,
-                                       deposit: deposit)
+    private func assetStatus() -> AnyPublisher<[AssetStatus], NetworkError> {
+            let route = UpbitRoute.assetsstatus
+            return NetworkManager().dataTaskPublisher(with: route,
+                                                      header: route.JWTHeader,
+                                                      requestType: .requestWithHeader)
+                .map { (assetStatusList: [UpbitAssetStatus]) in
+                    return assetStatusList.map { assetStatus -> AssetStatus in
+                        let markets = self.markets.filter { $0.market.contains(assetStatus.currency) }
+                        let name = markets.isEmpty ? "-" : markets[0].koreanName
+                        let withdraw = assetStatus.walletState == "working"
+                        || assetStatus.walletState == "withdraw_only"
+                        let deposit = assetStatus.walletState == "working"
+                        || assetStatus.walletState == "deposit_only"
+
+                        return AssetStatus(coinName: name,
+                                           symbol: assetStatus.currency,
+                                           withdraw: withdraw,
+                                           deposit: deposit)
+                    }
                 }
-                self?.filtered = data
-                self?.assetStatusList = data
-                self?.makeSnapshot()
-            case .failure(let error):
-                assertionFailure(error.localizedDescription)
-            }
+                .eraseToAnyPublisher()
         }
-    }
+        
+        func initAssetStatus() {
+            assetStatus()
+                .receive(on: DispatchQueue.main)
+                .sink { completion in
+                    switch completion {
+                    case .finished: break
+                    case .failure(let error):
+                        assertionFailure(error.localizedDescription)
+                    }
+                } receiveValue: { [weak self] assetStatusList in
+                    guard let self = self else { return }
+                    self.filtered = assetStatusList
+                    self.assetStatusList = assetStatusList
+                    self.makeSnapshot()
+                }
+                .store(in: &subscriptions)
+        }
 }
 
 // MARK: SearchBar

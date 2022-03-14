@@ -7,8 +7,7 @@
 
 import UIKit
 import SnapKit
-
-//typealias StatusDataSource = UITableViewDiffableDataSource<Int, AssetStatus>
+import Combine
 
 class AssetStatusViewController: UIViewController {
     private let viewModel: AssetStatusListViewModel
@@ -30,7 +29,7 @@ class AssetStatusViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        viewModel.makeSnapshot()
+        viewModel.initAssetStatus()
     }
 }
 
