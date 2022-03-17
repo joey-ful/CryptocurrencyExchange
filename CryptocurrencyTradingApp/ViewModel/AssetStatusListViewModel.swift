@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RxSwift
 
 typealias StatusDataSource = UITableViewDiffableDataSource<Int, AssetStatus>
 
@@ -16,6 +17,7 @@ class AssetStatusListViewModel {
     private let jwtGenerator = JWTGenerator()
     private let markets: [UpbitMarket]
     var dataSource: StatusDataSource?
+    private var diposedBag = DisposeBag()
     
     func assetStatusViewModel(at index: Int) -> AssetStatusViewModel {
         return AssetStatusViewModel(data: filtered[index])
@@ -30,7 +32,8 @@ class AssetStatusListViewModel {
 
     init(_ markets: [UpbitMarket]) {
         self.markets = markets
-        initiateRestAPI()
+        //        initiateRestAPI()
+        initAPI()
     }
 }
 
@@ -66,6 +69,30 @@ extension AssetStatusListViewModel {
             }
         }
     }
+    
+    func initAPI() {
+        let route = UpbitRoute.assetsstatus
+        let requestBuilder = URLRequestBuilder.requestWithHeader
+        guard let request = requestBuilder.buildRequest(route: route, queryItems: nil, header: route.JWTHeader, bodyParameters: nil, httpMethod: .get) else { return }
+        Observable.just(request)
+            .flatMap { request in RXnetworkManager().download(request: request)}
+//            .map { data in try JSONDecoder().decode([UpbitAssetStatus].self, from: data)}
+            .map { (data: [UpbitAssetStatus]) in
+                data.map { assetStatus -> AssetStatus in
+                    let markets = self.markets.filter { $0.market.contains(assetStatus.currency) }
+                    let name = markets.isEmpty ? "-" : markets[0].koreanName
+                    let withdraw = assetStatus.walletState == "working" || assetStatus.walletState == "withdraw_only"
+                    let deposit = assetStatus.walletState == "working" || assetStatus.walletState == "deposit_only"
+                    
+                    return AssetStatus(coinName: name,
+                                       symbol: assetStatus.currency,
+                                       withdraw: withdraw,
+                                       deposit: deposit)
+                }
+            }
+            .subscribe(onNext: { result in print(result)})
+            .disposed(by: diposedBag)
+    }
 }
 
 // MARK: SearchBar
@@ -73,7 +100,7 @@ extension AssetStatusListViewModel {
     
     func filter(_ target: String?) {
         let text = target?.uppercased() ?? ""
-
+        
         if text == "" {
             filtered = assetStatusList
         } else {
