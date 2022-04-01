@@ -81,6 +81,7 @@
 		D4D0D2AC27A000E200734C42 /* TransactionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0D2AB27A000E200734C42 /* TransactionsViewModel.swift */; };
 		D4D0D2B027A0011600734C42 /* TransactionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0D2AF27A0011600734C42 /* TransactionsViewController.swift */; };
 		D4D0D2B227A0024B00734C42 /* TransactionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D0D2B127A0024B00734C42 /* TransactionViewModel.swift */; };
+		D4ED4E9927F7178700024987 /* WebSocketPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4ED4E9827F7178700024987 /* WebSocketPublisher.swift */; };
 		E605E0B127B65465002B84F1 /* UpbitRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = E605E0B027B65465002B84F1 /* UpbitRoute.swift */; };
 		E605E0B327B654F6002B84F1 /* PaymentCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = E605E0B227B654F6002B84F1 /* PaymentCurrency.swift */; };
 		E605E0B627B679D2002B84F1 /* UpbitWebsocketTicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E605E0B527B679D2002B84F1 /* UpbitWebsocketTicker.swift */; };
@@ -198,6 +199,7 @@
 		D4D0D2AB27A000E200734C42 /* TransactionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsViewModel.swift; sourceTree = "<group>"; };
 		D4D0D2AF27A0011600734C42 /* TransactionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsViewController.swift; sourceTree = "<group>"; };
 		D4D0D2B127A0024B00734C42 /* TransactionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionViewModel.swift; sourceTree = "<group>"; };
+		D4ED4E9827F7178700024987 /* WebSocketPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketPublisher.swift; sourceTree = "<group>"; };
 		E605E0B027B65465002B84F1 /* UpbitRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpbitRoute.swift; sourceTree = "<group>"; };
 		E605E0B227B654F6002B84F1 /* PaymentCurrency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentCurrency.swift; sourceTree = "<group>"; };
 		E605E0B527B679D2002B84F1 /* UpbitWebsocketTicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpbitWebsocketTicker.swift; sourceTree = "<group>"; };
@@ -466,6 +468,7 @@
 				E6A126B527AFFF560080EC4D /* ChartDateFormatter.swift */,
 				E6E1E86C27B1115E00467E24 /* ChartYAxisFormatter.swift */,
 				D4C9F91227BB8B0E00EDF156 /* JWTGenerator.swift */,
+				D4ED4E9827F7178700024987 /* WebSocketPublisher.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -594,6 +597,7 @@
 				D4CC020927953FD300F15957 /* BithumbRestAPITickerAll.swift in Sources */,
 				D4C9F90227B64FFA00EDF156 /* HTTPMethod.swift in Sources */,
 				E6BDEFB127A3E32D00018967 /* CandleData24H+CoreDataProperties.swift in Sources */,
+				D4ED4E9927F7178700024987 /* WebSocketPublisher.swift in Sources */,
 				D4CC020927953FD300F15957 /* BithumbRestAPITickerAll.swift in Sources */,
 				E6197F9527A6AD7000EF207B /* DetailCoinViewModel.swift in Sources */,
 				D4B40E2C27A5A4B000EDA235 /* PopularCoinViewModel.swift in Sources */,
