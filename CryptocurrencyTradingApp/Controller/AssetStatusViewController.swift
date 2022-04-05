@@ -7,7 +7,6 @@
 
 import UIKit
 import SnapKit
-import Combine
 
 class AssetStatusViewController: UIViewController {
     private let viewModel: AssetStatusListViewModel
@@ -38,7 +37,6 @@ extension AssetStatusViewController {
     private func buildUI() {
         view.backgroundColor = .white
         buildSearchBar()
-        buildSelection()
         buildTableView()
     }
 
@@ -61,18 +59,12 @@ extension AssetStatusViewController {
         searchBar.layer.borderWidth = 0.5
         searchBar.layer.cornerRadius = 4
     }
-    
-    private func buildSelection() {
-        
-    }
 }
 
 // MARK: SearchResultsUpdating
 extension AssetStatusViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        let text = searchBar.text
-        viewModel.filter(text)
-        viewModel.makeSnapshot()
+        viewModel.filter(searchBar.text)
     }
 }
 
