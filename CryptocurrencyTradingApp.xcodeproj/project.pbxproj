@@ -39,7 +39,6 @@
 		D4B40E1627A556D000EDA235 /* AssetStatusListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E1527A556D000EDA235 /* AssetStatusListViewModel.swift */; };
 		D4B40E1827A5570200EDA235 /* BithumbRestAPIAssetStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E1727A5570200EDA235 /* BithumbRestAPIAssetStatus.swift */; };
 		D4B40E1A27A55A3000EDA235 /* AssetStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E1927A55A3000EDA235 /* AssetStatus.swift */; };
-		D4B40E1C27A55B8300EDA235 /* AssetStatusViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E1B27A55B8200EDA235 /* AssetStatusViewModel.swift */; };
 		D4B40E1E27A55BFC00EDA235 /* StatusCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E1D27A55BFC00EDA235 /* StatusCell.swift */; };
 		D4B40E2027A5646900EDA235 /* StatusHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E1F27A5646900EDA235 /* StatusHeader.swift */; };
 		D4B40E2A27A59EC300EDA235 /* PopularCoinCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40E2927A59EC300EDA235 /* PopularCoinCell.swift */; };
@@ -159,7 +158,6 @@
 		D4B40E1527A556D000EDA235 /* AssetStatusListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetStatusListViewModel.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		D4B40E1727A5570200EDA235 /* BithumbRestAPIAssetStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BithumbRestAPIAssetStatus.swift; sourceTree = "<group>"; };
 		D4B40E1927A55A3000EDA235 /* AssetStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetStatus.swift; sourceTree = "<group>"; };
-		D4B40E1B27A55B8200EDA235 /* AssetStatusViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetStatusViewModel.swift; sourceTree = "<group>"; };
 		D4B40E1D27A55BFC00EDA235 /* StatusCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusCell.swift; sourceTree = "<group>"; };
 		D4B40E1F27A5646900EDA235 /* StatusHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusHeader.swift; sourceTree = "<group>"; };
 		D4B40E2927A59EC300EDA235 /* PopularCoinCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularCoinCell.swift; sourceTree = "<group>"; };
@@ -400,7 +398,6 @@
 				D4B40DFD27A3C00200EDA235 /* OrderViewModel.swift */,
 				D4B40E0927A4110F00EDA235 /* RestAPITickerViewModel.swift */,
 				D4B40E1527A556D000EDA235 /* AssetStatusListViewModel.swift */,
-				D4B40E1B27A55B8200EDA235 /* AssetStatusViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -583,7 +580,6 @@
 				D4D0D2B027A0011600734C42 /* TransactionsViewController.swift in Sources */,
 				D4AFEB2B27A01FC300011251 /* BithumbRestAPITransaction.swift in Sources */,
 				D4D0D2002799A35100734C42 /* MainListViewController.swift in Sources */,
-				D4B40E1C27A55B8300EDA235 /* AssetStatusViewModel.swift in Sources */,
 				E64BFA3027956FF400BC17A1 /* RequestType.swift in Sources */,
 				D4B40E2A27A59EC300EDA235 /* PopularCoinCell.swift in Sources */,
 				D4CC01F527953FAF00F15957 /* MainTabBarViewController.swift in Sources */,
