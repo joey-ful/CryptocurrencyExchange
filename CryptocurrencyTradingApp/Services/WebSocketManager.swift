@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RxSwift
 
 class WebSocketManager: NSObject {
     private var webSockets: [URLSessionWebSocketTask] = []
@@ -25,6 +26,21 @@ class WebSocketManager: NSObject {
         webSocket.resume()
         webSockets.append(webSocket)
         return webSocket
+    }
+    
+    func connectWebsocketRX<T: WebSocketDataModel, S: WebSocketParameter>(to exchange: WebSocketURL,
+                                                                          parameter: S) -> Observable<T?>{
+        return Observable.create() { emitter in 
+            self.connectWebSocket(to: exchange, parameter: parameter) { (result: Result<T?, Error>) in
+            switch result {
+            case .success(let data):
+                emitter.onNext(data)
+            case .failure(let error):
+                emitter.onError(error)
+                }
+            }
+            return Disposables.create()
+        }
     }
     
     func connectWebSocket<T: WebSocketDataModel, S: WebSocketParameter>(to exchange: WebSocketURL,
@@ -88,13 +104,9 @@ class WebSocketManager: NSObject {
                 parsedData = try JSONDecoder().decode(BithumbWebSocketOrderBook.self, from: data) as? T
             }
             guard let parsedData = parsedData else { return }
-            DispatchQueue.main.async {
                 completion(.success(parsedData))
-            }
         } catch {
-            DispatchQueue.main.async {
                 completion(.failure(error))
-            }
         }
     }
     
@@ -114,13 +126,9 @@ class WebSocketManager: NSObject {
                 parsedData = try JSONDecoder().decode(UpbitWebsocketOrderBook.self, from: data) as? T
             }
             guard let parsedData = parsedData else { return }
-            DispatchQueue.main.async {
                 completion(.success(parsedData))
-            }
         } catch {
-            DispatchQueue.main.async {
                 completion(.failure(error))
-            }
         }
     }
     
