@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 typealias MainListDataSource = UITableViewDiffableDataSource<Int, Ticker>
 typealias PopularDataSource = UICollectionViewDiffableDataSource<Int, Ticker>
@@ -14,20 +15,25 @@ class MainListCoinsViewModel {
     let markets: [UpbitMarket]
     var dataSource: MainListDataSource?
     var collectionViewDataSource: PopularDataSource?
-    var mainListCoins: [Ticker] = [] {
+    private let webSocketManager = WebSocketManager(of: .upbit)
+    private let networkManager = NetworkManager(networkable: NetworkModule())
+    private var subscriptions: Set<AnyCancellable> = []
+    private var mainListCoins: [Ticker] = [] {
         didSet {
             filtered = mainListCoins.filter { existsInFiltered($0) }
             favorites = filtered.filter { favoriteSymbols.contains( $0.symbol.lowercased() ) }
+            makeSnapshot()
         }
     }
+    private(set) var favorites: [Ticker] = []
+    private(set) var filtered: [Ticker] = []
+    @Published private(set) var updatedCellInfo: (Int?, Int?, Bool) = (nil, nil, false)
     var showFavorites: Bool = false
+    
     private var favoriteSymbols: [String] {
         return UserDefaults.standard.array(forKey: "favorite") as? [String] ?? []
     }
     
-    private(set) var favorites: [Ticker] = []
-    
-    private(set) var filtered: [Ticker] = []
     var popularCoins: [Ticker] {
         return Array(
             mainListCoins
@@ -35,8 +41,6 @@ class MainListCoinsViewModel {
                 .prefix(10)
         )
     }
-    private let webSocketManager = WebSocketManager(of: .upbit)
-    private let networkManager = NetworkManager(networkable: NetworkModule())
     
     var headerViewModel: MainListHeaderViewModel {
         return MainListHeaderViewModel(mainListCoinsViewModel: self)
@@ -56,7 +60,7 @@ class MainListCoinsViewModel {
         return PopularCoinViewModel(popularCoin: popularCoins[index], market)
     }
     
-    func makeCollectionViewSnapshot() {
+    private func makeCollectionViewSnapshot() {
        var snapshot = NSDiffableDataSourceSnapshot<Int, Ticker>()
        snapshot.appendSections([0])
        snapshot.appendItems(popularCoins, toSection: 0)
@@ -87,16 +91,14 @@ extension MainListCoinsViewModel {
     func initiateRestAPI() {
         
         let route = UpbitRoute.ticker
-        networkManager.request(with: route,
-                               queryItems: route.tickerQueryItems(coins: markets),
-                               requestType: .request)
-        { [weak self](parsedResult: Result<[UpbitTicker], Error>) in
-            guard let weakSelf = self, var snapShot = weakSelf.dataSource?.snapshot() else { return }
-            switch parsedResult {
-            case .success(let tickers):
-                let data: [Ticker] = tickers.map {
+        networkManager.dataTaskPublisher(with: route,
+                                         queryItems: route.tickerQueryItems(coins: markets),
+                                         requestType: .request)
+            .map { [weak self] (tickers: [UpbitTicker]) -> [Ticker] in
+                guard let self = self else { return [] }
+                return tickers.map {
                     let symbol = $0.market.split(separator: "-")[1]
-                    let market = weakSelf.markets.filter { $0.market.contains(symbol) }[0]
+                    let market = self.markets.filter { $0.market.contains(symbol) }[0]
                     let fluctuationRate = ($0.fluctuationRate24HDividedByHundred * 100).description
                     
                     return Ticker(name: market.koreanName,
@@ -106,15 +108,21 @@ extension MainListCoinsViewModel {
                                   fluctuationAmount: $0.fluctuation24H.description,
                                   tradeValue: $0.tradeValueWithin24H.description)
                 }.sorted { $0.tradeValue.toDouble() > $1.tradeValue.toDouble() }
-                weakSelf.filtered = data
-                weakSelf.mainListCoins = data
-                weakSelf.makeSnapshot()
-                weakSelf.makeCollectionViewSnapshot()
-
-            case .failure(let error):
-                assertionFailure(error.localizedDescription)
             }
-        }
+            .sink { completion in
+                switch completion {
+                case .finished: break
+                case .failure(let error):
+                    assertionFailure(error.localizedDescription)
+                }
+            } receiveValue: { [weak self] data in
+                guard let self = self else { return }
+                self.filtered = data
+                self.mainListCoins = data
+                self.makeSnapshot()
+                self.makeCollectionViewSnapshot()
+            }
+            .store(in: &subscriptions)
     }
 }
 
@@ -125,40 +133,45 @@ extension MainListCoinsViewModel {
         initiateTickerWebSocket(to: exchange)
     }
     
+    private func initiateTransactionWebSocket(to exchange: WebSocketURL) {
+        URLSession.shared.webSocketPublisher(exchange,
+                                             UpbitWebSocketParameter(ticket: UUID(),
+                                                                     .transaction,
+                                                                     markets))
+            .decode(type: UpbitWebsocketTrade.self, decoder: JSONDecoder())
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    assertionFailure(error.localizedDescription)
+                }
+            } receiveValue: { data in
+                self.updateTransaction(data)
+            }
+            .store(in: &subscriptions)
+    }
+    
     func closeWebSocket() {
         webSocketManager.close()
     }
     
-    private func initiateTransactionWebSocket(to exchange: WebSocketURL) {
-        webSocketManager.connectWebSocket(to: exchange,
-                                          parameter: UpbitWebSocketParameter(ticket: UUID(),
-                                                                             .transaction,
-                                                                             markets))
-        { (parsedResult: Result<UpbitWebsocketTrade?, Error>) in
-            
-            switch parsedResult {
-            case .success(let parsedData):
-                self.updateTransaction(parsedData)
-            case .failure(let error):
-                assertionFailure(error.localizedDescription)
-            }
-        }
-    }
-    
     private func initiateTickerWebSocket(to exchange: WebSocketURL) {
-        webSocketManager.connectWebSocket(to: exchange,
-                                          parameter: UpbitWebSocketParameter(ticket: webSocketManager.uuid,
-                                                                             .ticker,
-                                                                             markets))
-        { (parsedResult: Result<UpbitWebsocketTicker?, Error>) in
-
-            switch parsedResult {
-            case .success(let parsedData):
-                self.updateTradeValueAndFluctuations(parsedData)
-            case .failure(let error):
-                assertionFailure(error.localizedDescription)
+        URLSession.shared.webSocketPublisher(exchange, UpbitWebSocketParameter(ticket: UUID(),
+                                                                               .ticker,
+                                                                               markets))
+            .decode(type: UpbitWebsocketTicker.self, decoder: JSONDecoder())
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    assertionFailure(error.localizedDescription)
+                }
+            } receiveValue: { data in
+                self.updateTradeValueAndFluctuations(data)
             }
-        }
+            .store(in: &subscriptions)
     }
     
     private func updateTransaction(_ transaction: UpbitWebsocketTrade?) {
@@ -177,14 +190,12 @@ extension MainListCoinsViewModel {
                 mainListCoins[index].currentPrice = newPrice
                 filtered = mainListCoins.filter { existsInFiltered($0) }
                 favorites = filtered.filter { favoriteSymbols.contains( $0.symbol.lowercased() ) }
-                let userInfo = userInfo(at: index, hasRisen: newPrice.toDouble() > oldPrice.toDouble())
+                updateIndices(at: index, hasRisen: newPrice.toDouble() > oldPrice.toDouble())
+                
                 guard let item = dataSource?.itemIdentifier(for: IndexPath(row: index, section: 0)) else { return }
                 guard var snapShot = dataSource?.snapshot() else { return }
                 snapShot.reconfigureItems([item])
                 dataSource?.apply(snapShot, animatingDifferences:  true)
-                NotificationCenter.default.post(name: .webSocketTransactionsNotification,
-                                                object: "currentPrice",
-                                                userInfo: userInfo)
             }
         }
     }
@@ -206,7 +217,7 @@ extension MainListCoinsViewModel {
         }
     }
     
-    private func userInfo(at index: Int, hasRisen: Bool = true) -> [String: Any] {
+    private func updateIndices(at index: Int, hasRisen: Bool = true) {
         var filteredIndex: Int? = nil
         filtered.enumerated().forEach { currentIndex, coin in
             if mainListCoins[index] == coin {
@@ -221,7 +232,8 @@ extension MainListCoinsViewModel {
                 return
             }
         }
-        return ["filtered": filteredIndex, "favorites": favoritesIndex, "hasRisen": hasRisen]
+        
+        updatedCellInfo = (filteredIndex, favoritesIndex, hasRisen)
     }
 }
 

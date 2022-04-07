@@ -7,16 +7,13 @@
 
 import UIKit
 import SnapKit
-
-//typealias MainListDataSource = UITableViewDiffableDataSource<Int, Ticker>
-//typealias PopularDataSource = UICollectionViewDiffableDataSource<Int, Ticker>
+import Combine
 
 class MainListViewController: UIViewController {
     private let viewModel: MainListCoinsViewModel
+    private var subscriptions: Set<AnyCancellable> = []
     private let tableView = UITableView(frame: .zero, style: .plain)
-//    private var dataSource: MainListDataSource?
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-//    private var collectionViewDataSource: PopularDataSource?
     private let collectionViewHeaderTop = UIView()
     private let collectionViewHeaderLeading = UIView()
     private let collectionViewHeader = UILabel.makeLabel(font: .subheadline, text: "인기 코인")
@@ -33,7 +30,6 @@ class MainListViewController: UIViewController {
         menuControl.layer.masksToBounds = true
         return menuControl
     }()
-//    private var showFavorites: Bool = false
 
     init(viewModel: MainListCoinsViewModel) {
         self.viewModel = viewModel
@@ -47,34 +43,32 @@ class MainListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         buildUI()
+        setUpBlinkCell()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         viewModel.initiateWebSocket(to: .upbit)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(updateDataSource),
-                                               name: .webSocketTransactionsNotification,
-                                               object: nil)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         viewModel.closeWebSocket()
-        NotificationCenter.default.removeObserver(self, name: .webSocketTransactionsNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .updateSortNotification, object: nil)
     }
 }
 
-// MARK: Handle Notification
+// MARK: Find Updated Cell and Blink
 extension MainListViewController {
-    @objc private func updateDataSource(notification: Notification) {
-        guard let userInfo = notification.userInfo as? [String: Any] else { return }
-        guard let targetIndex = (viewModel.showFavorites ? userInfo["favorites"] : userInfo["filtered"]) as? Int else { return }
-
-        guard notification.object as? String == "currentPrice",
-              let hasRisen = userInfo["hasRisen"] as? Bool
-        else { return }
-        let cell = (tableView.cellForRow(at: IndexPath(row: targetIndex, section: 0)) as? MainListCell)
-        cell?.blink(viewModel.coinViewModel(at: targetIndex, hasRisen: hasRisen))
+    private func setUpBlinkCell() {
+        viewModel.$updatedCellInfo
+            .receive(on: DispatchQueue.main)
+            .sink() { [weak self] (filtered, favorites, hasRisen) in
+                guard let self = self else { return }
+                let targetIndex = self.viewModel.showFavorites ? favorites : filtered
+                guard let targetIndex = targetIndex else { return }
+                
+                let cell = (self.tableView.cellForRow(at: IndexPath(row: targetIndex, section: 0)) as? MainListCell)
+                cell?.blink(self.viewModel.coinViewModel(at: targetIndex, hasRisen: hasRisen))
+            }
+            .store(in: &subscriptions)
     }
 }
 
@@ -102,9 +96,7 @@ extension MainListViewController {
 // MARK: SearchResultsUpdating
 extension MainListViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        let text = searchController.searchBar.text
-        viewModel.filter(text)
-        viewModel.makeSnapshot()
+        viewModel.filter(searchController.searchBar.text)
     }
 }
 
@@ -209,7 +201,6 @@ extension MainListViewController {
                                         cellProvider: { [weak self ] tableView, indexPath, mainListCoin in
 
             guard let weakSelf = self else { return UITableViewCell() }
-//            viewModel.initiateRestAPI()
             let viewModel = weakSelf.viewModel.showFavorites ? weakSelf.viewModel.favoriteCoinViewModel(at: indexPath.row) : weakSelf.viewModel.coinViewModel(at: indexPath.row)
             
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "mainListCell",
@@ -249,7 +240,7 @@ extension MainListViewController {
 extension MainListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let list = viewModel.showFavorites ? viewModel.favorites : viewModel.filtered
-        let coin = CoinType.coin(symbol: list[indexPath.row].symbol.lowercased()) ?? .unverified
+//        let coin = CoinType.coin(symbol: list[indexPath.row].symbol.lowercased()) ?? .unverified
         let symbol = list[indexPath.row].symbol.uppercased()
         let market = viewModel.markets.filter { $0.market.contains(symbol) }[0]
         let detailViewController = DetailCoinViewController(market: market)
