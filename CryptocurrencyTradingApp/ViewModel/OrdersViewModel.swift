@@ -5,7 +5,9 @@
 //  Created by 홍정아 on 2022/01/28.
 //
 
-import Foundation
+import UIKit
+
+typealias OrderDataSource = UITableViewDiffableDataSource<Int, Order>
 
 class OrdersViewModel {
     private let market: UpbitMarket
@@ -13,6 +15,9 @@ class OrdersViewModel {
     private let webSocketManager = WebSocketManager()
     private var asks: [Order] = []
     private var bids: [Order] = []
+    var orderDataSource: OrderDataSource?
+    private var isInitialization: Bool = true
+
     
     var orders: [Order] {
         return asks + bids
@@ -46,6 +51,21 @@ class OrdersViewModel {
     func orderViewModel(at index: Int) -> OrderViewModel {
         return OrderViewModel(order: orders[index], parent: self)
     }
+    
+    func makeOrderSnapshot() {
+        if isInitialization {
+            var snapshot = NSDiffableDataSourceSnapshot<Int, Order>()
+            snapshot.appendSections([0])
+            snapshot.appendItems(orders, toSection: 0)
+            orderDataSource?.apply(snapshot, animatingDifferences: false)
+            NotificationCenter.default.post(name: .moveScrollToMiddleNotification, object: nil)
+            isInitialization = false
+        } else {
+            guard var snapshot = orderDataSource?.snapshot() else { return }
+            snapshot.reconfigureItems(snapshot.itemIdentifiers)
+            orderDataSource?.apply(snapshot, animatingDifferences: true)
+        }
+    }
 }
 
 extension OrdersViewModel {
@@ -54,20 +74,20 @@ extension OrdersViewModel {
         networkManager.request(with: route,
                                queryItems: route.orderbookQueryItems(coins: [market]),
                                requestType: .request)
-        { (parsedResult: Result<[UpbitOrderBook], Error>) in
+        { [weak self] (parsedResult: Result<[UpbitOrderBook], Error>) in
             
             switch parsedResult {
             case .success(let parsedData):
-                self.asks = parsedData[0].data.map {
+                self?.asks = parsedData[0].data.map {
                     Order(price: $0.askPrice.description,
                           quantity: $0.askSize.description)
                 }.sorted { $0.price.toDouble() > $1.price.toDouble() }
-                self.bids = parsedData[0].data.map {
+                self?.bids = parsedData[0].data.map {
                     Order(price: $0.bidPrice.description,
                           quantity: $0.bidSize.description)
                 }.sorted { $0.price.toDouble() > $1.price.toDouble() }
-                
-                NotificationCenter.default.post(name: .restAPIOrderNotification, object: nil)
+                self?.makeOrderSnapshot()
+
             case .failure(NetworkError.unverifiedCoin):
                 print(NetworkError.unverifiedCoin.localizedDescription)
             case .failure(let error):
@@ -93,22 +113,22 @@ extension OrdersViewModel {
                                           parameter: UpbitWebSocketParameter(ticket: webSocketManager.uuid,
                                                                              .orderbookdepth,
                                                                              [market]))
-        { (parsedResult: Result<UpbitWebsocketOrderBook?, Error>) in
+        { [weak self] (parsedResult: Result<UpbitWebsocketOrderBook?, Error>) in
 
             switch parsedResult {
             case .success(let parsedData):
                 guard let parsedData = parsedData else { return }
                 
-                self.asks = parsedData.data.map {
+                self?.asks = parsedData.data.map {
                     Order(price: $0.askPrice.description,
                           quantity: $0.askSize.description)
                 }.sorted { $0.price.toDouble() > $1.price.toDouble() }
-                self.bids = parsedData.data.map {
+                self?.bids = parsedData.data.map {
                     Order(price: $0.bidPrice.description,
                           quantity: $0.bidSize.description)
                 }.sorted { $0.price.toDouble() > $1.price.toDouble() }
+                self?.makeOrderSnapshot()
                 
-                NotificationCenter.default.post(name: .restAPIOrderNotification, object: nil)
             case .failure(NetworkError.unverifiedCoin):
                 print(NetworkError.unverifiedCoin.localizedDescription)
             case .failure(let error):

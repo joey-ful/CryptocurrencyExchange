@@ -20,7 +20,7 @@ class DetailCoinViewModel {
     }
     
     var sign: String {
-        return coinInfomation.change.contains("FALL") ? "-" : "+"
+        return coinInfomation.change.contains("FALL") ? "" : "+"
     }
     
     var price: String {

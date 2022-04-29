@@ -7,17 +7,22 @@
 
 import UIKit
 
+typealias TransactionsDataSource = UITableViewDiffableDataSource<Int, Transaction>
+typealias TransactionDataSource = UITableViewDiffableDataSource<Int, Transaction>
+
 class TransactionsViewModel {
-    private(set) var transactions: [Transaction] = [] {
-        didSet {
-            NotificationCenter.default.post(name: .restAPITransactionsNotification, object: nil)
-        }
-    }
+    private(set) var transactions: [Transaction] = []
     private let market: UpbitMarket
     private let networkManager = NetworkManager(networkable: NetworkModule())
     private let webSocketManager = WebSocketManager()
     private let candleCoreDataManager = CandleCoreDataManager()
     private(set) var dayTransactions: [Transaction] = []
+    private var timeCursor: String?
+    private var dayLastDate: String?
+    var timeDataSource: TransactionsDataSource?
+    var dayDataSource: TransactionsDataSource?
+    var transactionDataSource: TransactionDataSource?
+    var workItem: DispatchWorkItem?
     
     var count: Int {
         transactions.count
@@ -36,103 +41,165 @@ class TransactionsViewModel {
     func dayTransactionViewModel(at index: Int) -> DayTransactionViewModel {
         return DayTransactionViewModel(dayTransaction: dayTransactions[index])
     }
+    
+    func makeTimeSnapshot() {
+        DispatchQueue.main.async { [weak self] in
+            var snapshot = NSDiffableDataSourceSnapshot<Int, Transaction>()
+            snapshot.appendSections([0])
+            snapshot.appendItems(self?.transactions ?? [], toSection: 0)
+            self?.timeDataSource?.apply(snapshot, animatingDifferences: false)
+        }
+        
+    }
+    
+    func makeDaySnapshot() {
+        DispatchQueue.main.async { [weak self] in
+            
+            var snapshot = NSDiffableDataSourceSnapshot<Int, Transaction>()
+            snapshot.appendSections([0])
+            snapshot.appendItems(self?.dayTransactions ?? [], toSection: 0)
+            self?.dayDataSource?.apply(snapshot, animatingDifferences: false)
+        }
+        
+    }
+    
+    func makeTransactionSnapshot() {
+        DispatchQueue.main.async { [weak self] in
+            
+            var snapshot = NSDiffableDataSourceSnapshot<Int, Transaction>()
+            snapshot.appendSections([0])
+            let data = Array(((self?.transactions ?? []).prefix(30)))
+            snapshot.appendItems(data, toSection: 0)
+            self?.transactionDataSource?.apply(snapshot, animatingDifferences: false)
+        }
+        
+    }
+    
 }
 
 // MARK: RestAPI Time
 extension TransactionsViewModel {
     private func initiateTimeRestAPI() {
-        initiateRestAPITransactionHistory()
+        loadRestAPITransactions()
     }
     
-    private func initiateRestAPITransactionHistory() {
+    
+    private func loadRestAPITransactions() {
         let route = UpbitRoute.trades
         networkManager.request(with: route,
-                               queryItems: route.tradesQueryItems(market: market, count: 60),
+                               queryItems: route.tradesQueryItems(market: market,
+                                                                  count: 50,
+                                                                  cursor: timeCursor),
                                requestType: .request)
         { (parsedResult: Result<[UpbitTrade], Error>) in
             
             switch parsedResult {
             case .success(let parsedData):
-                self.transactions = parsedData.map {
+                self.transactions += parsedData.map {
                     Transaction(symbol: nil,
                                 type: $0.type.lowercased(),
                                 price: $0.price.description,
                                 quantity: $0.quantity.description,
                                 amount: ($0.price * $0.quantity).description,
-                                date: $0.date.description,
+                                date: $0.timestamp.description,
                                 upDown: nil)
                 }.sorted { $0.date > $1.date }
+                self.timeCursor = parsedData.last?.cursor.description.lose(from: ".")
             case .failure(let error):
-                assertionFailure(error.localizedDescription)
+                if error.localizedDescription != "cancelled" {
+                    assertionFailure(error.localizedDescription)
+                }
             }
         }
+    }
+    
+    func loadMoreTimeTransactions() {
+        workItem?.cancel()
+        workItem = DispatchWorkItem {
+            self.loadRestAPITransactions()
+        }
+        guard let validWorkItem = workItem else { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: validWorkItem)
     }
 }
 
 // MARK: RestAPI Day
 extension TransactionsViewModel {
     private func initiateDayRestAPI() {
-        initiateRestAPICandleStick()
-        initiateRestAPITicker()
+        loadRestAPICandleStick()
+        loadRestAPITicker()
     }
     
-    private func initiateRestAPICandleStick() {
+    private func loadRestAPICandleStick() {
         let route = UpbitRoute.candles(.twentyFourHour)
         networkManager.request(with: route,
-                               queryItems: route.candlesQueryItems(coin: market, candleCount: 100),
+                               queryItems: route.candlesQueryItems(coin: market,
+                                                                   lastDate: dayLastDate?.replacingOccurrences(of: "T", with: " "),
+                                                                   candleCount: 50),
                                requestType: .request)
-        { (parsedResult: Result<[UpbitCandleStick], Error>) in
+        { [weak self](parsedResult: Result<[UpbitCandleStick], Error>) in
             
             switch parsedResult {
             case .success(let parsedData):
-                self.dayTransactions = parsedData.map {
+                let candleStickData = parsedData.sorted { $0.timestamp > $1.timestamp }[1..<parsedData.endIndex]
+                self?.dayTransactions += candleStickData.map {
                     Transaction(price: $0.closingPrice.description,
                                 prevPrice: $0.prevPrice?.description ?? .zero,
                                 quantity: $0.tradeVolume.description,
-                                date: $0.timestamp.description)
-                }.sorted { $0.date > $1.date }
-                NotificationCenter.default.post(name: .candlestickNotification, object: nil)
+                                date: $0.dateKST.replacingOccurrences(of: "T", with: " ").dropLast(3))
+                }
+                self?.dayLastDate = parsedData.last?.dateKST
+                self?.makeDaySnapshot()
+                NotificationCenter.default.post(name: .restAPITickerNotification, object: nil)
             case .failure(NetworkError.unverifiedCoin):
                 print(NetworkError.unverifiedCoin.localizedDescription)
             case .failure(let error):
-                assertionFailure(error.localizedDescription)
+                if error.localizedDescription != "cancelled" {
+                    assertionFailure(error.localizedDescription)
+                }
             }
         }
     }
     
-    private func initiateRestAPITicker() {
+    private func loadRestAPITicker() {
         let route = UpbitRoute.ticker
         networkManager.request(with: route,
                                queryItems: route.tickerQueryItems(coins: [market]),
                                requestType: .request)
-        { (parsedResult: Result<[UpbitTicker], Error>) in
+        { [weak self](parsedResult: Result<[UpbitTicker], Error>) in
             
             switch parsedResult {
             case .success(let parsedData):
                 let ticker = parsedData[0]
                 let newTransaction = Transaction(price: ticker.closingPrice.description,
-                                                 prevPrice: self.dayTransactions.last?.price ?? "0",
+                                                 prevPrice: self?.dayTransactions.last?.price ?? "0",
                                                  quantity: ticker.unitsTraded.description,
                                                  amount: ticker.tradeValue.description,
                                                  date: ticker.date.description.toDate())
-                self.dayTransactions.append(newTransaction)
-                NotificationCenter.default.post(name: .restAPITickerNotification, object: nil)
+                
+                self?.dayTransactions.append(newTransaction)
+                self?.makeDaySnapshot()
             case .failure(NetworkError.unverifiedCoin):
                 print(NetworkError.unverifiedCoin.localizedDescription)
             case .failure(let error):
-                assertionFailure(error.localizedDescription)
+                if error.localizedDescription != "cancelled" {
+                    assertionFailure(error.localizedDescription)
+                }
             }
         }
     }
-}
     
+    func loadMoreDayTransactions() {
+        loadRestAPICandleStick()
+    }
+}
+
 // MARK: WebSocket
 extension TransactionsViewModel {
     func initiateTimeWebSocket() {
-        
         webSocketManager.connectWebSocket(to: .upbit,
                                           parameter: UpbitWebSocketParameter(ticket: webSocketManager.uuid, .transaction, [market]))
-        { (parsedResult: Result<UpbitWebsocketTrade?, Error>) in
+        { [weak self] (parsedResult: Result<UpbitWebsocketTrade?, Error>) in
             
             switch parsedResult {
             case .success(let parsedData):
@@ -144,8 +211,9 @@ extension TransactionsViewModel {
                                                   amount: (parsedData.price * parsedData.quantity).description,
                                                   date: parsedData.dateTime.description,
                                                   upDown: parsedData.upDown)
-                self.transactions = (self.transactions + [newTransactions]).sorted { $0.date > $1.date }
-                NotificationCenter.default.post(name: .webSocketTransactionsNotification, object: nil)
+                self?.transactions = ((self?.transactions ?? []) + [newTransactions]).sorted { $0.date > $1.date }
+                self?.makeTimeSnapshot()
+                self?.makeTransactionSnapshot()
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
             }

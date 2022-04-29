@@ -8,19 +8,13 @@
 import UIKit
 import SnapKit
 
-typealias OrderDataSource = UITableViewDiffableDataSource<Int, Order>
-typealias TransactionDataSource = UITableViewDiffableDataSource<Int, Transaction>
-
 class OrderViewController: UIViewController {
     private let ordersViewModel: OrdersViewModel
     private let transactionsViewModel: TransactionsViewModel
     private let orderInfoViewModel: RestAPITickerViewModel
-    private var orderDataSource: OrderDataSource?
-    private var transactionDataSource: TransactionDataSource?
     private let orderTableView = UITableView(frame: .zero, style: .plain)
     private var transactionTableView = UITableView(frame: .zero, style: .plain)
     private let orderInfoTableView = UITableView(frame: .zero, style: .plain)
-    private var isInitialization: Bool = true
     
     init(_ market: UpbitMarket) {
         ordersViewModel = OrdersViewModel(market)
@@ -33,45 +27,33 @@ class OrderViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         setUpUI()
         configureTableView()
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(makeTransactionSnapshot),
-                                               name: .restAPITransactionsNotification,
-                                               object: nil)
+
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(initInfoData),
                                                name: .restAPITickerNotification,
                                                object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(moveScrollToMiddle), name: .moveScrollToMiddleNotification, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         ordersViewModel.initiateWebSocket()
         transactionsViewModel.initiateTimeWebSocket()
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(makeTransactionSnapshot),
-                                               name: .webSocketTransactionsNotification,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(makeOrderSnapshot),
-                                               name: .restAPIOrderNotification,
-                                               object: nil)
+
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         ordersViewModel.closeWebSocket()
         transactionsViewModel.closeWebSocket()
-        NotificationCenter.default.removeObserver(self, name: .webSocketTransactionsNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .restAPIOrderNotification, object: nil)
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self, name: .restAPITransactionsNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: .restAPITickerNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .moveScrollToMiddleNotification, object: nil)
     }
 }
 
@@ -79,7 +61,16 @@ class OrderViewController: UIViewController {
 extension OrderViewController {
     
     @objc private func initInfoData() {
-        orderInfoTableView.reloadData()
+        DispatchQueue.main.async { [weak self] in
+            self?.orderInfoTableView.reloadData()
+        }
+    }
+    
+    @objc private func moveScrollToMiddle() {
+            let middleIndexPath = IndexPath(row: ordersViewModel.middleIndex, section: 0)
+        DispatchQueue.main.async { [weak self] in
+            self?.orderTableView.scrollToRow(at: middleIndexPath, at: .middle, animated: false)
+        }
     }
 
     private func setUpUI() {
@@ -120,31 +111,6 @@ extension OrderViewController {
         registerCell()
     }
     
-    @objc private func makeOrderSnapshot() {
-        if isInitialization {
-            var snapshot = NSDiffableDataSourceSnapshot<Int, Order>()
-            snapshot.appendSections([0])
-            snapshot.appendItems(ordersViewModel.orders, toSection: 0)
-            orderDataSource?.apply(snapshot, animatingDifferences: false)
-            
-            let middleIndexPath = IndexPath(row: ordersViewModel.middleIndex, section: 0)
-            orderTableView.scrollToRow(at: middleIndexPath, at: .middle, animated: false)
-            isInitialization = false
-        } else {
-            guard var snapshot = orderDataSource?.snapshot() else { return }
-            snapshot.reconfigureItems(snapshot.itemIdentifiers)
-            orderDataSource?.apply(snapshot, animatingDifferences: true)
-        }
-    }
-    
-    @objc private func makeTransactionSnapshot() {
-        var snapshot = NSDiffableDataSourceSnapshot<Int, Transaction>()
-        snapshot.appendSections([0])
-        let data = Array(transactionsViewModel.transactions.prefix(30))
-        snapshot.appendItems(data, toSection: 0)
-        transactionDataSource?.apply(snapshot, animatingDifferences: false)
-    }
-    
     private func setUpTableView() {
         orderTableView.register(OrderCell.self, forCellReuseIdentifier: "orderCell")
         transactionTableView.register(OrderTransactionCell.self, forCellReuseIdentifier: "transactionCell")
@@ -155,7 +121,7 @@ extension OrderViewController {
     }
     
     private func registerCell() {
-        orderDataSource = OrderDataSource(tableView: orderTableView,
+        ordersViewModel.orderDataSource = OrderDataSource(tableView: orderTableView,
                                         cellProvider: { [weak self] tableView, indexPath, mainListCoin in
 
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "orderCell",
@@ -168,9 +134,9 @@ extension OrderViewController {
 
             return cell
         })
-        orderTableView.dataSource = orderDataSource
+        orderTableView.dataSource = ordersViewModel.orderDataSource
         
-        transactionDataSource = TransactionDataSource(tableView: transactionTableView,
+        transactionsViewModel.transactionDataSource = TransactionDataSource(tableView: transactionTableView,
                                         cellProvider: { [weak self] tableView, indexPath, mainListCoin in
 
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "transactionCell",
@@ -184,7 +150,7 @@ extension OrderViewController {
 
             return cell
         })
-        transactionTableView.dataSource = transactionDataSource
+        transactionTableView.dataSource = transactionsViewModel.transactionDataSource
     }
 }
 

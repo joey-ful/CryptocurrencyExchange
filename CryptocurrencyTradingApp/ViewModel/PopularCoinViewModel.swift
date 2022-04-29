@@ -64,12 +64,13 @@ extension PopularCoinViewModel {
         networkManager.request(with: route,
                                queryItems: route.candlesQueryItems(coin: market, candleCount: 24),
                                requestType: .request)
-        { (parsedResult: Result<[UpbitCandleStick], Error>) in
-            
+        { [weak self](parsedResult: Result<[UpbitCandleStick], Error>) in
             switch parsedResult {
             case .success(let parsedData):
-                self.highPriceList = parsedData
-                    .map { $0.highPrice }
+                DispatchQueue.main.async {
+                    self?.highPriceList = parsedData
+                        .map { $0.highPrice }
+                }
             case .failure(NetworkError.unverifiedCoin):
                 print(NetworkError.unverifiedCoin.localizedDescription)
             case .failure(let error):

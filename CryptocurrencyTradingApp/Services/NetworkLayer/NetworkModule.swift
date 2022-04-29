@@ -9,64 +9,41 @@ import Foundation
 
 class NetworkModule: Networkable {
     private let rangeOfSuccessState = 200...299
-    private var dataTask: [URLSessionDataTask] = []
+    private var networkStates: [URLRequest: NetworkState] = [:]
     
     func runDataTask<T: Decodable>(request: URLRequest,
                                    completionHandler: @escaping (Result<T, Error>) -> Void) {
         
-        dataTask.enumerated().forEach { (index, task) in
-            if let originalRequest = task.originalRequest,
-               originalRequest == request {
-                task.cancel()
-                if dataTask.count > index {
-                    dataTask.remove(at: index)
-                }
-            }
+        if let networkState = networkStates[request], networkState == .isLoading {
+            completionHandler(.failure(NetworkError.overlappingRequest))
+            return
         }
+        networkStates[request] = .isLoading
         
-        let task = URLSession.shared.dataTask(with: request) { [self] (data, response, error) in
+        URLSession.shared.dataTask(with: request) { [self] (data, response, error) in
             if let error = error {
-                DispatchQueue.main.async {
-                    completionHandler(.failure(error))
-                }
+                completionHandler(.failure(error))
                 return
             }
-
+            
             guard let response = response as? HTTPURLResponse,
                   rangeOfSuccessState.contains(response.statusCode) else {
-                DispatchQueue.main.async {
-                    completionHandler(.failure(NetworkError.badResponse))
-                }
-                return
-            }
+                      completionHandler(.failure(NetworkError.badResponse))
+                      return
+                  }
             
             guard let data = data else {
-                DispatchQueue.main.async {
-                    completionHandler(.failure(NetworkError.invalidData))
-                }
+                completionHandler(.failure(NetworkError.invalidData))
                 return
-            }
-            
-            dataTask.enumerated().forEach { (index, task) in
-                if let originalRequest = task.originalRequest,
-                   originalRequest == request {
-                    dataTask.remove(at: index)
-                }
             }
             
             do {
                 let parsedData = try JSONDecoder().decode(T.self, from: data)
-                DispatchQueue.main.async {
-                    completionHandler(.success(parsedData))
-                }
+                completionHandler(.success(parsedData))
             } catch let error {
-                DispatchQueue.main.async {
-                    completionHandler(.failure(error))
-                }
+                completionHandler(.failure(error))
             }
-        }
-        
-        task.resume()
-        dataTask.append(task)
+            networkStates.removeValue(forKey: request)
+        }.resume()
     }
 }

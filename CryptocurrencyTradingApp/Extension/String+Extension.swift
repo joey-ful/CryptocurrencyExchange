@@ -97,4 +97,10 @@ extension String {
         
         return formatted
     }
+    
+    func dropLast(_ count: Int) -> String {
+        let start = self.startIndex
+        let end = self.index(self.endIndex, offsetBy: -1 * count)
+        return String(self[start..<end])
+    }
 }

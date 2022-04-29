@@ -8,15 +8,11 @@
 import UIKit
 import SnapKit
 
-typealias TransactionsDataSource = UITableViewDiffableDataSource<Int, Transaction>
-
 class TransactionsViewController: UIViewController {
     private var viewModel: TransactionsViewModel
     private let market: UpbitMarket
     private let timeTableView = UITableView(frame: .zero, style: .grouped)
     private let dayTableView = UITableView(frame: .zero, style: .grouped)
-    private var timeDataSource: TransactionsDataSource?
-    private var dayDataSource: TransactionsDataSource?
     lazy var menuControl: UISegmentedControl = {
         let menuControl = UISegmentedControl(items: ["시간별", "일별"])
         menuControl.selectedSegmentIndex = 0
@@ -25,7 +21,6 @@ class TransactionsViewController: UIViewController {
         menuControl.layer.masksToBounds = true
         return menuControl
     }()
-    
 
     init(_ market: UpbitMarket) {
         self.market = market
@@ -40,58 +35,20 @@ class TransactionsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(makeTimeSnapshot),
-                                               name: .restAPITransactionsNotification,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(makeDaySnapshot),
-                                               name: .candlestickNotification,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(makeDaySnapshot),
-                                               name: .restAPITickerNotification,
-                                               object: nil)
         menuControlAutolayout()
         configureTableView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         viewModel.initiateTimeWebSocket()
-        getWebSocketNotification()
     }
-    
-    private func getWebSocketNotification() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(makeTimeSnapshot),
-                                               name: .webSocketTransactionsNotification,
-                                               object: nil)
-    }
-    
-    private func removeWebSocketNotification() {
-        NotificationCenter.default.removeObserver(self,
-                                                  name: .webSocketTransactionsNotification,
-                                                  object: nil)
-    }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         viewModel.closeWebSocket()
-        removeWebSocketNotification()
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self,
-                                                  name: .restAPITransactionsNotification,
-                                                  object: nil)
-        NotificationCenter.default.removeObserver(self,
-                                                  name: .candlestickNotification,
-                                                  object: nil)
-        NotificationCenter.default.removeObserver(self,
-                                                  name: .restAPITickerNotification,
-                                                  object: nil)
     }
 }
 
+// MARK: UISegmentedControl
 extension TransactionsViewController {
     private func menuControlAutolayout() {
         view.addSubview(menuControl)
@@ -107,44 +64,29 @@ extension TransactionsViewController {
         case 0:
             timeTableView.isHidden = false
             dayTableView.isHidden = true
-            getWebSocketNotification()
-            makeTimeSnapshot()
+            viewModel.makeTimeSnapshot()
         case 1:
             timeTableView.isHidden = true
             dayTableView.isHidden = false
-            removeWebSocketNotification()
-            makeDaySnapshot()
+            viewModel.makeDaySnapshot()
         default:
             break
         }
     }
 }
 
+// MARK: UITableView
 extension TransactionsViewController {
 
-    @objc private func makeTimeSnapshot() {
-        var snapshot = NSDiffableDataSourceSnapshot<Int, Transaction>()
-        snapshot.appendSections([0])
-        snapshot.appendItems(viewModel.transactions, toSection: 0)
-        timeDataSource?.apply(snapshot, animatingDifferences: false)
-    }
-    
-    @objc private func makeDaySnapshot() {
-        var snapshot = NSDiffableDataSourceSnapshot<Int, Transaction>()
-        snapshot.appendSections([0])
-        snapshot.appendItems(viewModel.dayTransactions, toSection: 0)
-        dayDataSource?.apply(snapshot, animatingDifferences: false)
-    }
-    
     private func configureTableView() {
         setUpTableView(type: "timeTransactions", tableView: timeTableView)
         setUpTableView(type: "dayTransactions", tableView: dayTableView)
         setTableViewAutoLayout(of: timeTableView)
         setTableViewAutoLayout(of: dayTableView)
-        timeDataSource = createDataSource(isTime: true)
-        timeTableView.dataSource = timeDataSource
-        dayDataSource = createDataSource(isTime: false)
-        dayTableView.dataSource = dayDataSource
+        viewModel.timeDataSource = createDataSource(isTime: true)
+        timeTableView.dataSource = viewModel.timeDataSource
+        viewModel.dayDataSource = createDataSource(isTime: false)
+        dayTableView.dataSource = viewModel.dayDataSource
         dayTableView.isHidden = true
     }
     
@@ -212,5 +154,21 @@ extension TransactionsViewController: UITableViewDelegate {
         header.configure(isTimeCell: isTime, symbol: market.symbol)
         
         return header
+    }
+}
+
+// MARK: Infinite Scroll
+extension TransactionsViewController {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let scrollViewHeight = scrollView.contentSize.height
+        let screenHeight = scrollView.contentOffset.y
+        let remainingBottomContentHeight = scrollViewHeight - screenHeight
+
+        let frameHeight = scrollView.frame.size.height
+        if remainingBottomContentHeight < frameHeight {
+            dayTableView.isHidden
+            ? viewModel.loadMoreTimeTransactions()
+            : viewModel.loadMoreDayTransactions()
+        }
     }
 }

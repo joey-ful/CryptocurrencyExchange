@@ -24,8 +24,8 @@ class StatusCell: UITableViewCell {
                                                                           withdrawStatusLabel,
                                                                           depositStatusLabel])
 
-    func configure(viewModel: AssetStatusViewModel) {
-        configureLabels(viewModel: viewModel)
+    func configure(with data: AssetStatus) {
+        configureLabels(with: data)
         layoutStackView()
         layoutLabels()
     }
@@ -50,12 +50,12 @@ class StatusCell: UITableViewCell {
         depositStatusLabel.textAlignment = .center
     }
     
-    private func configureLabels(viewModel: AssetStatusViewModel) {
-        coinNameLabel.text = viewModel.coinName
-        symbolLabel.text = viewModel.symbol
-        withdrawStatusLabel.text = viewModel.withdrawStatus ? "가능" : "불가"
-        withdrawStatusLabel.textColor = viewModel.withdrawStatus ? .systemGreen : .systemRed.withAlphaComponent(0.7)
-        depositStatusLabel.text = viewModel.depositStatus ? "가능" : "불가"
-        depositStatusLabel.textColor = viewModel.depositStatus ? .systemGreen : .systemRed.withAlphaComponent(0.7)
+    func configureLabels(with data: AssetStatus) {
+        coinNameLabel.text = data.coinName
+        symbolLabel.text = data.symbol
+        withdrawStatusLabel.text = data.withdraw ? "가능" : "불가"
+        withdrawStatusLabel.textColor = data.withdraw ? .systemGreen : .systemRed.withAlphaComponent(0.7)
+        depositStatusLabel.text = data.deposit ? "가능" : "불가"
+        depositStatusLabel.textColor = data.deposit ? .systemGreen : .systemRed
     }
 }

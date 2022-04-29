@@ -18,7 +18,9 @@ class MainTabBarViewController: UITabBarController {
 
             switch result {
             case .success(let data):
-                self.initTabBar(with: data)
+                DispatchQueue.main.async {
+                    self.initTabBar(with: data)
+                }
             case .failure(let error):
                 assertionFailure(error.localizedDescription)
             }
