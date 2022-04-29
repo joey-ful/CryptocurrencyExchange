@@ -15,45 +15,33 @@ class NetworkModule: Networkable {
                                    completionHandler: @escaping (Result<T, Error>) -> Void) {
         
         if let networkState = networkStates[request], networkState == .isLoading {
-            DispatchQueue.main.async {
-                completionHandler(.failure(NetworkError.overlappingRequest))
-            }
+            completionHandler(.failure(NetworkError.overlappingRequest))
             return
         }
         networkStates[request] = .isLoading
         
         URLSession.shared.dataTask(with: request) { [self] (data, response, error) in
             if let error = error {
-                DispatchQueue.main.async {
-                    completionHandler(.failure(error))
-                }
-                return
-            }
-
-            guard let response = response as? HTTPURLResponse,
-                  rangeOfSuccessState.contains(response.statusCode) else {
-                DispatchQueue.main.async {
-                    completionHandler(.failure(NetworkError.badResponse))
-                }
+                completionHandler(.failure(error))
                 return
             }
             
+            guard let response = response as? HTTPURLResponse,
+                  rangeOfSuccessState.contains(response.statusCode) else {
+                      completionHandler(.failure(NetworkError.badResponse))
+                      return
+                  }
+            
             guard let data = data else {
-                DispatchQueue.main.async {
-                    completionHandler(.failure(NetworkError.invalidData))
-                }
+                completionHandler(.failure(NetworkError.invalidData))
                 return
             }
             
             do {
                 let parsedData = try JSONDecoder().decode(T.self, from: data)
-                DispatchQueue.main.async {
-                    completionHandler(.success(parsedData))
-                }
+                completionHandler(.success(parsedData))
             } catch let error {
-                DispatchQueue.main.async {
-                    completionHandler(.failure(error))
-                }
+                completionHandler(.failure(error))
             }
             networkStates.removeValue(forKey: request)
         }.resume()

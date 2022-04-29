@@ -54,5 +54,6 @@ extension AssetStatusListViewModel {
             }
             .take(1)
             .bind(to: assetObservable)
+            .disposed(by: diposedBag)
     }
 }

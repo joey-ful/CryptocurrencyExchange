@@ -23,7 +23,7 @@ class TransactionsViewModel {
     var dayDataSource: TransactionsDataSource?
     var transactionDataSource: TransactionDataSource?
     var workItem: DispatchWorkItem?
-
+    
     var count: Int {
         transactions.count
     }
@@ -43,25 +43,36 @@ class TransactionsViewModel {
     }
     
     func makeTimeSnapshot() {
-        var snapshot = NSDiffableDataSourceSnapshot<Int, Transaction>()
-        snapshot.appendSections([0])
-        snapshot.appendItems(transactions, toSection: 0)
-        timeDataSource?.apply(snapshot, animatingDifferences: false)
+        DispatchQueue.main.async { [weak self] in
+            var snapshot = NSDiffableDataSourceSnapshot<Int, Transaction>()
+            snapshot.appendSections([0])
+            snapshot.appendItems(self?.transactions ?? [], toSection: 0)
+            self?.timeDataSource?.apply(snapshot, animatingDifferences: false)
+        }
+        
     }
     
     func makeDaySnapshot() {
-        var snapshot = NSDiffableDataSourceSnapshot<Int, Transaction>()
-        snapshot.appendSections([0])
-        snapshot.appendItems(dayTransactions, toSection: 0)
-        dayDataSource?.apply(snapshot, animatingDifferences: false)
+        DispatchQueue.main.async { [weak self] in
+            
+            var snapshot = NSDiffableDataSourceSnapshot<Int, Transaction>()
+            snapshot.appendSections([0])
+            snapshot.appendItems(self?.dayTransactions ?? [], toSection: 0)
+            self?.dayDataSource?.apply(snapshot, animatingDifferences: false)
+        }
+        
     }
     
     func makeTransactionSnapshot() {
-        var snapshot = NSDiffableDataSourceSnapshot<Int, Transaction>()
-        snapshot.appendSections([0])
-        let data = Array(transactions.prefix(30))
-        snapshot.appendItems(data, toSection: 0)
-        transactionDataSource?.apply(snapshot, animatingDifferences: false)
+        DispatchQueue.main.async { [weak self] in
+            
+            var snapshot = NSDiffableDataSourceSnapshot<Int, Transaction>()
+            snapshot.appendSections([0])
+            let data = Array(((self?.transactions ?? []).prefix(30)))
+            snapshot.appendItems(data, toSection: 0)
+            self?.transactionDataSource?.apply(snapshot, animatingDifferences: false)
+        }
+        
     }
     
 }
@@ -71,7 +82,6 @@ extension TransactionsViewModel {
     private func initiateTimeRestAPI() {
         loadRestAPITransactions()
     }
-    
     
     
     private func loadRestAPITransactions() {
@@ -102,7 +112,7 @@ extension TransactionsViewModel {
             }
         }
     }
-
+    
     func loadMoreTimeTransactions() {
         workItem?.cancel()
         workItem = DispatchWorkItem {
@@ -166,7 +176,7 @@ extension TransactionsViewModel {
                                                  quantity: ticker.unitsTraded.description,
                                                  amount: ticker.tradeValue.description,
                                                  date: ticker.date.description.toDate())
-
+                
                 self?.dayTransactions.append(newTransaction)
                 self?.makeDaySnapshot()
             case .failure(NetworkError.unverifiedCoin):
@@ -183,11 +193,10 @@ extension TransactionsViewModel {
         loadRestAPICandleStick()
     }
 }
-    
+
 // MARK: WebSocket
 extension TransactionsViewModel {
     func initiateTimeWebSocket() {
-        
         webSocketManager.connectWebSocket(to: .upbit,
                                           parameter: UpbitWebSocketParameter(ticket: webSocketManager.uuid, .transaction, [market]))
         { [weak self] (parsedResult: Result<UpbitWebsocketTrade?, Error>) in

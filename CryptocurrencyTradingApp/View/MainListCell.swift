@@ -39,11 +39,12 @@ class MainListCell: UITableViewCell {
 
 extension MainListCell {
     
-    func configure(_ viewModel: MainListCoinViewModel) {
-        configureLabel(viewModel)
+    func configure(_ ticker: Ticker, _ viewModel: MainListCoinsViewModel) {
+        configureLabel(ticker, viewModel)
         layoutLabel()
         layoutStackViews()
     }
+
     
     private func layoutStackViews() {
         nameLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
@@ -73,15 +74,15 @@ extension MainListCell {
         cellStackView.alignment = .center
     }
     
-    private func configureLabel(_ viewModel: MainListCoinViewModel) {
-        nameLabel.text = viewModel.name
-        symbolLabel.text = viewModel.symbolForView
-        currentPriceLabel.text = viewModel.currentPrice
-        fluctuationRateLabel.text = viewModel.fluctuationRate
-        fluctuationAmountLabel.text = viewModel.fluctuationAmount
-        tradeValueLabel.text = viewModel.tradeValue
-        
-        let textColor: UIColor = viewModel.sign == "+" ? .systemRed : .systemBlue
+    private func configureLabel(_ ticker: Ticker, _ viewModel: MainListCoinsViewModel) {
+        nameLabel.text = ticker.name
+        symbolLabel.text = ticker.symbol.uppercased()  + "/KRW"
+        currentPriceLabel.text = ticker.currentPrice.toDecimal()
+        fluctuationRateLabel.text = ticker.fluctuationRate.setFractionDigits(to: 2) + .percent
+        fluctuationAmountLabel.text = ticker.fluctuationAmount.toDecimal()
+        tradeValueLabel.text = ticker.tradeValue.dividedByMillion() + .million
+
+        let textColor: UIColor = ticker.fluctuationRate.contains("-") ? .systemBlue : .systemRed
         currentPriceLabel.textColor = textColor
         fluctuationRateLabel.textColor = textColor
         fluctuationAmountLabel.textColor = textColor
@@ -108,10 +109,10 @@ extension MainListCell {
         }
     }
     
-    func blink(_ viewModel: MainListCoinViewModel) {
-        let color: UIColor = viewModel.hasRisen ? .systemRed : .systemBlue
-        
-        UIView.animate(withDuration: 0.2, delay: 0, options: []) {
+    func blink(_ hasRisen: Bool) {
+        let color: UIColor = hasRisen ? .systemRed : .systemBlue
+        UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.2, delay: 0, options: []) { [weak self] in
+            guard let self = self else { return }
             self.backgroundColor = color.withAlphaComponent(0.1)
             self.underline.widthAnchor.constraint(equalTo: self.currentPriceLabel.widthAnchor).isActive = true
             self.underline.backgroundColor = color

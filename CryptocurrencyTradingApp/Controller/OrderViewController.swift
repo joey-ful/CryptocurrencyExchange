@@ -27,10 +27,9 @@ class OrderViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         setUpUI()
         configureTableView()
 
@@ -62,12 +61,16 @@ class OrderViewController: UIViewController {
 extension OrderViewController {
     
     @objc private func initInfoData() {
-        orderInfoTableView.reloadData()
+        DispatchQueue.main.async { [weak self] in
+            self?.orderInfoTableView.reloadData()
+        }
     }
     
     @objc private func moveScrollToMiddle() {
             let middleIndexPath = IndexPath(row: ordersViewModel.middleIndex, section: 0)
-            orderTableView.scrollToRow(at: middleIndexPath, at: .middle, animated: false)
+        DispatchQueue.main.async { [weak self] in
+            self?.orderTableView.scrollToRow(at: middleIndexPath, at: .middle, animated: false)
+        }
     }
 
     private func setUpUI() {

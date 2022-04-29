@@ -15,9 +15,7 @@
 		D48878D127D5D58600C63FE4 /* NetworkState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48878D027D5D58600C63FE4 /* NetworkState.swift */; };
 		D4AFEB2B27A01FC300011251 /* BithumbRestAPITransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AFEB2A27A01FC300011251 /* BithumbRestAPITransaction.swift */; };
 		D4AFEB2D27A0350800011251 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AFEB2C27A0350800011251 /* Transaction.swift */; };
-		D4AFEB2F27A03FB300011251 /* MainListCoinViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AFEB2E27A03FB300011251 /* MainListCoinViewModel.swift */; };
 		D4AFEB3127A0414200011251 /* MainListCoinsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AFEB3027A0414200011251 /* MainListCoinsViewModel.swift */; };
-		D4AFEB3327A0552500011251 /* MainListHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AFEB3227A0552500011251 /* MainListHeaderViewModel.swift */; };
 		D4AFEB3827A1292600011251 /* TransactionsHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AFEB3727A1292600011251 /* TransactionsHeader.swift */; };
 		D4B40DEC27A2065000EDA235 /* TransactionsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40DEB27A2065000EDA235 /* TransactionsCell.swift */; };
 		D4B40DF227A250C000EDA235 /* DayTransactionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B40DF127A250C000EDA235 /* DayTransactionViewModel.swift */; };
@@ -113,8 +111,10 @@
 		E68FCBA027E4DD2D008F113D /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E68FCB9F27E4DD2D008F113D /* RxSwift */; };
 		E6A126B427AFAD470080EC4D /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = E6A126B327AFAD470080EC4D /* Charts */; };
 		E6A126B627AFFF560080EC4D /* ChartDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A126B527AFFF560080EC4D /* ChartDateFormatter.swift */; };
+		E6A573CA281C1ACF00C0D795 /* UpdatedInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A573C9281C1ACF00C0D795 /* UpdatedInfo.swift */; };
 		E6A8694327A29BBD00D568B3 /* CandleData24H+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A8694227A29BBD00D568B3 /* CandleData24H+CoreDataClass.swift */; };
 		E6A8694527A29F1800D568B3 /* CandleStickCoreDataEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A8694427A29F1800D568B3 /* CandleStickCoreDataEntity.swift */; };
+		E6B0BB1127FD626200A91947 /* RxGesture in Frameworks */ = {isa = PBXBuildFile; productRef = E6B0BB1027FD626200A91947 /* RxGesture */; };
 		E6BDEFA927A3E1F700018967 /* CandleData10M+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BDEFA827A3E1F700018967 /* CandleData10M+CoreDataClass.swift */; };
 		E6BDEFAB27A3E23200018967 /* CandleData30M+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BDEFAA27A3E23200018967 /* CandleData30M+CoreDataClass.swift */; };
 		E6BDEFAD27A3E2FD00018967 /* CandleData10M+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BDEFAC27A3E2FD00018967 /* CandleData10M+CoreDataProperties.swift */; };
@@ -134,9 +134,7 @@
 		D48878D027D5D58600C63FE4 /* NetworkState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkState.swift; sourceTree = "<group>"; };
 		D4AFEB2A27A01FC300011251 /* BithumbRestAPITransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BithumbRestAPITransaction.swift; sourceTree = "<group>"; };
 		D4AFEB2C27A0350800011251 /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
-		D4AFEB2E27A03FB300011251 /* MainListCoinViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainListCoinViewModel.swift; sourceTree = "<group>"; };
 		D4AFEB3027A0414200011251 /* MainListCoinsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainListCoinsViewModel.swift; sourceTree = "<group>"; };
-		D4AFEB3227A0552500011251 /* MainListHeaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainListHeaderViewModel.swift; sourceTree = "<group>"; };
 		D4AFEB3727A1292600011251 /* TransactionsHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TransactionsHeader.swift; path = CryptocurrencyTradingApp/ViewModel/TransactionsHeader.swift; sourceTree = SOURCE_ROOT; };
 		D4B40DEB27A2065000EDA235 /* TransactionsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsCell.swift; sourceTree = "<group>"; };
 		D4B40DF127A250C000EDA235 /* DayTransactionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayTransactionViewModel.swift; sourceTree = "<group>"; };
@@ -228,6 +226,7 @@
 		E687135F2798422B0036CA0D /* BithumbCandleStick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BithumbCandleStick.swift; sourceTree = "<group>"; };
 		E6899C72279546320006C980 /* ParsingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsingError.swift; sourceTree = "<group>"; };
 		E6A126B527AFFF560080EC4D /* ChartDateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartDateFormatter.swift; sourceTree = "<group>"; };
+		E6A573C9281C1ACF00C0D795 /* UpdatedInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatedInfo.swift; sourceTree = "<group>"; };
 		E6A8694227A29BBD00D568B3 /* CandleData24H+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CandleData24H+CoreDataClass.swift"; sourceTree = "<group>"; };
 		E6A8694427A29F1800D568B3 /* CandleStickCoreDataEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleStickCoreDataEntity.swift; sourceTree = "<group>"; };
 		E6BDEFA827A3E1F700018967 /* CandleData10M+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CandleData10M+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -251,6 +250,7 @@
 				E68FCB9A27E4DD2D008F113D /* RxBlocking in Frameworks */,
 				E68FCB9C27E4DD2D008F113D /* RxCocoa in Frameworks */,
 				E6A126B427AFAD470080EC4D /* Charts in Frameworks */,
+				E6B0BB1127FD626200A91947 /* RxGesture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -350,6 +350,7 @@
 				D4AFEB2C27A0350800011251 /* Transaction.swift */,
 				D4B40E1927A55A3000EDA235 /* AssetStatus.swift */,
 				D4C9F91627BB8B7700EDF156 /* JWTModel.swift */,
+				E6A573C9281C1ACF00C0D795 /* UpdatedInfo.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -387,8 +388,6 @@
 			children = (
 				D4AFEB3027A0414200011251 /* MainListCoinsViewModel.swift */,
 				D4B40E2B27A5A4B000EDA235 /* PopularCoinViewModel.swift */,
-				D4AFEB2E27A03FB300011251 /* MainListCoinViewModel.swift */,
-				D4AFEB3227A0552500011251 /* MainListHeaderViewModel.swift */,
 				E6FA20B7279F04F700CCB1CC /* ChartViewModel.swift */,
 				E6197F9427A6AD7000EF207B /* DetailCoinViewModel.swift */,
 				D4D0D2AB27A000E200734C42 /* TransactionsViewModel.swift */,
@@ -510,6 +509,7 @@
 				E68FCB9B27E4DD2D008F113D /* RxCocoa */,
 				E68FCB9D27E4DD2D008F113D /* RxRelay */,
 				E68FCB9F27E4DD2D008F113D /* RxSwift */,
+				E6B0BB1027FD626200A91947 /* RxGesture */,
 			);
 			productName = CryptocurrencyTradingApp;
 			productReference = D4CC01ED27953FAE00F15957 /* CryptocurrencyTradingApp.app */;
@@ -543,6 +543,7 @@
 				E61B2C062796BC5700E919B0 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				E6A126B227AFAD470080EC4D /* XCRemoteSwiftPackageReference "Charts" */,
 				E68FCB9827E4DD2D008F113D /* XCRemoteSwiftPackageReference "RxSwift" */,
+				E6B0BB0F27FD626200A91947 /* XCRemoteSwiftPackageReference "RxGesture" */,
 			);
 			productRefGroup = D4CC01EE27953FAE00F15957 /* Products */;
 			projectDirPath = "";
@@ -587,7 +588,6 @@
 				D4B40E0C27A4EDD400EDA235 /* Double+Extension.swift in Sources */,
 				D4C9F91927BB918F00EDF156 /* UpbitAssetStatus.swift in Sources */,
 				D4CC020B279540CF00F15957 /* BithumbWebSockerTicker.swift in Sources */,
-				D4AFEB3327A0552500011251 /* MainListHeaderViewModel.swift in Sources */,
 				D4C9F91727BB8B7700EDF156 /* JWTModel.swift in Sources */,
 				D4D0D298279AE7A000734C42 /* CandleCoreDataManager.swift in Sources */,
 				D4C9F8F727B64F7900EDF156 /* NetworkManager.swift in Sources */,
@@ -667,6 +667,7 @@
 				D4AFEB2D27A0350800011251 /* Transaction.swift in Sources */,
 				D4CC02222795504900F15957 /* RestAPIType.swift in Sources */,
 				E6A8694327A29BBD00D568B3 /* CandleData24H+CoreDataClass.swift in Sources */,
+				E6A573CA281C1ACF00C0D795 /* UpdatedInfo.swift in Sources */,
 				D4AFEB3127A0414200011251 /* MainListCoinsViewModel.swift in Sources */,
 				D4B40DFC27A36B6100EDA235 /* UIButton+Extension.swift in Sources */,
 				E64BFA3227958BD900BC17A1 /* CoinType.swift in Sources */,
@@ -677,7 +678,6 @@
 				E605E0B127B65465002B84F1 /* UpbitRoute.swift in Sources */,
 				E644D50E27A40E320086972E /* CandleData1H+CoreDataClass.swift in Sources */,
 				D4B40DEC27A2065000EDA235 /* TransactionsCell.swift in Sources */,
-				D4AFEB2F27A03FB300011251 /* MainListCoinViewModel.swift in Sources */,
 				E605E0BA27B67A0A002B84F1 /* UpbitWebsocketTrade.swift in Sources */,
 				D4B40E2027A5646900EDA235 /* StatusHeader.swift in Sources */,
 				D4CC01FB27953FAF00F15957 /* CryptocurrencyTradingApp.xcdatamodeld in Sources */,
@@ -918,6 +918,14 @@
 				kind = branch;
 			};
 		};
+		E6B0BB0F27FD626200A91947 /* XCRemoteSwiftPackageReference "RxGesture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RxSwiftCommunity/RxGesture";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -950,6 +958,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E6A126B227AFAD470080EC4D /* XCRemoteSwiftPackageReference "Charts" */;
 			productName = Charts;
+		};
+		E6B0BB1027FD626200A91947 /* RxGesture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E6B0BB0F27FD626200A91947 /* XCRemoteSwiftPackageReference "RxGesture" */;
+			productName = RxGesture;
 		};
 /* End XCSwiftPackageProductDependency section */
 
