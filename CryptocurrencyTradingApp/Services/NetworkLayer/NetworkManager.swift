@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RxSwift
 
 class NetworkManager {
     private var networkable: Networkable
@@ -34,4 +35,37 @@ class NetworkManager {
         }
         networkable.runDataTask(request: urlRequest, completionHandler: completionHandler)
     }
+    
+    func requestRX<T: Decodable>(with route: Route,
+                                 queryItems: [URLQueryItem]? = nil,
+                                 header: [String: String]? = nil,
+                                 bodyParameters: [String: Any]? = nil,
+                                 httpMethod: HTTPMethod = .get,
+                                 requestType: URLRequestBuilder) -> Observable<T>
+    {
+        
+        guard let urlRequest = requestType.buildRequest(route: route,
+                                                        queryItems: queryItems,
+                                                        header: header,
+                                                        bodyParameters: bodyParameters,
+                                                        httpMethod: httpMethod)
+        else {
+            return Observable.error(NetworkError.invalidURL)
+        }
+        
+        return Observable.create() { [weak self] emitter  in 
+            self?.networkable.runDataTask(request: urlRequest) { (result:Result<T, Error>) in 
+                switch result {
+                case .success(let data):
+                    emitter.onNext(data)
+                case .failure(let error):
+                    emitter.onError(error)
+                }
+            }
+            return Disposables.create()
+        }
+    }
 }
+
+
+

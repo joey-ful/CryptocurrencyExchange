@@ -7,16 +7,12 @@
 
 import UIKit
 import SnapKit
-
-//typealias MainListDataSource = UITableViewDiffableDataSource<Int, Ticker>
-//typealias PopularDataSource = UICollectionViewDiffableDataSource<Int, Ticker>
+import RxSwift
 
 class MainListViewController: UIViewController {
     private let viewModel: MainListCoinsViewModel
     private let tableView = UITableView(frame: .zero, style: .plain)
-//    private var dataSource: MainListDataSource?
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-//    private var collectionViewDataSource: PopularDataSource?
     private let collectionViewHeaderTop = UIView()
     private let collectionViewHeaderLeading = UIView()
     private let collectionViewHeader = UILabel.makeLabel(font: .subheadline, text: "인기 코인")
@@ -33,8 +29,8 @@ class MainListViewController: UIViewController {
         menuControl.layer.masksToBounds = true
         return menuControl
     }()
-//    private var showFavorites: Bool = false
-
+    private var disposeBag = DisposeBag()
+    
     init(viewModel: MainListCoinsViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -46,65 +42,58 @@ class MainListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setUpCellBlink()
         buildUI()
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         viewModel.initiateWebSocket(to: .upbit)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(updateDataSource),
-                                               name: .webSocketTransactionsNotification,
-                                               object: nil)
     }
-
+    
     override func viewWillDisappear(_ animated: Bool) {
         viewModel.closeWebSocket()
-        NotificationCenter.default.removeObserver(self, name: .webSocketTransactionsNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .updateSortNotification, object: nil)
     }
 }
 
-// MARK: Handle Notification
+// MARK: Handle cell blink
 extension MainListViewController {
-    @objc private func updateDataSource(notification: Notification) {
-        guard let userInfo = notification.userInfo as? [String: Any] else { return }
-        guard let targetIndex = (viewModel.showFavorites ? userInfo["favorites"] : userInfo["filtered"]) as? Int else { return }
-
-        guard notification.object as? String == "currentPrice",
-              let hasRisen = userInfo["hasRisen"] as? Bool
-        else { return }
-        let cell = (tableView.cellForRow(at: IndexPath(row: targetIndex, section: 0)) as? MainListCell)
-        cell?.blink(viewModel.coinViewModel(at: targetIndex, hasRisen: hasRisen))
+    private func setUpCellBlink() {
+        viewModel.indexObservable
+            .asDriver(onErrorJustReturn: UpdatedInfo())
+            .drive(onNext: { [weak self] updateInfo in
+                guard let self = self, let cell = (self.tableView.cellForRow(at: IndexPath(row: updateInfo.index, section: 0)) as? MainListCell) else { return }
+                if self.tableView.visibleCells.contains(cell) {
+                    cell.blink(updateInfo.hasRisen)
+                }
+            })
+            .disposed(by: disposeBag)
     }
 }
 
 // MARK: SearchBar
 extension MainListViewController {
-
+    
     private func buildUI() {
         view.backgroundColor = .white
         buildSearchBar()
         buildTableView()
     }
-
+    
     private func buildSearchBar() {
         let searchController = UISearchController(searchResultsController: nil)
-        searchController.searchResultsUpdater = self
         navigationItem.searchController = searchController
         searchController.searchBar.placeholder = "코인명 또는 심볼 검색"
         searchController.searchBar.searchTextField.font = .preferredFont(forTextStyle: .subheadline)
         searchController.searchBar.searchTextField.backgroundColor = .white
         searchController.searchBar.autocapitalizationType = .none
         definesPresentationContext = true
-    }
-}
-
-// MARK: SearchResultsUpdating
-extension MainListViewController: UISearchResultsUpdating {
-    func updateSearchResults(for searchController: UISearchController) {
-        let text = searchController.searchBar.text
-        viewModel.filter(text)
-        viewModel.makeSnapshot()
+        
+        
+        let _ = searchController.searchBar.rx.text.orEmpty
+            .subscribe(onNext: { [weak self] in
+                self?.viewModel.searchResult(query: $0)
+            })
+            .disposed(by: disposeBag)
     }
 }
 
@@ -113,13 +102,12 @@ extension MainListViewController {
     @objc func menuSelect(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 0:
-            viewModel.showFavorites = false
+            viewModel.showFavoriteObesrvable.accept(false)
         case 1:
-            viewModel.showFavorites = true
+            viewModel.showFavoriteObesrvable.accept(true)
         default:
             break
         }
-        viewModel.makeSnapshot()
     }
 }
 
@@ -132,10 +120,11 @@ extension MainListViewController {
         registerCollectionViewCell()
         setCollectionViweFlowLayout()
     }
-
+    
     private func setUpTableView() {
         tableView.register(MainListCell.self, forCellReuseIdentifier: "mainListCell")
         tableView.register(MainListHeader.self, forHeaderFooterViewReuseIdentifier: "mainListHeader")
+        collectionView.register(PopularCoinCell.self, forCellWithReuseIdentifier: "popularCell")
         tableView.delegate = self
     }
     
@@ -143,7 +132,7 @@ extension MainListViewController {
         (collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.scrollDirection = .horizontal
         collectionView.delegate = self
     }
-
+    
     // MARK: AutoLayout
     private func setAutoLayout() {
         view.addSubview(collectionViewHeaderTop)
@@ -196,75 +185,58 @@ extension MainListViewController {
             make.trailing.equalToSuperview()
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
-
+        
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
         tableView.estimatedRowHeight = UIFont.preferredFont(forTextStyle: .subheadline).pointSize
         + UIFont.preferredFont(forTextStyle: .caption1).pointSize
         + 30
     }
-
-    // MARK: CellRegistrations
+    
     private func registerCell() {
-        viewModel.dataSource = MainListDataSource(tableView: tableView,
-                                        cellProvider: { [weak self ] tableView, indexPath, mainListCoin in
-
-            guard let weakSelf = self else { return UITableViewCell() }
-//            viewModel.initiateRestAPI()
-            let viewModel = weakSelf.viewModel.showFavorites ? weakSelf.viewModel.favoriteCoinViewModel(at: indexPath.row) : weakSelf.viewModel.coinViewModel(at: indexPath.row)
-            
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "mainListCell",
-                                                           for: indexPath) as? MainListCell
-            else {
-                return UITableViewCell()
-            }
-            
-            cell.configure(viewModel)
-
-            return cell
-        })
-        tableView.dataSource = viewModel.dataSource
+        Observable.combineLatest(viewModel.showFavoriteObesrvable, viewModel.filterdObservable) { [weak self] (showFavorites, filtered) in 
+            guard let self = self else { return [] }
+            let favorites = self.viewModel.favoriteObesrvable.value
+            return showFavorites ? favorites : filtered
+        }
+        .asDriver(onErrorJustReturn: [])
+        .drive(tableView.rx.items(cellIdentifier: "mainListCell", cellType: MainListCell.self)) {
+            index, item, cell in
+            cell.configure(item, self.viewModel)
+        }
+        .disposed(by: disposeBag)
     }
     
+    
     private func registerCollectionViewCell() {
-        let cellRegistration = UICollectionView.CellRegistration
-        <PopularCoinCell, Ticker> { [weak self] cell, indexPath, popularCoin in
-            
-            if let viewModel = self?.viewModel.popularCoinViewModel(at: indexPath.item),
-               let parent = self {
-                cell.configure(viewModel, parent: parent)
-            }
-        }
-        
-        viewModel.collectionViewDataSource = PopularDataSource(collectionView: collectionView)
-        { collectionView, indexPath, popularCoin in
-            return collectionView.dequeueConfiguredReusableCell(using: cellRegistration,
-                                                                for: indexPath,
-                                                                item: popularCoin)
-        }
-        collectionView.dataSource = viewModel.collectionViewDataSource
+        viewModel.popularObservable
+            .asDriver(onErrorJustReturn: [])
+            .drive(collectionView.rx.items(cellIdentifier: "popularCell", cellType: PopularCoinCell.self)) {
+                [weak self] index, item, cell in
+                if let viewModel = self?.viewModel.popularCoinViewModel(at: index), let parent = self {
+                    cell.configure(viewModel, parent: parent)
+                }
+            }.disposed(by: disposeBag)
     }
 }
 
 // MARK: TableViewHeader
 extension MainListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let list = viewModel.showFavorites ? viewModel.favorites : viewModel.filtered
+        let list = viewModel.showFavoriteObesrvable.value ? viewModel.favoriteObesrvable.value : viewModel.filterdObservable.value
         let coin = CoinType.coin(symbol: list[indexPath.row].symbol.lowercased()) ?? .unverified
         let symbol = list[indexPath.row].symbol.uppercased()
         let market = viewModel.markets.filter { $0.market.contains(symbol) }[0]
         let detailViewController = DetailCoinViewController(market: market)
         navigationController?.pushViewController(detailViewController, animated: true)
     }
-
+    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "mainListHeader")
                 as? MainListHeader
         else {
             return UIView()
         }
-
-        header.configure(viewModel.headerViewModel)
-
+        header.configure(viewModel)
         return header
     }
 }

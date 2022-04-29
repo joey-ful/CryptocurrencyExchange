@@ -98,7 +98,8 @@ final class ChartViewModel: ObservableObject {
         }
 
         barQueue.async(group: group) { [weak self] in
-            guard let maximumTradeVolume = candleData.compactMap({ $0.tradeVolume }).max(), let minimumPrice = candleData.compactMap({ $0.lowPrice}).min() else { return }
+            guard let maximumTradeVolume = candleData.compactMap({ $0.tradeVolume }).max(),
+                  let minimumPrice = candleData.compactMap({ $0.lowPrice}).min() else { return }
             self?.divider = maximumTradeVolume / minimumPrice
             let barData: [BarChartDataEntry] = candleData.reversed().enumerated().map { index, data in
                 let date = data.timestamp.convertDate()

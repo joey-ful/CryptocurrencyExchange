@@ -6,241 +6,159 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
+import RxRelay
 
-typealias MainListDataSource = UITableViewDiffableDataSource<Int, Ticker>
-typealias PopularDataSource = UICollectionViewDiffableDataSource<Int, Ticker>
 
-class MainListCoinsViewModel {
+final class MainListCoinsViewModel {
+    private var mainListConinsObservable = BehaviorRelay<[Ticker]>(value: [])
+    var filterdObservable = BehaviorRelay<[Ticker]>(value: [])
+    var popularObservable = BehaviorRelay<[Ticker]>(value: [])
+    var nameSortObesrvable = BehaviorRelay<Sort>(value: .none)
+    var priceSortObesrvable = BehaviorRelay<Sort>(value: .none)
+    var fluctuationSortObesrvable = BehaviorRelay<Sort>(value: .none)
+    var tradeValueSortObesrvable = BehaviorRelay<Sort>(value: .none)
+    var showFavoriteObesrvable = BehaviorRelay<Bool>(value: false)
+    var favoriteObesrvable = BehaviorRelay<[Ticker]>(value: [])
+    var indexObservable = BehaviorRelay<UpdatedInfo>(value: UpdatedInfo())
+    private var disPoseBag = DisposeBag()
     let markets: [UpbitMarket]
-    var dataSource: MainListDataSource?
-    var collectionViewDataSource: PopularDataSource?
-    var mainListCoins: [Ticker] = [] {
-        didSet {
-            filtered = mainListCoins.filter { existsInFiltered($0) }
-            favorites = filtered.filter { favoriteSymbols.contains( $0.symbol.lowercased() ) }
-        }
-    }
-    var showFavorites: Bool = false
     private var favoriteSymbols: [String] {
         return UserDefaults.standard.array(forKey: "favorite") as? [String] ?? []
-    }
-    
-    private(set) var favorites: [Ticker] = []
-    
-    private(set) var filtered: [Ticker] = []
-    var popularCoins: [Ticker] {
-        return Array(
-            mainListCoins
-                .sorted { $0.tradeValue.toDouble() > $1.tradeValue.toDouble() }
-                .prefix(10)
-        )
     }
     private let webSocketManager = WebSocketManager(of: .upbit)
     private let networkManager = NetworkManager(networkable: NetworkModule())
     
-    var headerViewModel: MainListHeaderViewModel {
-        return MainListHeaderViewModel(mainListCoinsViewModel: self)
-    }
-    
-    func coinViewModel(at index: Int, hasRisen: Bool = true) -> MainListCoinViewModel {
-        return MainListCoinViewModel(coin: filtered[index], hasRisen: hasRisen)
-    }
-    
-    func favoriteCoinViewModel(at index: Int) -> MainListCoinViewModel {
-        return MainListCoinViewModel(coin: favorites[index])
-    }
-    
     func popularCoinViewModel(at index: Int) -> PopularCoinViewModel {
-        let symbol = popularCoins[index].symbol
+        let coin = popularObservable.value[index]
+        let symbol = coin.symbol
         let market = markets.filter { $0.market.contains(symbol.uppercased()) }[0]
-        return PopularCoinViewModel(popularCoin: popularCoins[index], market)
+        return PopularCoinViewModel(popularCoin: coin, market)
     }
     
-    func makeCollectionViewSnapshot() {
-       var snapshot = NSDiffableDataSourceSnapshot<Int, Ticker>()
-       snapshot.appendSections([0])
-       snapshot.appendItems(popularCoins, toSection: 0)
-       collectionViewDataSource?.apply(snapshot, animatingDifferences: false)
-   }
+    private func bindFilterdObservable() {
+        mainListConinsObservable.map { [weak self] in
+            guard let self = self else { return []}
+            return $0.filter { 
+                self.existsInFiltered($0)
+            }
+        }.bind(to:filterdObservable)
+            .disposed(by: disPoseBag)
+        
+    }
     
-    @objc func makeSnapshot() {
-        var snapshot = NSDiffableDataSourceSnapshot<Int, Ticker>()
-        snapshot.appendSections([0])
-        let data = showFavorites ? favorites : filtered
-        snapshot.appendItems(data, toSection: 0)
-        dataSource?.apply(snapshot, animatingDifferences: false)
+    private func bindFavoriteObesrvable() {
+        filterdObservable.map { [weak self] in 
+            guard let self = self else { return []}
+            return $0.filter { self.favoriteSymbols.contains($0.symbol)}
+        }.bind(to: favoriteObesrvable)
+            .disposed(by: disPoseBag)
+        
     }
     
     init(_ markets: [UpbitMarket]) {
         self.markets = markets
-        initiateRestAPI()
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(makeSnapshot),
-                                               name: .updateSortNotification,
-                                               object: nil)
+        bindFilterdObservable()
+        bindFavoriteObesrvable()
+        initAPI()
     }
 }
 
 // MARK: RestAPI
 extension MainListCoinsViewModel {
-    
-    func initiateRestAPI() {
-        
+    private func initAPI() {
         let route = UpbitRoute.ticker
-        networkManager.request(with: route,
-                               queryItems: route.tickerQueryItems(coins: markets),
-                               requestType: .request)
-        { [weak self](parsedResult: Result<[UpbitTicker], Error>) in
-            guard let weakSelf = self, var snapShot = weakSelf.dataSource?.snapshot() else { return }
-            switch parsedResult {
-            case .success(let tickers):
-                let data: [Ticker] = tickers.map {
-                    let symbol = $0.market.split(separator: "-")[1]
-                    let market = weakSelf.markets.filter { $0.market.contains(symbol) }[0]
-                    let fluctuationRate = ($0.fluctuationRate24HDividedByHundred * 100).description
-                    
+        let requestBuilder = URLRequestBuilder.request
+        guard let request = requestBuilder.buildRequest(route: route, queryItems: route.tickerQueryItems(coins: markets), header: nil, bodyParameters: nil, httpMethod: .get) else { return }
+        _ = RXnetworkManager().download(request: request)
+            .map { (data: [UpbitTicker]) in
+                data.map { ticker -> Ticker in
+                    let symbol = ticker.market.split(separator: "-")[1]
+                    let market = self.markets.filter { $0.market.contains(symbol) }[0]
+                    let fluctuationRate = (ticker.fluctuationRate24HDividedByHundred * 100).description
                     return Ticker(name: market.koreanName,
                                   symbol: symbol.lowercased(),
-                                  currentPrice: $0.closingPrice.description,
+                                  currentPrice: ticker.closingPrice.description,
                                   fluctuationRate: fluctuationRate,
-                                  fluctuationAmount: $0.fluctuation24H.description,
-                                  tradeValue: $0.tradeValueWithin24H.description)
+                                  fluctuationAmount: ticker.fluctuation24H.description,
+                                  tradeValue: ticker.tradeValueWithin24H.description)
                 }.sorted { $0.tradeValue.toDouble() > $1.tradeValue.toDouble() }
-                weakSelf.filtered = data
-                weakSelf.mainListCoins = data
-                weakSelf.makeSnapshot()
-                weakSelf.makeCollectionViewSnapshot()
-
-            case .failure(let error):
-                assertionFailure(error.localizedDescription)
-            }
-        }
+            }.take(1)
+            .subscribe(onNext: { [weak self] in
+                self?.mainListConinsObservable.accept($0)
+                self?.filterdObservable.accept($0)
+                self?.popularObservable.accept(Array($0.prefix(10)))
+            })
+            .disposed(by: disPoseBag)
     }
 }
 
 // MARK: WebSocket
 extension MainListCoinsViewModel {
     func initiateWebSocket(to exchange: WebSocketURL) {
-        initiateTransactionWebSocket(to: exchange)
-        initiateTickerWebSocket(to: exchange)
+        initiateTickerWebSocketRX(to: exchange)
     }
     
     func closeWebSocket() {
         webSocketManager.close()
     }
     
-    private func initiateTransactionWebSocket(to exchange: WebSocketURL) {
-        webSocketManager.connectWebSocket(to: exchange,
-                                          parameter: UpbitWebSocketParameter(ticket: UUID(),
-                                                                             .transaction,
-                                                                             markets))
-        { (parsedResult: Result<UpbitWebsocketTrade?, Error>) in
-            
-            switch parsedResult {
-            case .success(let parsedData):
-                self.updateTransaction(parsedData)
-            case .failure(let error):
-                assertionFailure(error.localizedDescription)
-            }
-        }
-    }
-    
-    private func initiateTickerWebSocket(to exchange: WebSocketURL) {
-        webSocketManager.connectWebSocket(to: exchange,
-                                          parameter: UpbitWebSocketParameter(ticket: webSocketManager.uuid,
-                                                                             .ticker,
-                                                                             markets))
-        { (parsedResult: Result<UpbitWebsocketTicker?, Error>) in
-
-            switch parsedResult {
-            case .success(let parsedData):
-                self.updateTradeValueAndFluctuations(parsedData)
-            case .failure(let error):
-                assertionFailure(error.localizedDescription)
-            }
-        }
-    }
-    
-    private func updateTransaction(_ transaction: UpbitWebsocketTrade?) {
-        guard let transaction = transaction else { return }
-
-        mainListCoins.enumerated().forEach { index, oldCoin in
-            let newSymbol = transaction.market.split(separator: "-")[1].lowercased()
-
-            if mainListCoins[index].symbol == newSymbol
-            {
-                
-                let oldPrice = mainListCoins[index].currentPrice
-                let newPrice = transaction.price.description
-                if newPrice == oldPrice { return }
-                
-                mainListCoins[index].currentPrice = newPrice
-                filtered = mainListCoins.filter { existsInFiltered($0) }
-                favorites = filtered.filter { favoriteSymbols.contains( $0.symbol.lowercased() ) }
-                let userInfo = userInfo(at: index, hasRisen: newPrice.toDouble() > oldPrice.toDouble())
-                guard let item = dataSource?.itemIdentifier(for: IndexPath(row: index, section: 0)) else { return }
-                guard var snapShot = dataSource?.snapshot() else { return }
-                snapShot.reconfigureItems([item])
-                dataSource?.apply(snapShot, animatingDifferences:  true)
-                NotificationCenter.default.post(name: .webSocketTransactionsNotification,
-                                                object: "currentPrice",
-                                                userInfo: userInfo)
-            }
-        }
-    }
-    
-    private func updateTradeValueAndFluctuations(_ ticker: UpbitWebsocketTicker?) {
-        guard let ticker = ticker else { return }
+    private func initiateTickerWebSocketRX(to exchange: WebSocketURL) {
         
-        mainListCoins.enumerated().forEach { index, oldCoin in
-            let newSymbol = ticker.market.split(separator: "-")[1].lowercased()
-            
-            if mainListCoins[index].symbol == newSymbol {
-                
-                mainListCoins[index].tradeValue = ticker.accumulatedTradeValue.description
-                mainListCoins[index].fluctuationRate = (ticker.fluctuationRate * 100).description
-                mainListCoins[index].fluctuationAmount = ticker.fluctuationAmount.description
-                filtered = mainListCoins.filter { existsInFiltered($0) }
-                favorites = filtered.filter { favoriteSymbols.contains( $0.symbol.lowercased() ) }
+        let a = webSocketManager.connectWebsocketRX(to: exchange,
+                                                    parameter: UpbitWebSocketParameter(ticket: webSocketManager.uuid,
+                                                                                       .ticker,
+                                                                                       markets))
+            .debounce(.microseconds(400), scheduler: ConcurrentDispatchQueueScheduler.init(qos: .background))
+            .compactMap{ [weak self] (websocket: UpbitWebsocketTicker?) in
+                self?.mainListConinsObservable.value.enumerated().map { currentIndex, data -> Ticker in
+                    if data.symbol == websocket?.market.split(separator: "-")[1].lowercased(), data.currentPrice != websocket?.tradePrice.description {
+                        self?.findRecentlyUpdatedIndex(currentIndex, hasRisen: data.currentPrice.toDouble() < websocket?.tradePrice ?? .zero)
+                        return Ticker(name: data.name, symbol: data.symbol, currentPrice: websocket?.tradePrice.description ?? .zero,
+                                      fluctuationRate: ((websocket?.fluctuationRate ?? .zero) * 100).description
+                                      , fluctuationAmount: websocket?.fluctuationAmount.description ?? .zero, tradeValue: data.tradeValue)
+                    }
+                    return data
+                }
             }
-        }
+            .bind(to: mainListConinsObservable)
+            .disposed(by: disPoseBag)
     }
     
-    private func userInfo(at index: Int, hasRisen: Bool = true) -> [String: Any] {
-        var filteredIndex: Int? = nil
-        filtered.enumerated().forEach { currentIndex, coin in
-            if mainListCoins[index] == coin {
-                filteredIndex = currentIndex
-                return
+    private func findRecentlyUpdatedIndex(_ index: Int, hasRisen: Bool = true) {
+        switch showFavoriteObesrvable.value {
+        case true: 
+            favoriteObesrvable.value.enumerated().forEach { currentIndex, coin in
+                if mainListConinsObservable.value[index] == coin {
+                    indexObservable.accept(UpdatedInfo(index: currentIndex, hasRisen: hasRisen))
+                    return
+                }
+            }
+        case false:
+            filterdObservable.value.enumerated().forEach { currentIndex, coin in
+                if mainListConinsObservable.value[index] == coin {
+                    indexObservable.accept(UpdatedInfo(index: currentIndex, hasRisen: hasRisen))
+                    return
+                }
             }
         }
-        var favoritesIndex: Int? = nil
-        favorites.enumerated().forEach { currentIndex, coin in
-            if mainListCoins[index] == coin {
-                favoritesIndex = currentIndex
-                return
-            }
-        }
-        return ["filtered": filteredIndex, "favorites": favoritesIndex, "hasRisen": hasRisen]
     }
 }
-
 
 // MARK: SearchBar
 extension MainListCoinsViewModel {
     
-    func filter(_ target: String?) {
-        let text = target?.lowercased() ?? ""
-
-        if text == "" {
-            filtered = mainListCoins
-        } else {
-            filtered = mainListCoins.filter { return $0.name.contains(text) || $0.symbol.contains(text) }
+    func searchResult(query: ControlProperty<String>.Element) {
+        let filtered = mainListConinsObservable.value.filter {
+            query.isEmpty || $0.name.contains(query.uppercased()) || $0.symbol.contains(query.lowercased())
         }
+        
+        filterdObservable.accept(filtered)
     }
     
     private func existsInFiltered(_ coin: Ticker) -> Bool {
-        for filteredCoin in filtered {
+        for filteredCoin in filterdObservable.value {
             if filteredCoin.symbol == coin.symbol {
                 return true
             }
@@ -251,47 +169,83 @@ extension MainListCoinsViewModel {
 
 // MARK: Sorts
 extension MainListCoinsViewModel {
-    func sortName(type: Sort) {
-        switch type {
-        case .up:
-            mainListCoins.sort { $0.name < $1.name }
-        case .down:
-            mainListCoins.sort { $0.name > $1.name }
-        case .none:
-            break
+    func sortName() {
+        DispatchQueue.global().async { [weak self] in
+            guard let self = self else { return }
+            let sort = self.nameSortObesrvable.value
+            self.resetSortImage()
+            switch sort {
+            case .up, .none:
+                let sorted =  self.mainListConinsObservable.value.sorted(by: { $0.name > $1.name})
+                self.mainListConinsObservable.accept(sorted)
+                self.nameSortObesrvable.accept(.down)
+            case .down:
+                let sorted =  self.mainListConinsObservable.value.sorted(by: { $0.name < $1.name})
+                self.mainListConinsObservable.accept(sorted)
+                self.nameSortObesrvable.accept(.up)
+            }
+            
         }
     }
-
-    func sortPrice(type: Sort) {
-        switch type {
-        case .up:
-            mainListCoins.sort { $0.currentPrice.toDouble() < $1.currentPrice.toDouble() }
-        case .down:
-            mainListCoins.sort { $0.currentPrice.toDouble() > $1.currentPrice.toDouble() }
-        case .none:
-            break
+    
+    func sortPrice() {
+        DispatchQueue.global().async { [weak self] in
+            guard let self = self else { return }
+            let sort = self.priceSortObesrvable.value
+            self.resetSortImage()
+            switch sort {
+            case .up, .none:
+                let sorted = self.mainListConinsObservable.value.sorted(by: { $0.currentPrice.toDouble() > $1.currentPrice.toDouble()})
+                self.mainListConinsObservable.accept(sorted)
+                self.priceSortObesrvable.accept(.down)
+            case .down:
+                let sorted = self.mainListConinsObservable.value.sorted(by: { $0.currentPrice.toDouble() < $1.currentPrice.toDouble()})
+                self.mainListConinsObservable.accept(sorted)
+                self.priceSortObesrvable.accept(.up)
+            }
         }
     }
-
-    func sortFluctuation(type: Sort) {
-        switch type {
-        case .up:
-            mainListCoins.sort { $0.fluctuationRate.toDouble() < $1.fluctuationRate.toDouble() }
-        case .down:
-            mainListCoins.sort { $0.fluctuationRate.toDouble() > $1.fluctuationRate.toDouble() }
-        case .none:
-            break
+    
+    func sortFluctuation() {
+        DispatchQueue.global().async { [weak self] in
+            guard let self = self else { return }
+            let sort = self.fluctuationSortObesrvable.value
+            self.resetSortImage()
+            switch sort {
+            case .up, .none:
+                let sorted = self.mainListConinsObservable.value.sorted(by: { $0.fluctuationRate.toDouble() > $1.fluctuationRate.toDouble()})
+                self.mainListConinsObservable.accept(sorted)
+                self.fluctuationSortObesrvable.accept(.down)
+            case .down:
+                let sorted = self.mainListConinsObservable.value.sorted(by: { $0.fluctuationRate.toDouble() < $1.fluctuationRate.toDouble()})
+                self.mainListConinsObservable.accept(sorted)
+                self.fluctuationSortObesrvable.accept(.up)
+            }
         }
     }
-
-    func sortTradeValue(type: Sort) {
-        switch type {
-        case .up:
-            mainListCoins.sort { $0.tradeValue.toDouble() < $1.tradeValue.toDouble() }
-        case .down:
-            mainListCoins.sort { $0.tradeValue.toDouble() > $1.tradeValue.toDouble() }
-        case .none:
-            break
+    
+    func sortTradeValue() {
+        DispatchQueue.global().async { [weak self] in
+            guard let self = self else { return }
+            let sort = self.tradeValueSortObesrvable.value
+            self.resetSortImage()
+            switch sort {
+            case .up, .none:
+                let sorted = self.mainListConinsObservable.value.sorted(by: { $0.tradeValue.toDouble() > $1.tradeValue.toDouble()})
+                self.mainListConinsObservable.accept(sorted)
+                self.tradeValueSortObesrvable.accept(.down)
+            case .down:
+                let sorted = self.mainListConinsObservable.value.sorted(by: { $0.tradeValue.toDouble() < $1.tradeValue.toDouble()})
+                self.mainListConinsObservable.accept(sorted)
+                self.tradeValueSortObesrvable.accept(.up)
+            }
         }
+    }
+    
+    func resetSortImage() {
+        tradeValueSortObesrvable.accept(.none)
+        fluctuationSortObesrvable.accept(.none)
+        priceSortObesrvable.accept(.none)
+        nameSortObesrvable.accept(.none)
     }
 }

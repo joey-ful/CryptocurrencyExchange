@@ -61,11 +61,13 @@ final class DetailCoinViewController: UIViewController {
     }
 
     @objc private func setDataForLabel() {
-        priceLabel.text = viewModel.price
-        incrementLabel.text = viewModel.fluctuationAmount
-        percentLabel.text = viewModel.sign + viewModel.fluctuationRate
-        incrementLabel.textColor = viewModel.sign == "+" ? .systemRed : .systemBlue
-        percentLabel.textColor = viewModel.sign == "+" ? .systemRed : .systemBlue
+        DispatchQueue.main.async { [weak self] in
+            self?.priceLabel.text = self?.viewModel.price
+            self?.incrementLabel.text = self?.viewModel.fluctuationAmount
+            self?.percentLabel.text = (self?.viewModel.sign ?? "")  + (self?.viewModel.fluctuationRate ?? "")
+            self?.incrementLabel.textColor = self?.viewModel.sign == "+" ? .systemRed : .systemBlue
+            self?.percentLabel.textColor = self?.viewModel.sign == "+" ? .systemRed : .systemBlue
+        }
     }
     
     @objc func addTapped(_ sender: Any) {

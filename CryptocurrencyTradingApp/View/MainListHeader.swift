@@ -6,9 +6,11 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
+import RxGesture
 
 class MainListHeader: UITableViewHeaderFooterView {
-    private var viewModel: MainListHeaderViewModel?
     private let nameLabel = UILabel.makeLabel(font: .caption1, text: "가상자산명", color: .systemGray)
     private let priceLabel = UILabel.makeLabel(font: .caption1, text: "현재가", color: .systemGray)
     private let fluctuationLabel = UILabel.makeLabel(font: .caption1, text: "변동률", color: .systemGray)
@@ -47,28 +49,39 @@ class MainListHeader: UITableViewHeaderFooterView {
     
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(updateSortIcons),
-                                               name: .updateSortNotification,
-                                               object: nil)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc private func updateSortIcons() {
-        nameSortIcon.image = viewModel?.nameSort.image
-        priceSortIcon.image = viewModel?.priceSort.image
-        fluctuationSortIcon.image = viewModel?.fluctuationSort.image
-        tradeValueSortIcon.image = viewModel?.tradeValueSort.image
+    func updateSortIcons(_ viewModel: MainListCoinsViewModel) {
+        _ = viewModel.nameSortObesrvable
+            .map { $0.image}
+            .observe(on: MainScheduler.instance)
+            .bind(to: nameSortIcon.rx.image)
+        
+        _ = viewModel.priceSortObesrvable
+            .map { $0.image}
+            .observe(on: MainScheduler.instance)
+            .bind(to: priceSortIcon.rx.image)
+        
+        _ = viewModel.fluctuationSortObesrvable
+            .map { $0.image}
+            .observe(on: MainScheduler.instance)
+            .bind(to: fluctuationSortIcon.rx.image)
+        
+        _ = viewModel.tradeValueSortObesrvable
+            .map { $0.image}
+            .observe(on: MainScheduler.instance)
+            .bind(to: tradeValueSortIcon.rx.image)
     }
     
-    func configure(_ viewModel: MainListHeaderViewModel) {
-        self.viewModel = viewModel
+    func configure(_ viewModel: MainListCoinsViewModel) {
         resizeIcons()
         layoutLabels()
         layoutStackViews()
+        updateSortIcons(viewModel)
         addGestureRecognizers(viewModel)
     }
 }
@@ -81,8 +94,9 @@ extension MainListHeader {
         headerStackView.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(20)
             make.trailing.equalToSuperview().offset(-20)
-            make.top.equalToSuperview().offset(10)
-            make.bottom.equalToSuperview().offset(-10)
+//            make.centerY.equalToSuperview()
+//            make.top.equalToSuperview().offset(10)
+//            make.bottom.equalToSuperview().offset(-10)
         }
         
         nameStackView.snp.makeConstraints {
@@ -113,6 +127,10 @@ extension MainListHeader {
     
     private func resizeIcons() {
         NSLayoutConstraint.activate([
+            nameSortIcon.heightAnchor.constraint(equalTo: headerStackView.heightAnchor,multiplier: 0.8),
+            priceSortIcon.heightAnchor.constraint(equalTo: headerStackView.heightAnchor,multiplier: 0.8),
+            fluctuationSortIcon.heightAnchor.constraint(equalTo: headerStackView.heightAnchor,multiplier: 0.8),
+            tradeValueSortIcon.heightAnchor.constraint(equalTo: headerStackView.heightAnchor,multiplier: 0.8),
             nameSortIcon.heightAnchor.constraint(equalToConstant: 12),
             priceSortIcon.heightAnchor.constraint(equalToConstant: 12),
             fluctuationSortIcon.heightAnchor.constraint(equalToConstant: 12),
@@ -124,15 +142,37 @@ extension MainListHeader {
         ])
     }
     
-    private func addGestureRecognizers(_ viewModel: MainListHeaderViewModel) {
-        nameStackView.addGestureRecognizer(nameTapGestureRecognizer)
-        priceStackView.addGestureRecognizer(priceTapGestureRecognizer)
-        fluctuationStackView.addGestureRecognizer(fluctuationTapGestureRecognizer)
-        tradeValueStackView.addGestureRecognizer(tradeValueTapGestureRecognizer)
+    private func addGestureRecognizers(_ viewModel: MainListCoinsViewModel) {
+        _ = nameStackView.rx
+            .tapGesture(configuration: { gesture, delegate in 
+                delegate.simultaneousRecognitionPolicy = .never
+              }).when(.recognized)
+            .subscribe(onNext: { _ in
+                viewModel.sortName()
+            })
         
-        nameTapGestureRecognizer.addTarget(viewModel, action: #selector(viewModel.sortName))
-        priceTapGestureRecognizer.addTarget(viewModel, action: #selector(viewModel.sortPrice))
-        fluctuationTapGestureRecognizer.addTarget(viewModel, action: #selector(viewModel.sortFluctuation))
-        tradeValueTapGestureRecognizer.addTarget(viewModel, action: #selector(viewModel.sortTradeValue))
+        _ = priceStackView.rx
+            .tapGesture(configuration: { gesture, delegate in 
+                delegate.simultaneousRecognitionPolicy = .never
+              }).when(.recognized)
+            .subscribe(onNext: { _ in
+                viewModel.sortPrice()
+            })
+        
+        _ = fluctuationStackView.rx
+            .tapGesture(configuration: { gesture, delegate in 
+                delegate.simultaneousRecognitionPolicy = .never
+              }).when(.recognized)
+            .subscribe(onNext: { _ in
+                viewModel.sortFluctuation()
+            })
+        
+        _ = tradeValueStackView.rx
+            .tapGesture(configuration: { gesture, delegate in 
+                delegate.simultaneousRecognitionPolicy = .never
+              }).when(.recognized)
+            .subscribe(onNext: { _ in
+                viewModel.sortTradeValue()
+            })
     }
 }
